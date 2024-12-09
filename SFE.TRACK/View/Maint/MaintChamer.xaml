@@ -1,0 +1,213 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Maint.MaintChamer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SFE.TRACK.View.Maint"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             DataContext="{Binding MaintChamberViewModel, Source={StaticResource Locator}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="880" d:DesignWidth="1574">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3.5*"/>
+            <ColumnDefinition Width="6.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <StackPanel Orientation="Vertical" Margin="5">
+
+                <materialDesign:ColorZone  Mode="Custom" Background="#8F98AC" Padding="7" CornerRadius="5" ClipToBounds="False">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ClipboardListOutline" Foreground="Navy" Width="20" Height="40" VerticalAlignment="Center"/>
+                        <TextBlock Text="Module List" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+
+                <StackPanel >
+
+                    <Border BorderBrush="LightGray" BorderThickness="1" Height="812">
+                        <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                            <!--<ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="282" VerticalAlignment="Top" >-->
+                            <DataGrid  x:Name="DataGridList" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectedIndex="{Binding SelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding ModuleList}" AutoGenerateColumns="False" SelectedItem="{Binding ModuleInfo, Mode=TwoWay, UpdateSourceTrigger=Default}">
+
+                                <DataGrid.Resources>
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="Foreground" Value="DarkBlue"/>
+                                        <Setter Property="FontSize" Value="20"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.Resources>
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Module Name" Foreground="Black" Width="538" Binding="{Binding MachineTitle}" FontSize="18"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--</ScrollViewer>-->
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <GroupBox  materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Margin="5">
+
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="InfoCircle" Height="40" Width="20" VerticalAlignment="Center" />
+                            
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+
+
+
+                <StackPanel>
+                    <TextBlock Margin="30 -55 0 0"  VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="{Binding MainTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontWeight="Bold"  Foreground="White"/>
+                    <Button Command="{Binding RunRelayCommand}" ToolTip="Run" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="-100 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Play" Foreground="Blue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding StopRelayCommand}" ToolTip="Stop" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Stop" Foreground="Red" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding AutoTuningRelayCommand}" ToolTip="Auto Tuning" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="100 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Tune" Foreground="Yellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PinHomeRelayCommand}" ToolTip="Pin Home" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Home" Foreground="Orange" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PinReadyRelayCommand}" ToolTip="Pin Ready" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="300 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Pin" Foreground="Orange" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PinDownRelayCommand}" ToolTip="Pin Down" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="400 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Download" Foreground="Brown" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PinUpRelayCommand}" ToolTip="Pin Up" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="500 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Upload" Foreground="Brown" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ServoOnRelayCommand}" ToolTip="Servo On" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="600 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Power" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ServoOffRelayCommand}" ToolTip="Servo Off" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="700 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="PowerCycle" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShutterOpenRelayCommand}" ToolTip="Shutter Open" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="800 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="ArrowUp" Foreground="Black" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShutterCloseRelayCommand}" ToolTip="Shutter Close" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="900 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="ArrowDown" Foreground="Black" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <DataGrid  Height="40" Margin="0 0 0 0" TextBlock.TextAlignment="Center">
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="DarkBlue"/>
+                                <Setter Property="FontSize" Value="18"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="No" Width="100"/>
+                            <DataGridTextColumn Header="Description" Width="300"/>
+                            <DataGridTextColumn Header="Value" Width="500"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Border BorderBrush="DimGray" BorderThickness="0.1">
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+                            <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="1" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="PV" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="23" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="DimGray" BorderThickness="0.1">
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+                            <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="2" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="SV" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="27.5" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center">
+                                    <TextBlock.InputBindings>
+                                        <MouseBinding Command="{Binding TempRelayCommand}" MouseAction="LeftClick" />
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </materialDesign:ColorZone>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="DimGray" BorderThickness="0.1">
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+                            <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="3" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="State" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="RUN" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="DimGray" BorderThickness="0.1" >
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+                            <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="4" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="Pin Position" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="24.3" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="DimGray" BorderThickness="0.1" >
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+                            <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="5" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="Pin State" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
+                                <TextBlock Text="Up" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
+                            </materialDesign:ColorZone>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

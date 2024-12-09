@@ -1,0 +1,76 @@
+﻿<Window x:Class="SFE.TRACK.View.Auto.LotStart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        DataContext="{Binding LotStartViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        x:Name="LotStartView"
+        WindowStartupLocation="CenterScreen"
+        Title="LotStart" Height="470" Width="650">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadRelayCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <StackPanel >
+                <Border BorderBrush="LightGray" BorderThickness="1">
+                    <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                        <DataGrid  x:Name="DataGridFoupList" Height="430" GridLinesVisibility="All" Background="White" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectedIndex="{Binding SelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" ItemsSource="{Binding FoupTempList}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding Foup, Mode=TwoWay, UpdateSourceTrigger=Default}">
+
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Foreground" Value="DarkBlue"/>
+                                    <Setter Property="FontSize" Value="20"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header=""  Width="100" FontSize="18">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Background" Value="{Binding FoupColor}"/>
+                                            <Setter Property="Height" Value="40"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Module" Foreground="Black" Width="277" Binding="{Binding MachineTitle}" FontSize="18"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <Button Content="RecipeName" Height="40" Margin="0 0 0 0" Width="250" FontSize="20" Background="LightSteelBlue" Command="{Binding SetRecipeRelayCommand}"></Button>
+                <TextBox Text="{Binding Foup.RecipeName}" Height="40" Margin="0 1 0 0" Width="250" FontSize="20" IsReadOnly="True" TextAlignment="Center"></TextBox>
+
+                <Button Content="Lot Name" Height="40" Margin="0 10 0 0" Width="250" FontSize="20" Background="LightSteelBlue" Command="{Binding SetLotNameRelayCommand}"></Button>
+                <TextBox Text="{Binding Foup.LotID}" Height="40" Margin="0 1 0 0" Width="250" FontSize="20" IsReadOnly="True" TextAlignment="Center"></TextBox>
+
+                <Button Content="COMMENT" Height="40" Margin="0 10 0 0" Width="250" FontSize="20" Background="LightSteelBlue" Command="{Binding SetCommentRelayCommand}"></Button>
+                <TextBox Text="{Binding Foup.Comment}" Height="40" Margin="0 1 0 0" Width="250" FontSize="20" IsReadOnly="True" TextAlignment="Center"></TextBox>
+
+                <Button Content="PILOT PROCESS" Height="40" Margin="0 10 0 0" Width="250" FontSize="20" Background="LightSteelBlue" Command="{Binding SetPilotProcessRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
+                <TextBox Text="FALSE" Height="40" Margin="0 1 0 0" Width="250" FontSize="20" IsReadOnly="True" TextAlignment="Center"></TextBox>
+
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                    <Button Content="OK" Height="50" Margin="5 0 0 0" Width="120" FontSize="20" Background="LightPink" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
+                    <Button Content="CANCEL" Height="50" Margin="5 0 0 0" Width="120" FontSize="20" Background="White" Command="{Binding CanCelRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

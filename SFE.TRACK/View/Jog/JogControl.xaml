@@ -1,0 +1,79 @@
+﻿<Window x:Class="SFE.TRACK.View.Jog.JogControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Jog"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding JogControlViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        x:Name="JogTeach"
+        WindowStyle="None"
+        Title="PRA-X1" Height="450" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="6.5*"/>
+            <RowDefinition Height="1.5*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Border BorderBrush="Gray" BorderThickness="0.3" Margin="0 0 0 0" Canvas.Top="100">
+                <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+                    <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="MidnightBlue" Foreground="White" Padding="7" CornerRadius="1"  ClipToBounds="False">
+                        <StackPanel Orientation="Horizontal" Margin="180 0 0 0">
+                            <TextBlock Text="Current Position : " FontWeight="Bold"  VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18"></TextBlock>
+                            <TextBlock Text="15.123" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold"></TextBlock>
+                        </StackPanel>
+                    </materialDesign:ColorZone>
+                </StackPanel>
+            </Border>
+            
+            
+        </Grid>
+        <Grid Grid.Row="1" Background="#8F98A5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton Content="Low"   IsChecked="{Binding IsVelocity[0]}" FontSize="15"/>
+                <RadioButton Content="High"  IsChecked="{Binding IsVelocity[0]}" FontSize="15" Margin="20 0 0 0"/>
+                <RadioButton Content="Pitch" IsChecked="{Binding IsVelocity[0]}" FontSize="15" Margin="20 0 0 0"/>
+                <TextBlock Width="100" Background="Black" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="20" Text="0.5" Margin="100 0 0 0">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Command="{Binding PitchClickRelayCommand}" MouseAction="LeftClick"></MouseBinding>
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Width="270" Height="230" Content="+" FontSize="50">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseDown" >
+                            <i:InvokeCommandAction Command="{Binding MouseDownPlusRelayCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="PreviewMouseUp" >
+                            <i:InvokeCommandAction Command="{Binding MouseUpPlusRelayCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Width="270" Height="230" Content="-" FontSize="50" Margin="20 0 0 0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseDown" >
+                            <i:InvokeCommandAction Command="{Binding MouseDownMinusRelayCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="PreviewMouseUp" >
+                            <i:InvokeCommandAction Command="{Binding MouseUpMinusRelayCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" Background="LightGray">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Width="150" Height="50" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=JogTeach}" Margin="0 0 0 0" >OK</Button>
+                <Button Width="150" Height="50" FontSize="20" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=JogTeach}" Margin="100 0 0 0">Cancel</Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

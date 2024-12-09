@@ -1,0 +1,59 @@
+﻿<Window x:Class="SFE.TRACK.View.Auto.SlotDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
+        DataContext="{Binding SlotDetailViewModel, Source={StaticResource Locator}}"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        x:Name="SlotDetailView"
+        Title="SlotDetail" Height="705" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5.2*"/>
+            <ColumnDefinition Width="4.8*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <StackPanel >
+                <Border BorderBrush="LightGray" BorderThickness="1">
+                    <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                        <DataGrid  x:Name="DataGridFoupDetail" GridLinesVisibility="All" Background="White" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="7" SelectedIndex="{Binding SelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" ItemsSource="{Binding Foup.FoupWaferList}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding Wafer, Mode=TwoWay, UpdateSourceTrigger=Default}">
+
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Foreground" Value="DarkBlue"/>
+                                    <Setter Property="FontSize" Value="20"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Slot" Foreground="Black" Width="197" Binding="{Binding Index}" FontSize="18">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Background" Value="{Binding WaferColor}"/>
+                                            <Setter Property="Height" Value="40"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                            <DataGrid.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding FoupDetailDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridFoupDetail}"/>
+                            </DataGrid.InputBindings>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <Button Content="RecipeName" Height="40" Margin="0 300 0 0"  FontSize="20" Width="180" Background="LightSteelBlue" Command="{Binding SetRecipeRelayCommand}"></Button>
+                <TextBox Text="{Binding Wafer.Recipe.Name, Mode=TwoWay, UpdateSourceTrigger=Default}" Height="40" Margin="0 1 0 0" Width="180" FontSize="20" IsReadOnly="True" TextAlignment="Center"></TextBox>
+                <Button Content="OK" Height="60" Margin="0 150 0 0"  FontSize="20" Width="180" Background="LightPink" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SlotDetailView}"></Button>
+                <Button Content="Cancel" Height="60" Margin="0 10 0 0"  FontSize="20" Width="180"  Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SlotDetailView}"></Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

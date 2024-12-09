@@ -1,0 +1,288 @@
+﻿<Controls:MetroWindow x:Class="SFE.TRACK.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Closing="MetroWindow_Closing"
+        xmlns:local="clr-namespace:SFE.TRACK"         
+        xmlns:AutoView="clr-namespace:SFE.TRACK.View.Auto"
+        xmlns:AutoViewModel="clr-namespace:SFE.TRACK.ViewModel.Auto"
+        xmlns:RecipeView="clr-namespace:SFE.TRACK.View.Recipe"
+        xmlns:RecipeViewModel="clr-namespace:SFE.TRACK.ViewModel.Recipe"
+        xmlns:GemView="clr-namespace:SFE.TRACK.View.Gem"
+        xmlns:GemViewModel="clr-namespace:SFE.TRACK.ViewModel.Gem"
+        xmlns:LogView="clr-namespace:SFE.TRACK.View.Log"
+        xmlns:LogViewModel="clr-namespace:SFE.TRACK.ViewModel.Log"
+        xmlns:MaintView="clr-namespace:SFE.TRACK.View.Maint"
+        xmlns:MaintViewModel="clr-namespace:SFE.TRACK.ViewModel.Maint"
+        xmlns:MotorView="clr-namespace:SFE.TRACK.View.Motor"
+        xmlns:MotorViewModel="clr-namespace:SFE.TRACK.ViewModel.Motor"
+        xmlns:ParamView="clr-namespace:SFE.TRACK.View.Param"
+        xmlns:ParamViewModel="clr-namespace:SFE.TRACK.ViewModel.Param"
+        xmlns:UtilView="clr-namespace:SFE.TRACK.View.Util"
+        xmlns:UtilViewModel="clr-namespace:SFE.TRACK.ViewModel.Util"
+        xmlns:AlarmView="clr-namespace:SFE.TRACK.View.Alarm"
+        xmlns:AlarmViewModel="clr-namespace:SFE.TRACK.ViewModel.Alarm"          
+        mc:Ignorable="d"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
+        Height="1080" Width="1920" 
+        WindowStyle="None"
+        ShowTitleBar="False" 
+        WindowStartupLocation="CenterScreen" Margin="0,0,6,0">
+    <Controls:MetroWindow.Resources>
+        <DataTemplate x:Key="AutoMain" DataType="{x:Type AutoViewModel:AutoMainViewModel}">
+            <AutoView:UCAutoMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="RecipeMain" DataType="{x:Type RecipeViewModel:RecipeMainViewModel}">
+            <RecipeView:UCRecipeMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="GemMain" DataType="{x:Type GemViewModel:GemMainViewModel}">
+            <GemView:UCGemMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="LogMain" DataType="{x:Type LogViewModel:LogMainViewModel}">
+            <LogView:UCLogMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="MaintMain" DataType="{x:Type MaintViewModel:MaintMainViewModel}">
+            <MaintView:UCMaintMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="MotorMain" DataType="{x:Type MotorViewModel:MotorMainViewModel}">
+            <MotorView:UCMotorMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="ParamMain" DataType="{x:Type ParamViewModel:ParamMainViewModel}">
+            <ParamView:UCParameterMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="UtilMain" DataType="{x:Type UtilViewModel:UtilMainViewModel}">
+            <UtilView:UCUtilMain/>
+        </DataTemplate>
+        <DataTemplate x:Key="AlarmMain" DataType="{x:Type AlarmViewModel:AlarmMainViewModel}">
+            <AlarmView:AlarmMain/>
+        </DataTemplate>
+        <local:ClockCls x:Name="Clock" x:Key="Clock"/>
+    </Controls:MetroWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="120"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+
+            <Border Background="{Binding TitleColor}" BorderBrush="Black" BorderThickness="1.5" CornerRadius="5" Width="1914" Height="74" Margin="3">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Background="White">
+                        <Image Source="../Resources/Logo.png" Stretch="Uniform" Margin="0"/>
+                    </StackPanel>
+                    
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="      SFE.TRACK"  FontFamily="Georgia"  Foreground="White" FontWeight="Bold" FontSize="65" Margin="10"/>
+                    <Border BorderBrush="#00004f" BorderThickness="0" CornerRadius="15" Margin="120 0 0 0">
+                        <StackPanel Orientation="Horizontal" Margin="1 ">
+
+                            <Border BorderBrush="#DCD2D2" BorderThickness="1" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal" Margin="2">
+                                    <Border Background="#DCD2D2" CornerRadius="5">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Lan" Width="70" Height="40" HorizontalAlignment="Center" Margin="0 0 0 0"/>
+                                            <TextBlock FontWeight="Bold" Margin="-5,5" Text="GEM" FontSize="13" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Orientation="Horizontal" Margin="5 2 3 2">
+                                        <StackPanel Orientation="Vertical" Width="90">
+                                            <Label Content="ON-LINE" HorizontalContentAlignment="Center" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20" Height="28" Background="White" BorderBrush="Black" BorderThickness="1"/>
+                                            <Label Content="OFF-LINE" HorizontalContentAlignment="Center" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20" Height="28" Background="White" BorderBrush="Black" BorderThickness="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical" Width="90">
+                                            <Label Content="LOCAL" HorizontalContentAlignment="Center" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20" Height="28" Background="White" BorderBrush="Black" BorderThickness="1"/>
+                                            <Label Content="REMOTE" HorizontalContentAlignment="Center" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20" Height="28" Background="White" BorderBrush="Black" BorderThickness="1"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+
+                            <Border BorderBrush="#DCD2D2" BorderThickness="0" CornerRadius="5" Margin="10 0 0 0">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                        <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="SERVER" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
+                                        <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="CHAMBER" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
+                                        <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="CDM" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                        <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80" Height="35">
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                        </Border>
+                                        <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80">
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                        </Border>
+                                        <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80">
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+
+                            </Border>
+
+                            <Button Command="{Binding LoginRelayCommand}" materialDesign:ButtonAssist.CornerRadius="5" Background="White" Width="125" Height="45" Margin="70 5 5 5">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <materialDesign:PackIcon Kind="{Binding Source={x:Static local:Global.STLoginInfo}, Path = LoginDisplay}" Foreground="Blue" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-5 0 0 0"/>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Source={x:Static local:Global.STLoginInfo}, Path = LoginDisplay}" Foreground="Black" FontSize="15" VerticalAlignment="Center" Margin="2 0 0 0"/>
+                                </StackPanel>
+                            </Button>
+
+                            <TextBlock Foreground="White" Text="{Binding Source={StaticResource Clock}, Path=DateTime, ConverterCulture='ko-KR'}" TextWrapping="NoWrap" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Margin="50 0 0 0 "/>
+                            <Button Command="{Binding ShutDownRelayCommand}" Style="{StaticResource MaterialDesignFloatingActionButton}" Background="#FF2A2A" ToolTip="Shut Down" Width="60" Height="60" BorderBrush="White" Foreground="White" Margin="30 0 0 0">
+                                <materialDesign:PackIcon Kind="Power" Height="50" Width="50" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding}" Grid.ColumnSpan="2">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvAuto}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource AutoMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource RecipeMain}"/>
+                            </DataTrigger>
+                            
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvMotor}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource MotorMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvParam}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ParamMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvMaint}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource MaintMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvUtil}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource UtilMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvGem}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource GemMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvLog}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource LogMain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvAlarm}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource AlarmMain}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>            
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Border BorderBrush="Black" BorderThickness="3" CornerRadius="5">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#00004f" Offset="0"/>
+                        <GradientStop Color="#00004f" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <ListView ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" Background="#00004f" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" IsSynchronizedWithCurrentItem="True">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            </StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
+                    <ListViewItem IsSelected="{Binding IsSelectedAuto}" x:Name="lvAuto" ToolTip="Auto" BorderBrush="Black" BorderThickness="1">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Monitor" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" Text="Auto" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+
+                    </ListViewItem>
+
+                    <!-- IsEnabled="{Binding CanControlMenu}" Opacity="{Binding ControlOpacity}"-->
+                    <ListViewItem IsSelected="{Binding IsSelectedRecipe}" Visibility="{Binding ControlVisibility}" x:Name="lvRecipe" BorderBrush="Black" ToolTip="Recipe" BorderThickness="1">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="File" Width="50" Height="50" Foreground="#565656" Margin="0,5,0,0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Recipe" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                    <ListViewItem IsSelected="{Binding IsSelectedIO}" Visibility="{Binding ControlVisibility}" Background="{Binding BackColor}" x:Name="lvMotor" ToolTip="Motion I/O" BorderBrush="Black" BorderThickness="1">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ReportSankey" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Motor I/O" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                    <ListViewItem IsSelected="{Binding IsSelectedParam}" Visibility="{Binding ControlVisibility}" x:Name="lvParam" Background="{Binding BackColor}" ToolTip="Parameter" BorderBrush="Black" BorderThickness="1">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Folder" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Parameter" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                    <ListViewItem IsSelected="{Binding IsSelectedMaint}" Visibility="{Binding ControlVisibility}" x:Name="lvMaint" BorderBrush="Black" BorderThickness="1" ToolTip="Maintenance">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ScheduledMaintenance" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Maint" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                    <ListViewItem IsSelected="{Binding IsSelectedUtil}" Visibility="{Binding ControlVisibility}" x:Name="lvUtil" BorderBrush="Black" BorderThickness="1" ToolTip="Utility">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Settings" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Utility" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                    <!--<ListViewItem IsSelected="{Binding IsSelectedGem}" Visibility="{Binding ControlVisibility}" x:Name="lvGem" BorderBrush="Black" BorderThickness="1" ToolTip="Gem">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Database" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Gem" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>-->
+
+                    <ListViewItem IsSelected="{Binding IsSelectedLog}" Visibility="{Binding ControlVisibility}" x:Name="lvLog" BorderBrush="Black" BorderThickness="1" ToolTip="Log">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="History" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Log" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                    <ListViewItem IsSelected="{Binding IsSelectedAlarm}" Visibility="{Binding ControlVisibility}" x:Name="lvAlarm" BorderBrush="Black" BorderThickness="1" ToolTip="Log">
+                        <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
+                            <StackPanel>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Alarm" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="Alarm" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </ListViewItem>
+
+                </ListView>
+
+            </Border>
+        </Grid>
+    </Grid>
+</Controls:MetroWindow>

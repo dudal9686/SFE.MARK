@@ -1,0 +1,96 @@
+﻿<Window x:Class="SFE.TRACK.View.Auto.CassetteSlot"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
+        xmlns:Model="clr-namespace:SFE.TRACK.Model"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{Binding CassetteSlotViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        x:Name="SlotView"
+        WindowStartupLocation="CenterScreen"
+        Title="CassetteSlot" Height="700" Width="1100">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7.5*"/>
+            <ColumnDefinition Width="2.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Canvas>
+                <Border BorderBrush="Navy" CornerRadius="5" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
+                    <GroupBox Width="820" materialDesign:ColorZoneAssist.Mode="Custom" Background="RosyBrown" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0" Height="660">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Cassette" Height="20" Width="20" VerticalAlignment="Center" Background="RosyBrown"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Slot Info" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <ItemsControl ItemsSource="{Binding WaferList ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas  x:Name="CanvasGraphic" Width="820" Height="660" IsItemsHost="True" Margin="5 20 0 0"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="Canvas.Left" Value="{Binding ScreenX, Mode=TwoWay}"/>
+                                    <Setter Property="Canvas.Top" Value="{Binding ScreenY, Mode=TwoWay}"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.Resources>
+
+                                <DataTemplate DataType="{x:Type Model:WaferCls}">
+                                    <Canvas>
+                                        <TextBlock Width="{Binding SizeX}" Height="{Binding SizeY}" Text="{Binding Index}" FontWeight="Bold" FontSize="10" TextAlignment="Center"  Background="{Binding Path=WaferColor}"></TextBlock>
+                                    </Canvas>
+                                </DataTemplate>
+                            </ItemsControl.Resources>
+                        </ItemsControl>
+
+                    </GroupBox>
+                </Border>
+                <Button Canvas.Top="580" Background="RosyBrown" Command="{Binding SlotDetailRelayCommand}" CommandParameter="1" Canvas.Left= "50" Content="Slot" FontSize ="20" Width="130" Height="65"></Button>
+                <Button Canvas.Top="580" Background="RosyBrown" Command="{Binding SlotDetailRelayCommand}" CommandParameter="2" Canvas.Left="250" Content="Slot" FontSize ="20" Width="130" Height="65"></Button>
+                <Button Canvas.Top="580" Background="RosyBrown" Command="{Binding SlotDetailRelayCommand}" CommandParameter="3" Canvas.Left="450" Content="Slot" FontSize ="20" Width="130" Height="65"></Button>
+                <Button Canvas.Top="580" Background="RosyBrown" Command="{Binding SlotDetailRelayCommand}" CommandParameter="4" Canvas.Left="650" Content="Slot" FontSize ="20" Width="130" Height="65"></Button>
+            </Canvas>
+            <Canvas>
+                <StackPanel Orientation="Horizontal" Canvas.Top="35">
+                    <Button Background="Blue" Foreground="White" Content="1-1" FontSize ="15" Width="130" Height="30" Margin="50 0 0 0" Command="{Binding SetSlotRelayCommand}" CommandParameter="1"></Button>
+                    <Button Background="Blue" Foreground="White" Content="1-2" FontSize ="15" Width="130" Height="30" Margin="69 0 0 0" Command="{Binding SetSlotRelayCommand}" CommandParameter="2"></Button>
+                    <Button Background="Blue" Foreground="White" Content="1-3" FontSize ="15" Width="130" Height="30" Margin="70 0 0 0" Command="{Binding SetSlotRelayCommand}" CommandParameter="3"></Button>
+                    <Button Background="Blue" Foreground="White" Content="1-4" FontSize ="15" Width="130" Height="30" Margin="70 0 0 0" Command="{Binding SetSlotRelayCommand}" CommandParameter="4"></Button>
+                </StackPanel>
+            </Canvas>
+        </Grid>
+        <Grid Grid.Column="1">
+            <DataGrid Margin="10 40 0 0" Width="235" x:Name="DataFoupList" ItemsSource="{Binding CstList, Mode=TwoWay}" GridLinesVisibility="All" Background="White" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40"  SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False"  CanUserAddRows="False" AutoGenerateColumns="False">
+
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="RosyBrown"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Module" Foreground="Black" Binding="{Binding CstNo}" Width="235"  FontSize="18"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Canvas>
+                <StackPanel Orientation="Vertical" Canvas.Left="23" Canvas.Top="500">
+                    <Button Width="235" Height="60" Background="LightPink" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SlotView}">OK</Button>
+                    <Button Width="235" Height="60" Margin="0 10 0 0" FontSize="20" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SlotView}">Cancel</Button>
+                </StackPanel>
+            </Canvas>
+        </Grid>
+    </Grid>
+</Window>

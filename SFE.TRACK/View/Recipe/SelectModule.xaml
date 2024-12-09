@@ -1,0 +1,48 @@
+﻿<Window x:Class="SFE.TRACK.View.Recipe.SelectModule"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
+        DataContext="{Binding SelectModuleViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        x:Name="SelModule"
+        WindowStartupLocation="CenterScreen"
+        Title="Select Module" Height="450" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <DataGrid x:Name="DataGridModule" GridLinesVisibility="All" SelectedIndex="{Binding SelectedIndex}" RowHeight="40" TextBlock.TextAlignment="Center" IsReadOnly="True" FontFamily = "Consolar" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False"  ItemsSource="{Binding ModuleList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" SelectedItem="{Binding ItemModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="DarkBlue"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Index}"  Header="Index" FontSize="19" Width="100"/>
+                    <DataGridCheckBoxColumn Binding="{Binding IsCheck, Mode=TwoWay}" Header="Check" Width="100">
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn Binding="{Binding Display}" Header="Module Type" FontSize="19" Width="275"/>
+                </DataGrid.Columns>
+                <DataGrid.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ModuleDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridModule}"/>
+                </DataGrid.InputBindings>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Canvas HorizontalAlignment="Center">                
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="150" Height="70" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SelModule}" Margin="-250 0 0 0" >OK</Button>
+                    <Button Width="150" Height="70" FontSize="20" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SelModule}" Margin="50 0 0 0">Cancel</Button>
+                </StackPanel>
+            </Canvas>
+        </Grid>
+    </Grid>
+</Window>

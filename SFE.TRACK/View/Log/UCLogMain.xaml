@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Log.UCLogMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:SFE.TRACK.View.Log"
+             mc:Ignorable="d" 
+             DataContext="{Binding LogMainViewModel, Source={StaticResource Locator}}"
+             d:DesignHeight="880" d:DesignWidth="1920">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.8*"/>
+            <ColumnDefinition Width="8.2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <materialDesign:ColorZone  Mode="Custom" Background="#00004f" Padding="7" CornerRadius="5" ClipToBounds="False">
+                <StackPanel Height="40" Orientation="Horizontal">
+                    <materialDesign:PackIcon HorizontalAlignment="Left" Kind="ListBox" Width="30" Height="35" Foreground="White" Margin="0 5 10 0"/>
+                    <Label Content="Log" Foreground="White" FontSize="30" Margin="10 -10"/>
+                </StackPanel>
+            </materialDesign:ColorZone>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightGray" Margin="0 50 0 0">
+                <TreeView FontSize="18" FontFamily = "Consolar" Background="White">
+                    <TreeViewItem IsSelected="{Binding IsSupport}" x:Name="lvSupport">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Heater" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Chamber" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem IsSelected="{Binding IsChamber}" x:Name="lvChamber">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Video3dVariant" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="PRA" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem IsSelected="{Binding IsMaint}" x:Name="lvMaint">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Camera" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="CRA" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>
+            </Border>
+        </Grid>
+        <Grid Grid.Column="1">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <materialDesign:ColorZone  Mode="Custom" Background="#8F98AC" Padding="7" CornerRadius="5" ClipToBounds="False">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="History" Foreground="Navy"  Width="20" Height="40" VerticalAlignment="Center"/>
+                        <TextBlock Text="Log Viewer" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                        <TextBlock Text="{Binding DateDisplay}" FontSize="22" Background="Blue" Foreground="White" VerticalAlignment="Center" Margin="1000 0 0 0"/>
+                        <Button Command="{Binding DateRelayCommand}" ToolTip="Date" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="DateRange" Foreground="Blue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+
+                <StackPanel >
+
+                    <Border BorderBrush="LightGray" BorderThickness="1" Height="810">
+                        <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                            <DataGrid  x:Name="DataGridAlarm" Height="800" SelectedIndex="{Binding SelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False">
+                                <DataGrid.Resources>
+
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="Foreground" Value="DarkBlue"/>
+                                        <Setter Property="FontSize" Value="18"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Date" Foreground="Black" Width="250" Binding="{Binding}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Display" Foreground="Black" Width="700" Binding="{Binding}" FontSize="15"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

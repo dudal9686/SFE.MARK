@@ -1,0 +1,46 @@
+﻿<Window x:Class="SFE.TRACK.View.Recipe.SelectDispense"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        DataContext="{Binding SelectDispenseViewModel, Source={StaticResource Locator}}"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        x:Name="SelDispense"
+        Title="SelectDispense" Height="550" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <DataGrid x:Name="DataGrid" GridLinesVisibility="All" SelectedIndex="{Binding SelectedIndex}" RowHeight="40" TextBlock.TextAlignment="Center" IsReadOnly="True" FontFamily = "Consolar" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False"  ItemsSource="{Binding DispenseList}" AutoGenerateColumns="False" SelectedItem="{Binding DispenseStep, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="DarkBlue"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding DispNo}"  Header="No" FontSize="19" Width="100"/>
+                    <DataGridCheckBoxColumn Binding="{Binding IsCheck, Mode=TwoWay}" Header="Check" Width="100"/>
+                    <DataGridTextColumn Binding="{Binding DispName}" Header="Dispense" FontSize="19" Width="270"/>
+                </DataGrid.Columns>
+                <DataGrid.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding GridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+                </DataGrid.InputBindings>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Canvas HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="150" Height="70" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SelDispense}" Margin="-250 0 0 0" >OK</Button>
+                    <Button Width="150" Height="70" FontSize="20" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SelDispense}" Margin="50 0 0 0">Cancel</Button>
+                </StackPanel>
+            </Canvas>
+        </Grid>
+    </Grid>
+</Window>

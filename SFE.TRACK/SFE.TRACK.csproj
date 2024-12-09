@@ -1,0 +1,651 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0B2B5E4D-61F5-4260-94D0-FAFD937B1E3C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SFE.TRACK</RootNamespace>
+    <AssemblyName>SFE.TRACK</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\ControlzEx.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreCSBase">
+      <HintPath>bin\Debug\Library\CoreCSBase\CoreCSBase.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreCSDB">
+      <HintPath>bin\Debug\Library\CoreCSDB\CoreCSDB.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreCSMac">
+      <HintPath>bin\Debug\Library\CoreCSMac\CoreCSMac.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="MachineCSBaseSim">
+      <HintPath>bin\Debug\Library\MachineCSBaseSim\MachineCSBaseSim.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net47\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors, Version=3.1.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.3.1.0\lib\net462\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=5.1.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.5.1.0\lib\net462\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AjinLib\AXA.cs" />
+    <Compile Include="AjinLib\AXC.cs" />
+    <Compile Include="AjinLib\AXD.cs" />
+    <Compile Include="AjinLib\AXDev.cs" />
+    <Compile Include="AjinLib\AXHD.cs" />
+    <Compile Include="AjinLib\AXHS.cs" />
+    <Compile Include="AjinLib\AXL.cs" />
+    <Compile Include="AjinLib\AXM.cs" />
+    <Compile Include="AjinLib\AXP.cs" />
+    <Compile Include="AjinLib\AXS.cs" />
+    <Compile Include="Alarm\AlarmMessage.xaml.cs">
+      <DependentUpon>AlarmMessage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DefineCls.cs" />
+    <Compile Include="ClockCls.cs" />
+    <Compile Include="DataAccessCls.cs" />
+    <Compile Include="DB\AccessDBCls.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="IDialog.cs" />
+    <Compile Include="Log\LogCls.cs" />
+    <Compile Include="MachineDefine.cs" />
+    <Compile Include="Model\AxisBaseCls.cs" />
+    <Compile Include="Model\AxisCls.cs" />
+    <Compile Include="Model\AxisInfoCls.cs" />
+    <Compile Include="Model\ChamberCls.cs" />
+    <Compile Include="Model\FoupCls.cs" />
+    <Compile Include="Model\IODataCls.cs" />
+    <Compile Include="Model\SpinChamberCls.cs" />
+    <Compile Include="Model\TeachingDataCls.cs" />
+    <Compile Include="Model\WaferCls.cs" />
+    <Compile Include="Model\ModuleBaseCls.cs" />
+    <Compile Include="Model\CRARobotCls.cs" />
+    <Compile Include="Model\PRARobotCls.cs" />
+    <Compile Include="Model\RobotArmCls.cs" />
+    <Compile Include="Pad\KeyBoard.xaml.cs">
+      <DependentUpon>KeyBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pad\KeyPad.xaml.cs">
+      <DependentUpon>KeyPad.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\Account\AccountModifyViewModel.cs" />
+    <Compile Include="ViewModel\Account\UserAccountViewModel.cs" />
+    <Compile Include="ViewModel\AlarmMessageViewModel.cs" />
+    <Compile Include="ViewModel\Alarm\AlarmMainViewModel.cs" />
+    <Compile Include="ViewModel\Auto\AutoMainViewModel.cs" />
+    <Compile Include="ViewModel\Auto\CassetteLayOutViewModel.cs" />
+    <Compile Include="ViewModel\Auto\CassetteSlotViewModel.cs" />
+    <Compile Include="ViewModel\Auto\JobStartViewModel.cs" />
+    <Compile Include="ViewModel\Auto\LotStartViewModel.cs" />
+    <Compile Include="ViewModel\Auto\MachineLayOutViewModel.cs" />
+    <Compile Include="ViewModel\Auto\MotorInitialViewModel.cs" />
+    <Compile Include="ViewModel\Auto\SlotDetailViewModel.cs" />
+    <Compile Include="ViewModel\Gem\GemMainViewModel.cs" />
+    <Compile Include="ViewModel\Jog\JogControlViewModel.cs" />
+    <Compile Include="ViewModel\Log\LogMainViewModel.cs" />
+    <Compile Include="ViewModel\Maint\MaintChamberViewModel.cs" />
+    <Compile Include="ViewModel\Maint\MaintenanceModeViewModel.cs" />
+    <Compile Include="ViewModel\Maint\MaintMainViewModel.cs" />
+    <Compile Include="ViewModel\Maint\MaintSupportViewModel.cs" />
+    <Compile Include="ViewModel\Maint\SelSupportDateViewModel.cs" />
+    <Compile Include="ViewModel\Maint\UserRegistViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\Motor\IOControlViewModel.cs" />
+    <Compile Include="ViewModel\Motor\MotorControlViewModel.cs" />
+    <Compile Include="ViewModel\Motor\MotorMainViewModel.cs" />
+    <Compile Include="ViewModel\Param\ParamMainViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\ADHDummyCondRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\ADHDummySeqRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\ADHProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\ArmPositionViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\CleanCondRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\CoaterCleanRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\CoaterDummyCondRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\CoaterDummySeqRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\CoaterProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\CPLProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\DevCleanRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\DevDummyCondRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\DevDummySeqRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\DevProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\DummyCondLinkRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\HHPProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\LHPProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\PumpRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\RecipeMainViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\SelectDispenseViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\SelectModuleViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\SelectRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\SystemRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\TCPProcessRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Recipe\WaferFlowRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Util\CassetteConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\DispenseConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\MachineConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\RobotConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\UtilMainViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\ViewModelMessage.cs" />
+    <Compile Include="View\Account\AccountModify.xaml.cs">
+      <DependentUpon>AccountModify.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Account\UserAccount.xaml.cs">
+      <DependentUpon>UserAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Alarm\AlarmMain.xaml.cs">
+      <DependentUpon>AlarmMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\CassetteLayOut.xaml.cs">
+      <DependentUpon>CassetteLayOut.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\CassetteSlot.xaml.cs">
+      <DependentUpon>CassetteSlot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\JobStart.xaml.cs">
+      <DependentUpon>JobStart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\LotStart.xaml.cs">
+      <DependentUpon>LotStart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\MachineLayOut.xaml.cs">
+      <DependentUpon>MachineLayOut.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\MotorInitail.xaml.cs">
+      <DependentUpon>MotorInitail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\SlotDetail.xaml.cs">
+      <DependentUpon>SlotDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gem\UCGemMain.xaml.cs">
+      <DependentUpon>UCGemMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Jog\JogControl.xaml.cs">
+      <DependentUpon>JogControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Log\UCLogMain.xaml.cs">
+      <DependentUpon>UCLogMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\MaintChamer.xaml.cs">
+      <DependentUpon>MaintChamer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\MaintenanceMode.xaml.cs">
+      <DependentUpon>MaintenanceMode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\MaintSupport.xaml.cs">
+      <DependentUpon>MaintSupport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\SelSupportDate.xaml.cs">
+      <DependentUpon>SelSupportDate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\UCMaintMain.xaml.cs">
+      <DependentUpon>UCMaintMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\UserRegist.xaml.cs">
+      <DependentUpon>UserRegist.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Motor\IOControl.xaml.cs">
+      <DependentUpon>IOControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Motor\MotorControl.xaml.cs">
+      <DependentUpon>MotorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Motor\UCMotorMain.xaml.cs">
+      <DependentUpon>UCMotorMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Param\UCParameterMain.xaml.cs">
+      <DependentUpon>UCParameterMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\ADHDummyCondRecipe.xaml.cs">
+      <DependentUpon>ADHDummyCondRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\ADHDummySeqRecipe.xaml.cs">
+      <DependentUpon>ADHDummySeqRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\ADHProcessRecipe.xaml.cs">
+      <DependentUpon>ADHProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\ArmPosition.xaml.cs">
+      <DependentUpon>ArmPosition.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\CleanCondRecipe.xaml.cs">
+      <DependentUpon>CleanCondRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\CoaterCleanRecipe.xaml.cs">
+      <DependentUpon>CoaterCleanRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\CoaterDummyCondRecipe.xaml.cs">
+      <DependentUpon>CoaterDummyCondRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\CoaterDummySeqRecipe.xaml.cs">
+      <DependentUpon>CoaterDummySeqRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\CoaterProcessRecipe.xaml.cs">
+      <DependentUpon>CoaterProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\CPLProcessRecipe.xaml.cs">
+      <DependentUpon>CPLProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\DevCleanRecipe.xaml.cs">
+      <DependentUpon>DevCleanRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\DevDummyCondRecipe.xaml.cs">
+      <DependentUpon>DevDummyCondRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\DevDummySeqRecipe.xaml.cs">
+      <DependentUpon>DevDummySeqRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\DevProcessRecipe.xaml.cs">
+      <DependentUpon>DevProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\DummyCondLinkRecipe.xaml.cs">
+      <DependentUpon>DummyCondLinkRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\HHPProcessRecipe.xaml.cs">
+      <DependentUpon>HHPProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\LHPProcessRecipe.xaml.cs">
+      <DependentUpon>LHPProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\PumpRecipe.xaml.cs">
+      <DependentUpon>PumpRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\SelectDispense.xaml.cs">
+      <DependentUpon>SelectDispense.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\SelectModule.xaml.cs">
+      <DependentUpon>SelectModule.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\SelectRecipe.xaml.cs">
+      <DependentUpon>SelectRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\SystemRecipe.xaml.cs">
+      <DependentUpon>SystemRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\TCPProcessRecipe.xaml.cs">
+      <DependentUpon>TCPProcessRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\UCRecipeMain.xaml.cs">
+      <DependentUpon>UCRecipeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Recipe\WaferFlowRecipe.xaml.cs">
+      <DependentUpon>WaferFlowRecipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\CassetteConfig.xaml.cs">
+      <DependentUpon>CassetteConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\DispenseConfig.xaml.cs">
+      <DependentUpon>DispenseConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\MachineConfig.xaml.cs">
+      <DependentUpon>MachineConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\RobotConfig.xaml.cs">
+      <DependentUpon>RobotConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\UCUtilMain.xaml.cs">
+      <DependentUpon>UCUtilMain.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Alarm\AlarmMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pad\KeyBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pad\KeyPad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Account\AccountModify.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Account\UserAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Alarm\AlarmMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\CassetteLayOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\CassetteSlot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\JobStart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\LotStart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\MachineLayOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\MotorInitail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\SlotDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\UCAutoMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Gem\UCGemMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Jog\JogControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Log\UCLogMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\MaintChamer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\MaintenanceMode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\MaintSupport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\SelSupportDate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\UCMaintMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\UserRegist.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Auto\UCAutoMain.xaml.cs">
+      <DependentUpon>UCAutoMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\Motor\IOControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Motor\MotorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Motor\UCMotorMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Param\UCParameterMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\ADHDummyCondRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\ADHDummySeqRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\ADHProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\ArmPosition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\CleanCondRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\CoaterCleanRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\CoaterDummyCondRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\CoaterDummySeqRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\CoaterProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\CPLProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\DevCleanRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\DevDummyCondRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\DevDummySeqRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\DevProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\DummyCondLinkRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\HHPProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\LHPProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\PumpRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\SelectDispense.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\SelectModule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\SelectRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\SystemRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\TCPProcessRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\UCRecipeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Recipe\WaferFlowRecipe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\CassetteConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\DispenseConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\MachineConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\RobotConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\UCUtilMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Object\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>이 프로젝트는 이 컴퓨터에 없는 NuGet 패키지를 참조합니다. 해당 패키지를 다운로드하려면 NuGet 패키지 복원을 사용하십시오. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkID=322105를 참조하십시오. 누락된 파일은 {0}입니다.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets'))" />
+  </Target>
+</Project>

@@ -1,0 +1,28 @@
+﻿<Window x:Class="SFE.TRACK.View.Maint.SelSupportDate"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Maint"
+        DataContext="{Binding SelSupportDateViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        x:Name="SelDate"
+        Title="" Height="500" Width="400">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Calendar Style="{StaticResource styleCalendar}" DisplayDate="{Binding SelectDate}" Margin="0 0 0 0" SelectionMode="SingleDate" SelectedDate="{Binding SelectDate, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+        </Grid>
+        <Grid Grid.Row="1">            
+            <StackPanel Orientation="Horizontal">
+                <Button Width="150" Height="70" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SelDate}" Margin="45 5 0 0" >OK</Button>
+                <Button Width="150" Height="70" FontSize="20" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SelDate}" Margin="10 5 0 0">Cancel</Button>
+            </StackPanel>            
+        </Grid>
+    </Grid>
+</Window>

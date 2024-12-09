@@ -1,0 +1,69 @@
+﻿<Window x:Class="SFE.TRACK.View.Auto.JobStart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
+        xmlns:Track="clr-namespace:SFE.TRACK"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{Binding JobStartViewModel, Source={StaticResource Locator}}"
+        WindowStartupLocation="CenterScreen"
+        x:Name="JobStartView"
+        mc:Ignorable="d"
+        Title="JobStart" Height="500" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7.5*"/>
+            <ColumnDefinition Width="2.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0">
+            <StackPanel >
+                <Border BorderBrush="LightGray" BorderThickness="1">
+                    <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                        <DataGrid x:Name="DataGridJobList"  GridLinesVisibility="All" Background="White" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="38" SelectedIndex="{Binding SelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" ItemsSource="{Binding Source= {x:Static Track:Global.STJobInfo}, Path=LotInfoList}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding LotInfo, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Foreground" Value="DarkBlue"/>
+                                    <Setter Property="FontSize" Value="17"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Lot Name" Foreground="Black" Width="135" Binding="{Binding LotID}" FontSize="18"/>
+                                <DataGridTextColumn Header="Wafer Flow Recipe" Foreground="Black" Width="200" Binding="{Binding RecipeName}" FontSize="18"/>
+                                <DataGridTextColumn Header="Start Module" Foreground="Black" Width="200" Binding="{Binding StartDisplay}" FontSize="18"/>
+                                <DataGridTextColumn Header="End Module" Foreground="Black" Width="200" Binding="{Binding EndDisplay}" FontSize="18"/>
+                            </DataGrid.Columns>
+
+                            <DataGrid.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding JobGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridJobList}"/>
+                            </DataGrid.InputBindings>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="0" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="20 0 0 0">
+                <TextBlock FontSize="20" Text="Job Name : " Margin="0 10 0 0"/>
+                <TextBox Width="500" Height="35" TextAlignment="Center" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Source= {x:Static Track:Global.STJobInfo}, Path=JobName}"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <StackPanel Orientation="Vertical" Margin="0 30 0 0">
+                <Button Content="New Job" Height="40" Margin="0 0 0 0" Width="230" FontSize="20" Background="LightSteelBlue" Command="{Binding NewJobRelayCommand}"></Button>
+                <Button Content="Delete Job" Height="40" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightSalmon" Command="{Binding DeleteJobRelayCommand}"></Button>
+                <Button Content="Previous Job" Height="40" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightSteelBlue" Command="{Binding PreJobRelayCommand}"></Button>
+                <Button Content="Host Job" Height="40" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightSteelBlue" Command="{Binding HostJobRelayCommand}"></Button>
+                <Button Content="OK" Height="60" Margin="0 110 0 0" Width="230" FontSize="20" Background="LightPink" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=JobStartView}"></Button>
+                <Button Content="Cancel" Height="60" Margin="0 10 0 0" Width="230" FontSize="20" Background="White" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=JobStartView}"></Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

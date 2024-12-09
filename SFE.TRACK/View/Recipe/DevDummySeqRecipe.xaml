@@ -1,0 +1,210 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Recipe.DevDummySeqRecipe"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
+             xmlns:Track="clr-namespace:SFE.TRACK"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             DataContext="{Binding DevDummySeqRecipeViewModel, Source={StaticResource Locator}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="880" d:DesignWidth="1574">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3.5*"/>
+            <ColumnDefinition Width="6.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Grid.RowSpan="2">
+            <StackPanel Orientation="Vertical" Margin="5">
+
+                <materialDesign:ColorZone  Mode="Custom" Background="#8F98AC" Padding="7" CornerRadius="5" ClipToBounds="False">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ClipboardListOutline" Foreground="Navy" Width="20" Height="40" VerticalAlignment="Center"/>
+                        <TextBlock Text="Recipe List" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
+
+                        <Button Command="{Binding LoadListRelayCommand}" ToolTip="Load" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="70 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="ReadMore" Foreground="Green" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding AddListRelayCommand}" ToolTip="New" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="NewBox" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding SaveAsListRelayCommand}" ToolTip="Save As" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="ContentSaveEdit" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding DeleteListRelayCommand}" ToolTip="Delete" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Delete" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding ReNameListRelayCommand}" ToolTip="ReName" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Rename" Width="40" Foreground="LightPink" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </materialDesign:ColorZone>
+
+                <StackPanel >
+
+                    <Border BorderBrush="LightGray" BorderThickness="1" Height="812">
+                        <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                            <!--<ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="282" VerticalAlignment="Top" >-->
+                            <DataGrid  x:Name="DataGridRecipeList" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectedIndex="{Binding RecipeListSelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding Source= {x:Static Track:Global.DevDummySeqRecipeFileList}}" AutoGenerateColumns="False" SelectedItem="{Binding RecipeFileInfo, Mode=TwoWay, UpdateSourceTrigger=Default}">
+
+                                <DataGrid.Resources>
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="Foreground" Value="DarkBlue"/>
+                                        <Setter Property="FontSize" Value="20"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.Resources>
+
+                                <!--<DataGrid.RowStyle>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="PapayaWhip"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>-->
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="No"  Foreground="Black" Width="100" Binding="{Binding Index}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Recipe Name" Foreground="Black" Width="437" Binding="{Binding FileName}" FontSize="18"/>
+                                </DataGrid.Columns>
+
+                                <DataGrid.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
+                                    <MouseBinding Gesture="WheelClick" Command="{Binding WheelCommand}"/>
+                                </DataGrid.InputBindings>
+                            </DataGrid>
+                            <!--</ScrollViewer>-->
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="0">
+            <StackPanel Orientation="Vertical" Margin="5">
+
+                <materialDesign:ColorZone  Mode="Custom" Background="#8F98AC" Padding="7" CornerRadius="5" ClipToBounds="False">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ClipboardListOutline" Foreground="Navy" Width="20" Height="40" VerticalAlignment="Center"/>
+                        <TextBlock Text="Recipe Detail" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
+
+
+
+                        <Button Command="{Binding AddDetailRelayCommand}" ToolTip="New" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="630 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="AddAlert"
+                                                         Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding SaveDetailRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding DeleteDetailRelayCommand}" ToolTip="Delete" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Delete" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </materialDesign:ColorZone>
+
+                <StackPanel >
+
+                    <Border BorderBrush="LightGray" BorderThickness="1" Height="730">
+                        <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                            <!--<ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="282" VerticalAlignment="Top" >-->
+                            <DataGrid  x:Name="DataGridRecipe" SelectedIndex="{Binding RecipeDetailSelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding DevData.StepList, Mode=TwoWay, UpdateSourceTrigger=Default}" AutoGenerateColumns="False" SelectedItem="{Binding DevStepData, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                                <DataGrid.Resources>
+
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="Foreground" Value="DarkBlue"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.Resources>
+
+                                <!--<DataGrid.RowStyle>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="PapayaWhip"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>-->
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="No"  Foreground="Black" Width="50" Binding="{Binding Index}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Name" Foreground="Black" Width="130" Binding="{Binding Name}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Loop" Foreground="Black" Width="160" Binding="{Binding LoopDisplay}" FontSize="16"/>
+                                    
+                                    <DataGridTextColumn Header="Step&#x0a;Time" Foreground="Black" Width="60" Binding="{Binding StepTime}" FontSize="16"/>
+                                    
+                                    <DataGridTextColumn Header="Dispense No" Foreground="Black" Width="150" Binding="{Binding DispDisplay}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm1&#x0a; Pos" Foreground="Black" Width="80" Binding="{Binding Arm1Pos}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm1&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm1Speed}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm1&#x0a; Wait" Foreground="Black" Width="70" Binding="{Binding IsArm1MoveWait}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm2&#x0a; Pos" Foreground="Black" Width="80" Binding="{Binding Arm2Pos}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm2&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm2Speed}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm2&#x0a; Wait" Foreground="Black" Width="70" Binding="{Binding IsArm2MoveWait}" FontSize="16"/>
+                                </DataGrid.Columns>
+
+                                <DataGrid.InputBindings>
+                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding RecipeDetailDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridRecipe}"/>
+                                </DataGrid.InputBindings>
+                            </DataGrid>
+                            <!--</ScrollViewer>-->
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <StackPanel Orientation="Vertical">
+
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 0 ">
+
+                    <Button Width="200" Height="70" Background="LightGray" Command="{Binding StopRangeRelayCommand}" Margin="10,10,0,80">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Stop Range" FontSize="20" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBox BorderThickness="1" FontSize="20"  Width="270" Height="70" TextAlignment="Center" Padding="15" BorderBrush="LightGray" Text="{Binding DevData.StopRange , Mode=TwoWay, UpdateSourceTrigger=Default}"  Margin="10 -70 0 0"/>
+                    <Button Width="200" Height="70" Background="LightGray" Command="{Binding AlarmRangeRelayCommand}" Margin="10,10,0,80">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Alarm Range" FontSize="20" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBox BorderThickness="1" FontSize="20"  Width="300" Height="70" TextAlignment="Center" Padding="15" BorderBrush="LightGray" Text="{Binding DevData.AlarmRange , Mode=TwoWay, UpdateSourceTrigger=Default}"  Margin="10 -70 0 0"/>
+
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

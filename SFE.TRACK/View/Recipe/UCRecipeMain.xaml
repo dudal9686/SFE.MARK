@@ -1,0 +1,364 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Recipe.UCRecipeMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
+             mc:Ignorable="d" 
+             DataContext="{Binding RecipeMainViewModel, Source={StaticResource Locator}}"
+             d:DesignHeight="880" d:DesignWidth="1920">
+    <UserControl.Resources>
+        <DataTemplate x:Key="WaferRecipe" DataType="{x:Type local:WaferFlowRecipe}">
+            <local:WaferFlowRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="SystemRecipe" DataType="{x:Type local:SystemRecipe}">
+            <local:SystemRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="PumpRecipe" DataType="{x:Type local:PumpRecipe}">
+            <local:PumpRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="CoaterProcessRecipe" DataType="{x:Type local:CoaterProcessRecipe}">
+            <local:CoaterProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="DevProcessRecipe" DataType="{x:Type local:DevProcessRecipe}">
+            <local:DevProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="ADHProcessRecipe" DataType="{x:Type local:ADHProcessRecipe}">
+            <local:ADHProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="LHPProcessRecipe" DataType="{x:Type local:LHPProcessRecipe}">
+            <local:LHPProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="HHPProcessRecipe" DataType="{x:Type local:HHPProcessRecipe}">
+            <local:HHPProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="CPLProcessRecipe" DataType="{x:Type local:CPLProcessRecipe}">
+            <local:CPLProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="TCPProcessRecipe" DataType="{x:Type local:TCPProcessRecipe}">
+            <local:TCPProcessRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="DummyCondLinkRecipe" DataType="{x:Type local:DummyCondLinkRecipe}">
+            <local:DummyCondLinkRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="CleanCondRecipe" DataType="{x:Type local:CleanCondRecipe}">
+            <local:CleanCondRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="CoaterCleanRecipe" DataType="{x:Type local:CoaterCleanRecipe}">
+            <local:CoaterCleanRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="DevCleanRecipe" DataType="{x:Type local:DevCleanRecipe}">
+            <local:DevCleanRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="ADHDummySeqRecipe" DataType="{x:Type local:ADHDummySeqRecipe}">
+            <local:ADHDummySeqRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="CoaterDummySeqRecipe" DataType="{x:Type local:CoaterDummySeqRecipe}">
+            <local:CoaterDummySeqRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="DevDummySeqRecipe" DataType="{x:Type local:DevDummySeqRecipe}">
+            <local:DevDummySeqRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="ADHDummyCondRecipe" DataType="{x:Type local:ADHDummyCondRecipe}">
+            <local:ADHDummyCondRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="CoaterDummyCondRecipe" DataType="{x:Type local:CoaterDummyCondRecipe}">
+            <local:CoaterDummyCondRecipe/>
+        </DataTemplate>
+        <DataTemplate x:Key="DevDummyCondRecipe" DataType="{x:Type local:DevDummyCondRecipe}">
+            <local:DevDummyCondRecipe/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.8*"/>
+            <ColumnDefinition Width="8.2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <materialDesign:ColorZone  Mode="Custom" Background="DarkGray" Padding="7" CornerRadius="1" ClipToBounds="False">
+                <StackPanel Height="40" Orientation="Horizontal">
+                    <materialDesign:PackIcon HorizontalAlignment="Left" Kind="ListBox" Width="30" Height="35" Foreground="White" Margin="0 5 10 0"/>
+                    <Label Content="Menu" Foreground="White" FontSize="30" Margin="10 -10"/>
+                </StackPanel>
+            </materialDesign:ColorZone>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightGray" Margin="0 50 0 0">
+                
+                <TreeView FontSize="18" FontFamily = "Consolar" Background="White">
+                        
+                    <!--WaferRecipe-->
+                    <TreeViewItem IsSelected="{Binding IsWaferRecipe}" x:Name="lvWaferRecipe">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Journal" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Wafer Flow Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <!--ProcessRecipe-->
+                    <TreeViewItem IsSelected="{Binding IsCotProcessRecipe}">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="FullOuterJoin" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Process Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsCotProcessRecipe}" x:Name="lvCotProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Coater" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsDevProcessRecipe}" x:Name="lvDevProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Developer" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsAdhProcessRecipe}" x:Name="lvAdhProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Adhension" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsLhpProcessRecipe}" x:Name="lvLhpProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Low Temp. Hot Plate" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsHhpProcessRecipe}" x:Name="lvHhpProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="High Temp. Hot Plate" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsCplProcessRecipe}" x:Name="lvCplProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Chill Plate" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsTcpProcessRecipe}" x:Name="lvTcpProcessRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Transition Chill Plate" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                    <!--System Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsSystemRecipe}" x:Name="lvSystemRecipe">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center"  Kind="CabinAFrame" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="System Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <!--Pump Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsPumpRecipe}" x:Name="lvPumpRecipe">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Pump" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Pump Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <!--Dummy Condition Link Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsDummyCondLinkRecipe}" x:Name="lvDummyCondLinkRecipe">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="Link" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Dummy Condition Link Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <!--Dummy Condition Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsCotDummyCondRecipe}">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="AirConditioning" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Dummy Condition Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsCotDummyCondRecipe}" x:Name="lvCotDummyCondRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Coater" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsDevDummyCondRecipe}" x:Name="lvDevDummyCondRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Developer" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsAdhDummyCondRecipe}" x:Name="lvAdhDummyCondRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Adhension" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                    <!--Dummy Seq Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsCotDummySeqRecipe}">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="ViewSequential" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Dummy Seq Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsCotDummySeqRecipe}" x:Name="lvCotDummySeqRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Coater" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsDevDummySeqRecipe}" x:Name="lvDevDummySeqRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Developer" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsAdhDummySeqRecipe}" x:Name="lvAdhDummySeqRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Adhension" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                    <!--Cleaning Condition Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsCleanCondRecipe}" x:Name="lvCleanCondRecipe">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="BorderClear" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Cleaning Condition Recipe" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <!--Cleaning Recipe-->
+                    <TreeViewItem IsSelected="{Binding IsCotCleanRecipe}">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="WasherFluid" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Cleaning Recipe"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsCotCleanRecipe}" x:Name="lvCotCleanRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Coater" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsDevCleanRecipe}" x:Name="lvDevCleanRecipe">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Developer" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeView>
+            </Border>
+        </Grid>
+        <Grid Grid.Column="1">
+            <ContentControl Content="{Binding}" Grid.ColumnSpan="2">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvWaferRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource WaferRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvSystemRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource SystemRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvPumpRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PumpRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCotProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CoaterProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDevProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DevProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvAdhProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ADHProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvLhpProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource LHPProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvHhpProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource HHPProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCplProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CPLProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvTcpProcessRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource TCPProcessRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDummyCondLinkRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DummyCondLinkRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCleanCondRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CleanCondRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCotCleanRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CoaterCleanRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDevCleanRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DevCleanRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCotDummySeqRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CoaterDummySeqRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDevDummySeqRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DevDummySeqRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvAdhDummySeqRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ADHDummySeqRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCotDummyCondRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CoaterDummyCondRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDevDummyCondRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DevDummyCondRecipe}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvAdhDummyCondRecipe}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ADHDummyCondRecipe}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </Grid>
+</UserControl>

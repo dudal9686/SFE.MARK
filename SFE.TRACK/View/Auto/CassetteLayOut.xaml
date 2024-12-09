@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Auto.CassetteLayOut"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Model="clr-namespace:SFE.TRACK.Model"
+             xmlns:Track="clr-namespace:SFE.TRACK"
+             xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
+             DataContext="{Binding CassetteLayOutViewModel, Source={StaticResource Locator}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="660" d:DesignWidth="820">
+    <Grid>
+        <Canvas>
+            <Border BorderBrush="Navy" CornerRadius="5" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
+                <GroupBox Width="820" materialDesign:ColorZoneAssist.Mode="Custom" Background="RosyBrown" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0" Height="660">
+                    <GroupBox.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="StateMachine" Height="20" Width="20" VerticalAlignment="Center" Background="RosyBrown"/>
+                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Cassette LayOut" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupBox.HeaderTemplate>
+                    <ItemsControl ItemsSource="{Binding Source = {x:Static Track:Global.STWaferList}}" Margin="0,0,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas  x:Name="CanvasGraphic" Width="820" Height="660" IsItemsHost="True"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Canvas.Left" Value="{Binding Path=ScreenX, Mode=TwoWay}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Path=ScreenY, Mode=TwoWay}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.Resources>
+                            
+                            <DataTemplate DataType="{x:Type Model:WaferCls}">
+                                <Canvas>
+                                    <TextBlock Width="{Binding SizeX}" Height="{Binding SizeY}" Text="{Binding Diplay}" FontWeight="Bold" FontSize="10" TextAlignment="Center"  Background="{Binding WaferColor}"></TextBlock>
+                                </Canvas>
+                            </DataTemplate>
+                        </ItemsControl.Resources>
+                    </ItemsControl>
+                    
+                </GroupBox>
+            </Border>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="50" Content="Cassette1&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="250" Content="Cassette2&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="450" Content="Cassette3&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="650" Content="Cassette4&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
+
+            <CheckBox Content="" Canvas.Top="35" Canvas.Left="790" IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                
+            </CheckBox>
+        </Canvas>
+    </Grid>
+</UserControl>
