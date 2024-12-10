@@ -84,7 +84,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\ProcessCOTRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessCOTRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -281,7 +281,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\ProcessCOTRecipe\", ref Global.CoaterProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessCOTRecipe\", ref Global.CoaterProcessRecipeFileList);
             if (Global.CoaterProcessRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

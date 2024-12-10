@@ -73,7 +73,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Pump Recipe] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\PumpRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\PumpRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -215,7 +215,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\PumpRecipe\", ref Global.PumpRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\PumpRecipe\", ref Global.PumpRecipeFileList);
             if (Global.PumpRecipeFileList.Count() > 0)
             {
                 RecipeListSelectedIndex = 0;

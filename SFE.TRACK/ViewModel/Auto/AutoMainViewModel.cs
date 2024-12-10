@@ -72,7 +72,9 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void StopCommand()
         {
-
+            View.Auto.StopControl stop = new View.Auto.StopControl();
+            stop.Owner = Application.Current.MainWindow;
+            stop.ShowDialog();
         }
     }
 }

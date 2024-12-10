@@ -47,10 +47,10 @@
                     
                 </GroupBox>
             </Border>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="50" Content="Cassette1&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="250" Content="Cassette2&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="450" Content="Cassette3&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="650" Content="Cassette4&#x0a;     Scan " FontSize ="20" Width="130" Height="65"></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="50"  Content="Cassette1&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="1" ></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="250" Content="Cassette2&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="2" ></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="450" Content="Cassette3&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="3" ></Button>
+            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="650" Content="Cassette4&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="4" ></Button>
 
             <CheckBox Content="" Canvas.Top="35" Canvas.Left="790" IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=Default}">
                 

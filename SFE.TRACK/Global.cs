@@ -33,6 +33,9 @@ namespace SFE.TRACK
 
         public static List<TeachingDataCls> STTeachingData = new List<TeachingDataCls>();
 
+        public static ObservableCollection<AlarmLogCls> STAlarmList { get; set; } = new ObservableCollection<AlarmLogCls>();
+        public static ObservableCollection<AlarmLogCls> STWarningList { get; set; } = new ObservableCollection<AlarmLogCls>();
+
         //RegisterViewMain 에서 단독으로 하려 했으나 ViewModel에서 메모리를 가지고 있기 떄문에 글로벌에서 가지고 있는다.
         public static List<LoginInfoCls> STUserList = new List<LoginInfoCls>();
         public static LoginInfoCls STLoginInfo = new LoginInfoCls(); //로그인 후 권한 설정

@@ -181,29 +181,65 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void OKCommand(Window window)
         {
-            for(int i = 0; i < FoupList.Count; i++)
+            for (int j = 0; j < FoupTempList.Count; j++)
+            {
+                if(FoupList[j].IsDetect && FoupList[j].IsScan)
+                {
+                    if(FoupTempList[j].RecipeName != string.Empty && FoupTempList[j].LotID == string.Empty)
+                    {
+                        Global.MessageOpen(enMessageType.OK, string.Format("Please enter the LotID of the cassette[{0}].", FoupList[j].ModuleNo));
+                        return;
+                    }
+                }
+            }
+
+            Global.STJobInfo.Clear();
+            Global.STJobInfo.JobName = string.Format("JOB{0}", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            string filename = string.Format(@"C:\MachineSet\SFETrack\Recipe\JobInfo\{0}.sfe", Global.STJobInfo.JobName);
+            int index = 0;
+            for (int i = 0; i < FoupList.Count; i++)
             {
                 for(int j = 0; j < FoupTempList.Count; j++)
                 {
                     if(FoupList[i].BlockNo == FoupTempList[j].BlockNo && FoupList[i].ModuleNo == FoupTempList[j].ModuleNo)
                     {
-                        FoupList[i].RecipeName = FoupTempList[j].RecipeName;
-                        FoupList[i].Comment = FoupTempList[j].Comment;
-                        FoupList[i].LotID = FoupTempList[j].LotID;
-                        
-                        for(int k = 0; k < FoupList[i].FoupWaferList.Count; k++)
+                        if (FoupList[i].IsDetect && FoupList[i].IsScan)
                         {
-                            WaferCls tempWafer_ = FoupTempList[j].FoupWaferList.Find(x => x.ModuleNo == FoupList[i].FoupWaferList[k].ModuleNo && x.Index == FoupList[i].FoupWaferList[k].Index);
-                            if(tempWafer_ != null)
+                            if (FoupTempList[j].RecipeName == string.Empty || FoupTempList[j].LotID == string.Empty) continue;
+                            FoupList[i].RecipeName = FoupTempList[j].RecipeName;
+                            FoupList[i].Comment = FoupTempList[j].Comment;
+                            FoupList[i].LotID = FoupTempList[j].LotID;
+
+                            Global.STJobInfo.LotInfoList[index].RecipeName = FoupList[i].RecipeName;
+                            Global.STJobInfo.LotInfoList[index].LotID = FoupList[i].LotID;
+                            Global.STJobInfo.LotInfoList[index].Comment = FoupList[i].Comment;
+                            Global.STJobInfo.LotInfoList[index].StartModuleList.Add(FoupList[i].ModuleNo);
+                            Global.STJobInfo.LotInfoList[index].SModuleCount = 1;
+                            Global.STJobInfo.LotInfoList[index].StartDisplay = FoupList[i].ModuleNo.ToString();
+
+                            for (int k = 0; k < FoupList[i].FoupWaferList.Count; k++)
                             {
-                                FoupList[i].FoupWaferList[k].WaferState = tempWafer_.WaferState;
-                                FoupList[i].FoupWaferList[k].Recipe.Name = tempWafer_.Recipe.Name;
+                                WaferCls tempWafer_ = FoupTempList[j].FoupWaferList.Find(x => x.ModuleNo == FoupList[i].FoupWaferList[k].ModuleNo && x.Index == FoupList[i].FoupWaferList[k].Index);
+                                if (tempWafer_ != null)
+                                {
+                                    FoupList[i].FoupWaferList[k].WaferState = tempWafer_.WaferState;
+                                    FoupList[i].FoupWaferList[k].Recipe.Name = tempWafer_.Recipe.Name;
+                                    FoupList[i].FoupWaferList[k].LotNo = FoupList[i].LotID;
+                                }
                             }
+
+                            index++;
                         }
-                        //break;
                     }
                 }
             }
+
+            if(index != 0)
+            {
+                Global.STDataAccess.SaveJobInfo(filename);
+                Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\JobInfo\", ref Global.JobInfoFileList, ".sfe");
+            }
+            
 
             FoupTempList.Clear();
             window.DialogResult = true;

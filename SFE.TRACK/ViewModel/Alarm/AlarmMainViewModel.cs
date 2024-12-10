@@ -12,6 +12,11 @@ namespace SFE.TRACK.ViewModel.Alarm
     {
         public RelayCommand ClearAlarmRelayCommand { get; set; }
         public RelayCommand ClearWarningRelayCommand { get; set; }
+        public AlarmLogCls AlarmSelectedItem { get; set; }
+        public AlarmLogCls WarningSelectedItem { get; set; }        
+
+        int alarmSelectedIndex = 0;
+        int warningSelectedIndex = 0;
 
         public AlarmMainViewModel()
         {
@@ -19,14 +24,28 @@ namespace SFE.TRACK.ViewModel.Alarm
             ClearWarningRelayCommand = new RelayCommand(ClearWarningCommand);
         }
 
+        public int AlarmSelectedIndex
+        {
+            get { return alarmSelectedIndex; }
+            set { alarmSelectedIndex = value; RaisePropertyChanged("AlarmSelectedIndex"); }
+        }
+
+        public int WarningSelectedIndex
+        {
+            get { return warningSelectedIndex; }
+            set { warningSelectedIndex = value; RaisePropertyChanged("WarningSelectedIndex"); }
+        }
+
         private void ClearAlarmCommand()
         {
-
+            Global.STAlarmList.Clear();
+            CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
         }
 
         private void ClearWarningCommand()
         {
-
+            if (WarningSelectedItem == null) return;
+            Global.STAlarmList.Clear();
         }
     }
 }

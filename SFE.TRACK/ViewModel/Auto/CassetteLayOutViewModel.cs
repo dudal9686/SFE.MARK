@@ -12,9 +12,10 @@ namespace SFE.TRACK.ViewModel.Auto
     public class CassetteLayOutViewModel : ViewModelBase
     {
         bool isCheck = false;
+        public RelayCommand<string> CassetteScanRelayCommand { get; set; }
         public CassetteLayOutViewModel()
         {
-
+            CassetteScanRelayCommand = new RelayCommand<string>(CassetteScanCommand);
         }
 
         public bool IsCheck
@@ -22,13 +23,18 @@ namespace SFE.TRACK.ViewModel.Auto
             get { return isCheck; }
             set { isCheck = value; 
                 
-                foreach(WaferCls wafer in Global.STWaferList)
-                {
-                    if (IsCheck) wafer.Diplay = wafer.Recipe.Name;
-                    else wafer.Diplay = string.Format("{0}-{1}", wafer.ModuleNo, wafer.Index);
-                }
+            foreach(WaferCls wafer in Global.STWaferList)
+            {
+                if (IsCheck) wafer.Diplay = wafer.Recipe.Name;
+                else wafer.Diplay = string.Format("{0}-{1}", wafer.ModuleNo, wafer.Index);
+            }
 
-                RaisePropertyChanged("IsCheck"); }
+            RaisePropertyChanged("IsCheck"); }
+        }
+
+        public void CassetteScanCommand(string cst)
+        {
+            Console.WriteLine(cst);
         }
     }
 }

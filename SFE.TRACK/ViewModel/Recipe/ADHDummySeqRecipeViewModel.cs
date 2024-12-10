@@ -91,7 +91,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[ADH Dummy Seq] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\ProcessADHRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessADHRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -302,7 +302,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\DummySeqADHRecipe\", ref Global.ADHDummySeqRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummySeqADHRecipe\", ref Global.ADHDummySeqRecipeFileList);
             if (Global.ADHDummySeqRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

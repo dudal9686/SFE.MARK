@@ -92,7 +92,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[CPL] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\ProcessCPLRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessCPLRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -277,7 +277,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\ProcessCPLRecipe\", ref Global.CPLProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessCPLRecipe\", ref Global.CPLProcessRecipeFileList);
             if (Global.CPLProcessRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

@@ -83,7 +83,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater Clean] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\CleanCOTRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\CleanCOTRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -249,7 +249,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         #endregion
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\CleanCOTRecipe\", ref Global.CoaterCleanRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanCOTRecipe\", ref Global.CoaterCleanRecipeFileList);
             if (Global.CoaterCleanRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

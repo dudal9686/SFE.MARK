@@ -51,7 +51,8 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Auto.SlotDetailViewModel>();
             SimpleIoc.Default.Register<Auto.JobStartViewModel>();
             SimpleIoc.Default.Register<Auto.CassetteSlotViewModel>();
-            SimpleIoc.Default.Register<Auto.MotorInitialViewModel>();            
+            SimpleIoc.Default.Register<Auto.MotorInitialViewModel>();
+            SimpleIoc.Default.Register<Auto.StopControlViewModel>();
             SimpleIoc.Default.Register<Gem.GemMainViewModel>();
             SimpleIoc.Default.Register<Log.LogMainViewModel>();
             SimpleIoc.Default.Register<Maint.MaintMainViewModel>();
@@ -156,6 +157,10 @@ namespace SFE.TRACK.ViewModel
         public Auto.MotorInitialViewModel MotorInitialViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Auto.MotorInitialViewModel>(); }
+        }
+        public Auto.StopControlViewModel StopControlViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Auto.StopControlViewModel>(); }
         }
         #endregion
 

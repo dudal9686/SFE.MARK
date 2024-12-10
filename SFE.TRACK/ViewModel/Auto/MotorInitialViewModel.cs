@@ -16,7 +16,8 @@ namespace SFE.TRACK.ViewModel.Auto
     {
         public RelayCommand<Window> OKRelayCommand { get; set; }
         public RelayCommand<Window> CancelRelayCommand { get; set; }
-        public RelayCommand<object> HomeCheckRelayCommand { get; set; }
+        public RelayCommand<object> HomeCheckDoubleClickRelayCommand { get; set; }
+        public RelayCommand<object> HomeCheckClickRelayCommand { get; set; }
         public RelayCommand AllCheckRelayCommand { get; set; }
         public AxisInfoCls Axis { get; set; }
         int selectedIndex = 0;
@@ -26,7 +27,8 @@ namespace SFE.TRACK.ViewModel.Auto
         {
             OKRelayCommand = new RelayCommand<Window>(OKCommand);
             CancelRelayCommand = new RelayCommand<Window>(CancelCommand);
-            HomeCheckRelayCommand = new RelayCommand<object>(HomeCheckCommand);
+            HomeCheckDoubleClickRelayCommand = new RelayCommand<object>(HomeCheckDoubleClickCommand);
+            HomeCheckClickRelayCommand = new RelayCommand<object>(HomeCheckClickCommand);
             AllCheckRelayCommand = new RelayCommand(AllCheckCommand);
         }
 
@@ -72,7 +74,7 @@ namespace SFE.TRACK.ViewModel.Auto
             check = !check;
         }
 
-        private void HomeCheckCommand(object o)
+        private void HomeCheckClickCommand(object o)
         {
             System.Windows.Controls.DataGrid grid = o as System.Windows.Controls.DataGrid;
             int index = grid.CurrentCell.Column.DisplayIndex;
@@ -80,6 +82,34 @@ namespace SFE.TRACK.ViewModel.Auto
             if (index == 0)
             {
                 Axis.IsHomeChecked = !Axis.IsHomeChecked;
+            }
+        }
+
+        private void HomeCheckDoubleClickCommand(object o)
+        {
+            System.Windows.Controls.DataGrid grid = o as System.Windows.Controls.DataGrid;
+            int index = grid.CurrentCell.Column.DisplayIndex;
+
+            switch(index)
+            {
+                case 0:
+                case 1:
+                case 3:
+                case 4:
+                    Axis.IsHomeChecked = !Axis.IsHomeChecked;
+                    break;
+                case 2:
+                    bool ishomecheck = Axis.IsHomeChecked;
+                    foreach(AxisInfoCls axis in Global.STAxis)
+                    {
+                        if (axis.BlockNo == Axis.BlockNo && axis.ModuleNo == Axis.ModuleNo) axis.IsHomeChecked = !ishomecheck;
+                    }
+                    break;
+            }
+
+            if (index == 0)
+            {
+                
             }
         }
     }

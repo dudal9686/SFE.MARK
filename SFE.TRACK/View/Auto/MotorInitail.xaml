@@ -62,7 +62,7 @@
                                     <DataGridCheckBoxColumn Header="Check" Binding="{Binding IsHomeChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100">
                                     </DataGridCheckBoxColumn>
                                     <DataGridTextColumn Header="Type"  Foreground="Black" Width="200" Binding="{Binding AxisID}" FontSize="18"/>
-                                    <DataGridTextColumn Header="Module" Foreground="Black" Width="250" Binding="{Binding Parent}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Module" Foreground="Black" Width="250" Binding="{Binding ModuleName}" FontSize="18"/>
                                     <DataGridTextColumn Header="HomeState" Foreground="Black" Width="200" Binding="{Binding HomeSituation}" FontSize="20">
                                         <DataGridTextColumn.CellStyle>
                                             <Style TargetType="DataGridCell">
@@ -73,7 +73,8 @@
                                     <DataGridTextColumn Header="Position" Foreground="Black" Width="200" Binding="{Binding ActualPosition}" FontSize="18"/>
                                 </DataGrid.Columns>
                                 <DataGrid.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding HomeCheckRelayCommand}" CommandParameter="{Binding ElementName=DataGridHomming}"/>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding HomeCheckClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridHomming}"/>
+                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding HomeCheckDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridHomming}"/>
                                 </DataGrid.InputBindings>
                             </DataGrid>
                         </StackPanel>

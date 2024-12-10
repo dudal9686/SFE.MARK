@@ -158,6 +158,7 @@
     <Compile Include="ViewModel\Auto\MachineLayOutViewModel.cs" />
     <Compile Include="ViewModel\Auto\MotorInitialViewModel.cs" />
     <Compile Include="ViewModel\Auto\SlotDetailViewModel.cs" />
+    <Compile Include="ViewModel\Auto\StopControlViewModel.cs" />
     <Compile Include="ViewModel\Gem\GemMainViewModel.cs" />
     <Compile Include="ViewModel\Jog\JogControlViewModel.cs" />
     <Compile Include="ViewModel\Log\LogMainViewModel.cs" />
@@ -233,6 +234,9 @@
     </Compile>
     <Compile Include="View\Auto\SlotDetail.xaml.cs">
       <DependentUpon>SlotDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auto\StopControl.xaml.cs">
+      <DependentUpon>StopControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Gem\UCGemMain.xaml.cs">
       <DependentUpon>UCGemMain.xaml</DependentUpon>
@@ -412,6 +416,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Auto\SlotDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Auto\StopControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

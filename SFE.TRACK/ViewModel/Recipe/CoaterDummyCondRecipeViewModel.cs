@@ -78,7 +78,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater Dummy Condition]\n Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\DummyCondCOTRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\DummyCondCOTRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -274,7 +274,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\DummyCondCOTRecipe\", ref Global.CoaterDummyCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummyCondCOTRecipe\", ref Global.CoaterDummyCondRecipeFileList);
             if (Global.CoaterDummyCondRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

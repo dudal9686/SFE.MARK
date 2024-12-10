@@ -76,7 +76,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Clean Condition] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"D:\SFE_RECIPE\CleanCondRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\CleanCondRecipe\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -245,7 +245,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\CleanCondRecipe\", ref Global.CleanCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanCondRecipe\", ref Global.CleanCondRecipeFileList);
             if (Global.CleanCondRecipeFileList.Count() > 0)
             {
                 RecipeListSelectedIndex = 0;

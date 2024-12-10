@@ -22,6 +22,7 @@ namespace SFE.TRACK.Model
         string parent = string.Empty;
         int blockNo = 2;
         int moduleNo = 0;
+        string moduleName = string.Empty;
         bool isHomeChecked = false; //UI에서 홈 선택시 바인딩
         
         bool servo = false;
@@ -318,6 +319,10 @@ namespace SFE.TRACK.Model
             set { moduleNo = value; }
         }
 
+        public string ModuleName
+        {
+            get { return Global.GetModule(BlockNo, ModuleNo).MachineTitle; }
+        }
         private void HomeCommand()
         {
             Motor.DoHomming();

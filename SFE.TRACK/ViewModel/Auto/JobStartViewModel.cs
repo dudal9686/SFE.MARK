@@ -65,7 +65,7 @@ namespace SFE.TRACK.ViewModel.Auto
             if(Global.RecipeOpen(enRecipeMenu.JOBINFO))
             {
                 Global.STJobInfo.Clear();
-                Global.STDataAccess.ReadJobInfoData(string.Format(@"D:\SFE_RECIPE\JobInfo\{0}.sfe", Global.STRecipePopUp.SelectRecipeName));
+                Global.STDataAccess.ReadJobInfoData(string.Format(@"C:\MachineSet\SFETrack\Recipe\JobInfo\{0}.sfe", Global.STRecipePopUp.SelectRecipeName));
             }
         }
 
@@ -101,9 +101,9 @@ namespace SFE.TRACK.ViewModel.Auto
             }
 
             SetWafer();
-            string filename = string.Format(@"D:\SFE_RECIPE\JobInfo\JOB{0}.sfe", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            string filename = string.Format(@"C:\MachineSet\SFETrack\Recipe\JobInfo\JOB{0}.sfe", DateTime.Now.ToString("yyyyMMddHHmmss"));
             Global.STDataAccess.SaveJobInfo(filename);
-            Global.GetDirectoryFile(@"D:\SFE_RECIPE\JobInfo\", ref Global.JobInfoFileList, ".sfe");
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\JobInfo\", ref Global.JobInfoFileList, ".sfe");
 
             window.DialogResult = true;
         }
