@@ -206,6 +206,12 @@ namespace SFE.TRACK
             return isDone;
         }
 
+        private string[] ReadLine(StreamReader sr)
+        {
+            string[] arr = sr.ReadLine().Split(',');
+            return arr;
+        }
+
         public bool ReadPrcessWaferRecipe(string filename, ref ProcessWaferDataCls waferdata)
         {
             bool isDone = true;
@@ -222,16 +228,17 @@ namespace SFE.TRACK
 
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
+                    
 
-                    if (arr[0].Trim() == "System Recipe")
+                    if (arr[0].Trim() == "SystemRecipe")
                     {
-                        waferdata.SystemRecipeName = arr[1].Trim();
+                        arr = ReadLine(sr);
+                        waferdata.SystemRecipeName = arr[0].Trim();
                         continue;
                     }
 
-                    if (arr[0].Trim() == "Process")
+                    if (arr[0].Trim() == "Index")
                     {
                         isRead = true;
                         continue;
@@ -243,24 +250,15 @@ namespace SFE.TRACK
                         WaferStepCls stepData = new WaferStepCls();
                         stepData.Index = index + 1;
                         stepData.Name = arr[1].Trim();
-                        stepData.BlokNo = Convert.ToInt32(arr[2].Trim());
-                        stepData.ModuleNo = Convert.ToInt32(arr[3].Trim());
-                        stepData.ModuleFunc = Convert.ToInt32(arr[4].Trim());
-                        stepData.RecipeName = arr[5].Trim();
-                        //stepData.RecipeNameList[1] = arr[6].Trim();
-                        //stepData.RecipeNameList[2] = arr[7].Trim();
-                        //stepData.RecipeNameList[3] = arr[8].Trim();
-                        //stepData.RecipeNameList[4] = arr[9].Trim();
-                        //stepData.RecipeNameList[5] = arr[10].Trim();
-                        stepData.ModuleNoList[0] = Convert.ToInt32(arr[11].Trim());
-                        stepData.ModuleNoList[1] = Convert.ToInt32(arr[12].Trim());
-                        stepData.ModuleNoList[2] = Convert.ToInt32(arr[13].Trim());
-                        stepData.ModuleNoList[3] = Convert.ToInt32(arr[14].Trim());
-                        stepData.ModuleNoList[4] = Convert.ToInt32(arr[15].Trim());
-                        stepData.ModuleNoList[5] = Convert.ToInt32(arr[16].Trim());
-                        stepData.ModuleCount = Convert.ToInt32(arr[17].Trim());
-                        stepData.ExtraPin = Convert.ToInt32(arr[18].Trim());
+                        stepData.BlokNo = Convert.ToInt32(arr[3].Trim());
+                        stepData.ModuleNo = arr[4].Trim();
+                        string[] arrModule = arr[4].Split(':');
+                        stepData.ModuleCount = arrModule.Length;
 
+                        for(int i = 0; i < stepData.ModuleCount; i++) stepData.ModuleNoList[i] = Convert.ToInt32(arrModule[i]);
+
+                        stepData.RecipeName = arr[5].Trim(); 
+                        stepData.ExtraPin = Convert.ToInt32(arr[6].Trim());
                         stepData.ModuleListDescription = string.Empty;
                         for(int i = 0; i < stepData.ModuleCount; i++)
                         {
@@ -302,29 +300,31 @@ namespace SFE.TRACK
             {
                 sw = new StreamWriter(filename);
                 sw.WriteLine("<Wafer Flow>"); sw.WriteLine();
-                sw.WriteLine(string.Format("System Recipe,{0}", waferdata.SystemRecipeName));
-                sw.WriteLine("Process,Name,Block No,Module No,Module Function,Rcp Name1,Rcp Name2,Rcp Name3,Rcp Name4,Rcp Name5,Rcp Name6,Module_1,Module_2,Module_3,Module_4,Module_5,Module_6,Count,ExtraPin");
+                sw.WriteLine("SystemRecipe");
+                sw.WriteLine(waferdata.SystemRecipeName);
+                sw.WriteLine();
+                sw.WriteLine("Index,Name,Type,BlockNo,ModuleNo,RecipeName,ExtraPin");
+
                 foreach (WaferStepCls stepData in waferdata.WaferStepList)
                 {
-                    sw.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18}",
-                    stepData.Index - 1,
+                    stepData.ModuleNo = string.Empty;
+                    for (int i = 0; i < stepData.ModuleCount; i++)
+                    {
+                        stepData.ModuleNo += stepData.ModuleNoList[i].ToString();
+                        if (stepData.ModuleCount - 1 != i) stepData.ModuleNo += ":";
+                    }
+
+                    Model.ModuleBaseCls module = Global.GetModule(stepData.BlokNo, stepData.ModuleNoList[0]);
+
+                    if (module == null) continue;
+
+                    sw.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6}",
+                    stepData.Index,
                     stepData.Name,
+                    module.MachineName.Substring(0, 3),
                     stepData.BlokNo,
                     stepData.ModuleNo,
-                    stepData.ModuleFunc,
                     stepData.RecipeName,
-                    "-",
-                    "-",
-                    "-",
-                    "-",
-                    "-",
-                    stepData.ModuleNoList[0],
-                    stepData.ModuleNoList[1],
-                    stepData.ModuleNoList[2],
-                    stepData.ModuleNoList[3],
-                    stepData.ModuleNoList[4],
-                    stepData.ModuleNoList[5],
-                    stepData.ModuleCount,
                     stepData.ExtraPin));
                 }
             }
@@ -361,7 +361,7 @@ namespace SFE.TRACK
                     line = sr.ReadLine();
                     string[] arr = line.Split(',');
 
-                    if (arr[0].Trim().ToUpper() == "NO")
+                    if (arr[0].Trim().ToUpper() == "INDEX")
                     {
                         isRead = true;
                         continue;
@@ -412,7 +412,7 @@ namespace SFE.TRACK
             {
                 sw = new StreamWriter(filename);
                 sw.WriteLine("<System Recipe>"); sw.WriteLine();
-                sw.WriteLine("No,Module,Control Target,Setting,Alarm Max,Alarm min,Stop Max,Stop Min");
+                sw.WriteLine("Index,Module,Control Target,SetValue,AlarmMax,AlarmMin,StopMax,StopMin");
 
                 foreach (SystemRecipeStepCls stepData in systemRecipe.StepList)
                 {
@@ -458,7 +458,7 @@ namespace SFE.TRACK
                     line = sr.ReadLine();
                     string[] arr = line.Split(',');
 
-                    if (arr[0].Trim().ToUpper().IndexOf("AMOUNT") != -1)
+                    if (arr[0].Trim().ToUpper() == "AMOUNT")
                     {
                         isRead = true;
                         continue;
@@ -504,7 +504,7 @@ namespace SFE.TRACK
             {
                 sw = new StreamWriter(filename);
                 sw.WriteLine("<Pump Recipe>"); sw.WriteLine();
-                sw.WriteLine("[Disp.Amount],[Disp.Rate],[Disp.Acc],[Disp.Dec],[Reload rate],[Calibration],[AV close]");
+                sw.WriteLine("Amount,Rate,Acc,Dec,Reload Rate,Calibration,AV Close");
                 sw.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6}",
                     pumpData.DisAmount,
                     pumpData.DistRate,
@@ -545,34 +545,22 @@ namespace SFE.TRACK
 
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
 
                     if (isRead == false)
                     {
-                        if (arr[0].Trim().ToUpper().IndexOf("GAP") != -1)
+                        if (arr[0].Trim().ToUpper().IndexOf("PUMPRECIPE") != -1)
                         {
-                            cotData.PosEnd = Convert.ToInt32(arr[1]);
-                            cotData.Pos3 = Convert.ToInt32(arr[3]);
-                            cotData.Pos2 = Convert.ToInt32(arr[4]);
-                            cotData.Pos1 = Convert.ToInt32(arr[5]);
-                            cotData.PosBegin = Convert.ToInt32(arr[6]);
+                            arr = ReadLine(sr);
+                            cotData.PumpRecipe = arr[0];
                         }
-                        else if (arr[0].Trim().ToUpper().IndexOf("PUMP RECIPE") != -1)
+                        else if (arr[0].Trim().ToUpper().IndexOf("STOPRANGE") != -1)
                         {
-                            cotData.PumpRecipe = arr[1];
+                            arr = ReadLine(sr);
+                            cotData.StopRange = Convert.ToInt32(arr[0]);
+                            cotData.AlarmRange = Convert.ToInt32(arr[1]);
                         }
-                        else if (arr[0].Trim().ToUpper().IndexOf("STOP RANGE") != -1)
-                        {
-                            cotData.StopRange = Convert.ToInt32(arr[1]);
-                            cotData.AlarmRange = Convert.ToInt32(arr[3]);
-                        }
-                        else if (arr[0].Trim().ToUpper().IndexOf("DISPN BLOCK") != -1)
-                        {
-                            cotData.DispBlock = Convert.ToInt32(arr[1]);
-                            cotData.DispModule = Convert.ToInt32(arr[3]);
-                        }
-                        else if (arr[0].Trim().ToUpper().IndexOf("PROCESS") != -1)
+                        else if (arr[0].Trim().ToUpper().IndexOf("INDEX") != -1)
                         {
                             isRead = true;
                             continue;
@@ -586,13 +574,13 @@ namespace SFE.TRACK
                         stepData.StepTime = Convert.ToSingle(arr[2]);
                         stepData.SpinSpeed = Convert.ToInt32(arr[3]);
                         stepData.SpinAcc = Convert.ToInt32(arr[4]);
-                        stepData.DispNo = Convert.ToUInt32(arr[6]);
-                        stepData.Arm1Pos = arr[7];
-                        stepData.Arm1Speed = Convert.ToInt32(arr[8]);
-                        stepData.IsArm1MoveWait = Convert.ToInt32(arr[9]).Equals(1) ? true : false;
-                        stepData.Arm2Pos = arr[10];
-                        stepData.Arm2Speed = Convert.ToInt32(arr[11]);
-                        stepData.IsArm2MoveWait = Convert.ToInt32(arr[12]).Equals(1) ? true : false;
+                        stepData.DispNo = Convert.ToUInt32(arr[5]);
+                        stepData.Arm1Pos = arr[6];
+                        stepData.Arm1Speed = Convert.ToInt32(arr[7]);
+                        stepData.IsArm1MoveWait = Convert.ToInt32(arr[8]).Equals(1) ? true : false;
+                        stepData.Arm2Pos = arr[9];
+                        stepData.Arm2Speed = Convert.ToInt32(arr[10]);
+                        stepData.IsArm2MoveWait = Convert.ToInt32(arr[11]).Equals(1) ? true : false;
                         cotData.StepList.Add(stepData);
                         index++;
                     }
@@ -626,26 +614,23 @@ namespace SFE.TRACK
             {
                 sw = new StreamWriter(filename);
 
-                sw.WriteLine("< Coater Flow >");
-                sw.WriteLine("[POS],END,CENTER,POS3,POS2,POS1,BEGIN,HOME,,GAP From < WAFER CENTER > to < END/POS3/POS2/POS1/BEGIN >,,,,,,,");
-                sw.WriteLine(string.Format("Gap,{0},FIX,{1},{2},{3},{4},FIX,,,,,,,,,", cotData.PosEnd, cotData.Pos3, cotData.Pos2, cotData.Pos1, cotData.PosBegin));
-                sw.WriteLine(string.Format("Pump Recipe,{0},", cotData.PumpRecipe));
-                sw.WriteLine(string.Format("Stop Range,{0},Alarm Range,{1},", cotData.StopRange, cotData.AlarmRange));
-                sw.WriteLine(string.Format("Dispn Block,{0},Dispn Module,{1},", cotData.DispBlock, cotData.DispModule));
+                sw.WriteLine("<Coater Flow>");
+                sw.WriteLine("PumpRecipe");
+                sw.WriteLine(cotData.PumpRecipe);
                 sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3,4,5,6,7,8,9,10,11");
-                sw.WriteLine(",[string],[sec],[rpm],[rmp/s],,[1 / 0],[pos],[mm/s],[1 / 0],[pos],[mm/s],[1 / 0] ");
-                sw.WriteLine("Process,Name,Time [sec],Spd [rmp],Accel,Spare,Dispense No,DEV Pos,DEV Spd,DEV Wait,RNS Pos,RNS Spd,RNS Wait");
+                sw.WriteLine("StopRange,AlarmRange");
+                sw.WriteLine(string.Format("{0},{1}", cotData.StopRange, cotData.AlarmRange));
+                sw.WriteLine();
+                sw.WriteLine("Index,Name,Time,Speed,Acc,DispenseNo,Arm1Pos,Arm1Speed,Arm1Wait,Arm2Pos,Arm2Speed,Arm2Wait");
 
                 foreach (SpinChamberStepCls step in cotData.StepList)
                 {
-                    sw.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
+                    sw.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
                         step.Index,
                         step.Name,
                         step.StepTime,
                         step.SpinSpeed,
                         step.SpinAcc,
-                        "X",
                         step.DispNo,
                         step.Arm1Pos,
                         step.Arm1Speed,
@@ -684,30 +669,17 @@ namespace SFE.TRACK
 
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
 
                     if (isRead == false)
                     {
-                        if (arr[0].Trim().ToUpper().IndexOf("GAP") != -1)
+                        if (arr[0].Trim().ToUpper().IndexOf("STOPRANGE") != -1)
                         {
-                            devData.PosEnd = Convert.ToInt32(arr[1]);
-                            devData.Pos3 = Convert.ToInt32(arr[3]);
-                            devData.Pos2 = Convert.ToInt32(arr[4]);
-                            devData.Pos1 = Convert.ToInt32(arr[5]);
-                            devData.PosBegin = Convert.ToInt32(arr[6]);
+                            arr = ReadLine(sr);
+                            devData.StopRange = Convert.ToInt32(arr[0]);
+                            devData.AlarmRange = Convert.ToInt32(arr[1]);
                         }
-                        else if (arr[0].Trim().ToUpper().IndexOf("STOP RANGE") != -1)
-                        {
-                            devData.StopRange = Convert.ToInt32(arr[1]);
-                            devData.AlarmRange = Convert.ToInt32(arr[3]);
-                        }
-                        else if (arr[0].Trim().ToUpper().IndexOf("DISPN BLOCK") != -1)
-                        {
-                            devData.DispBlock = Convert.ToInt32(arr[1]);
-                            devData.DispModule = Convert.ToInt32(arr[3]);
-                        }
-                        else if (arr[0].Trim().ToUpper().IndexOf("PROCESS") != -1)
+                        else if (arr[0].Trim().ToUpper().IndexOf("INDEX") != -1)
                         {
                             isRead = true;
                             continue;
@@ -760,15 +732,11 @@ namespace SFE.TRACK
             {
                 sw = new StreamWriter(filename);
 
-                sw.WriteLine("< Develop Flow >");
-                sw.WriteLine("[POS],END,CENTER,POS3,POS2,POS1,BEGIN,HOME,,GAP From < WAFER CENTER > to < END/POS3/POS2/POS1/BEGIN >,,,,,,,");
-                sw.WriteLine(string.Format("Gap,{0},FIX,{1},{2},{3},{4},FIX,,,,,,,,,", devData.PosEnd, devData.Pos3, devData.Pos2, devData.Pos1, devData.PosBegin));
-                sw.WriteLine(string.Format("Stop Range,{0},Alarm Range,{1},", devData.StopRange, devData.AlarmRange));
-                sw.WriteLine(string.Format("Dispn Block,{0},Dispn Module,{1},", devData.DispBlock, devData.DispModule));
+                sw.WriteLine("< Developer Flow >");
+                sw.WriteLine("StopRange,AlarmRange");
+                sw.WriteLine(string.Format("{0},{1}", devData.StopRange, devData.AlarmRange));
                 sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3,4,5,6,7,8,9,10,11,");
-                sw.WriteLine(",[string],[sec],[rpm],[rmp/s],,[1 / 0],[pos],[mm/s],[1 / 0],[pos],[mm/s],[1 / 0]");
-                sw.WriteLine("Process,Name,Time [sec],Spd [rmp],Accel,Spare,Nz0,Nz Pos,Nz Spd,COT Wait,RNS Pos,RNS Spd,RNS Wait");
+                sw.WriteLine("Index,Name,Time,Speed,Accel,DispenseNo,Arm1Pos,Arm1Speed,Arm1Wait,Arm2Pos,Arm2Speed,Arm2Wait");
 
                 foreach (SpinChamberStepCls step in devData.StepList)
                 {
@@ -816,25 +784,21 @@ namespace SFE.TRACK
 
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+
+                    string[] arr = ReadLine(sr);
 
                     if (!isRead)
                     {
-                        if (arr[0].Trim().IndexOf("[Data]") != -1)
+                        if (arr[0].Trim().IndexOf("SetValue") != -1)
                         {
-                            adhData.SetValue = Convert.ToSingle(arr[1]);
-                            adhData.AlarmMaxValue = Convert.ToSingle(arr[2]);
+                            arr = ReadLine(sr);
+                            adhData.SetValue = Convert.ToSingle(arr[0]);
+                            adhData.AlarmMaxValue = Convert.ToSingle(arr[1]);
                             adhData.AlarmMinValue = Convert.ToSingle(arr[2]);
-                            adhData.StopMaxValue = Convert.ToSingle(arr[2]);
-                            adhData.StopMinValue = Convert.ToSingle(arr[2]);
-                        }
-                        else if (arr[0].Trim().IndexOf("Dispn Block") != -1)
-                        {
-                            adhData.DispBlock = Convert.ToInt32(arr[1]);
-                            adhData.DispModule = Convert.ToInt32(arr[3]);
-                        }
-                        else if (arr[0].Trim().IndexOf("Process") != -1)
+                            adhData.StopMaxValue = Convert.ToSingle(arr[3]);
+                            adhData.StopMinValue = Convert.ToSingle(arr[4]);
+                        }                        
+                        else if (arr[0].Trim().IndexOf("Index") != -1)
                         {
                             isRead = true;
                             continue;
@@ -881,14 +845,13 @@ namespace SFE.TRACK
             try
             {
                 sw = new StreamWriter(filename);
-                sw.WriteLine("< ADH Flow >");
-                sw.WriteLine(",Setting,Alarm Max,Alarm Min,Stop Max,Stop Min");
-                sw.WriteLine(string.Format("[Data],{0},{1},{2},{3},{4}", adhData.SetValue, adhData.AlarmMaxValue, adhData.AlarmMinValue, adhData.StopMaxValue, adhData.StopMinValue));
-                sw.WriteLine(string.Format("Dispn Block,{0},Dispn Module,{1}", adhData.DispBlock, adhData.DispModule));
+                sw.WriteLine("<ADH Flow>");
+                sw.WriteLine("SetValue,AlarmMax,AlarmMix,StopMax,StopMin");
+                sw.WriteLine(string.Format("{0},{1},{2},{3},{4}", adhData.SetValue, adhData.AlarmMaxValue, adhData.AlarmMinValue, adhData.StopMaxValue, adhData.StopMinValue));
+                
                 sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3,");
-                sw.WriteLine(",[string],[sec],,[1 / 0],");
-                sw.WriteLine("Process,Name,Time [sec],Dispense No,Pin Position,");
+
+                sw.WriteLine("Index,Name,Time,DispenseNo,PinPosition");
 
                 foreach (ADHStepCls step in adhData.StepList)
                 {
@@ -928,20 +891,20 @@ namespace SFE.TRACK
                 sr = new StreamReader(filename);
                 while(!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
 
                     if(!isRead)
                     {
-                        if (arr[0].Trim() == "[Data]")
+                        if (arr[0].Trim() == "SetValue")
                         {
-                            lhpData.SetValue = Convert.ToSingle(arr[1]);
-                            lhpData.AlarmMaxValue = Convert.ToSingle(arr[2]);
-                            lhpData.AlarmMinValue = Convert.ToSingle(arr[3]);
-                            lhpData.StopMaxValue = Convert.ToSingle(arr[4]);
-                            lhpData.StopMinValue = Convert.ToSingle(arr[5]);
+                            arr = ReadLine(sr);
+                            lhpData.SetValue = Convert.ToSingle(arr[0]);
+                            lhpData.AlarmMaxValue = Convert.ToSingle(arr[1]);
+                            lhpData.AlarmMinValue = Convert.ToSingle(arr[2]);
+                            lhpData.StopMaxValue = Convert.ToSingle(arr[3]);
+                            lhpData.StopMinValue = Convert.ToSingle(arr[4]);
                         }
-                        else if (arr[0].Trim() == "Process")
+                        else if (arr[0].Trim() == "Index")
                         {
                             isRead = true;
                             continue;
@@ -953,8 +916,8 @@ namespace SFE.TRACK
                         step.Index = index;
                         step.Name = arr[1];
                         step.StepTime = Convert.ToSingle(arr[2]);
-                        step.IsPinPos = Convert.ToInt32(arr[4]).Equals(1) ? true : false;
-                        step.IsShutter = Convert.ToInt32(arr[5]).Equals(1) ? true : false;
+                        step.IsPinPos = Convert.ToInt32(arr[3]).Equals(1) ? true : false;
+                        step.IsShutter = Convert.ToInt32(arr[4]).Equals(1) ? true : false;
                         lhpData.StepList.Add(step);
                         index++;
                     }
@@ -987,17 +950,15 @@ namespace SFE.TRACK
             try
             {
                 sw = new StreamWriter(filename);
-                sw.WriteLine("< LHP Process Flow >");
-                sw.WriteLine(",Setting,Alarm Max,Alarm Min,Stop Max,Stop Min");
-                sw.WriteLine(string.Format("[Data],{0},{1},{2},{3},{4}", LhpData.SetValue, LhpData.AlarmMaxValue, LhpData.AlarmMinValue, LhpData.StopMaxValue, LhpData.StopMinValue));
+                sw.WriteLine("<LHP Flow>");
+                sw.WriteLine("SetValue,AlarmMax,AlarmMin,StopMax,StopMin");
+                sw.WriteLine(string.Format("{0},{1},{2},{3},{4}", LhpData.SetValue, LhpData.AlarmMaxValue, LhpData.AlarmMinValue, LhpData.StopMaxValue, LhpData.StopMinValue));
                 sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3,4");
-                sw.WriteLine(",[string],[sec],,[1 / 0],[1 / 0]");
-                sw.WriteLine("Process,Name,Time [sec],Spare,Pin Position,Shutter Status");
+                sw.WriteLine("Index,Name,Time,PinPosition,ShutterPosition");
 
                 foreach (ChamberStepCls step in LhpData.StepList)
                 {
-                    sw.WriteLine(string.Format("{0},{1},{2},X,{3},{4}",
+                    sw.WriteLine(string.Format("{0},{1},{2},{3},{4}",
                         step.Index,
                         step.Name,
                         step.StepTime,
@@ -1033,20 +994,20 @@ namespace SFE.TRACK
                 sr = new StreamReader(filename);
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
 
                     if (!isRead)
                     {
-                        if (arr[0].Trim() == "[Data]")
+                        if (arr[0].Trim() == "SetValue")
                         {
-                            HhpData.SetValue = Convert.ToSingle(arr[1]);
-                            HhpData.AlarmMaxValue = Convert.ToSingle(arr[2]);
-                            HhpData.AlarmMinValue = Convert.ToSingle(arr[3]);
-                            HhpData.StopMaxValue = Convert.ToSingle(arr[4]);
-                            HhpData.StopMinValue = Convert.ToSingle(arr[5]);
+                            arr = ReadLine(sr);
+                            HhpData.SetValue = Convert.ToSingle(arr[0]);
+                            HhpData.AlarmMaxValue = Convert.ToSingle(arr[1]);
+                            HhpData.AlarmMinValue = Convert.ToSingle(arr[2]);
+                            HhpData.StopMaxValue = Convert.ToSingle(arr[3]);
+                            HhpData.StopMinValue = Convert.ToSingle(arr[4]);
                         }
-                        else if (arr[0].Trim() == "Process")
+                        else if (arr[0].Trim() == "Index")
                         {
                             isRead = true;
                             continue;
@@ -1058,8 +1019,8 @@ namespace SFE.TRACK
                         step.Index = index;
                         step.Name = arr[1];
                         step.StepTime = Convert.ToSingle(arr[2]);
-                        step.IsPinPos = Convert.ToInt32(arr[4]).Equals(1) ? true : false;
-                        step.IsShutter = Convert.ToInt32(arr[5]).Equals(1) ? true : false;
+                        step.IsPinPos = Convert.ToInt32(arr[3]).Equals(1) ? true : false;
+                        step.IsShutter = Convert.ToInt32(arr[4]).Equals(1) ? true : false;
                         HhpData.StepList.Add(step);
                         index++;
                     }
@@ -1092,17 +1053,16 @@ namespace SFE.TRACK
             try
             {
                 sw = new StreamWriter(filename);
-                sw.WriteLine("< HHP Process Flow >");
-                sw.WriteLine(",Setting,Alarm Max,Alarm Min,Stop Max,Stop Min");
-                sw.WriteLine(string.Format("[Data],{0},{1},{2},{3},{4}", HhpData.SetValue, HhpData.AlarmMaxValue, HhpData.AlarmMinValue, HhpData.StopMaxValue, HhpData.StopMinValue));
+                sw.WriteLine("<HHP Flow>");
+                sw.WriteLine("SetValue,AlarmMax,AlarmMin,StopMax,StopMin");
+                sw.WriteLine(string.Format("{0},{1},{2},{3},{4}", HhpData.SetValue, HhpData.AlarmMaxValue, HhpData.AlarmMinValue, HhpData.StopMaxValue, HhpData.StopMinValue));
                 sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3,4");
-                sw.WriteLine(",[string],[sec],,[1 / 0],[1 / 0]");
-                sw.WriteLine("Process,Name,Time [sec],Spare,Pin Position,Shutter Status");
+
+                sw.WriteLine("Index,Name,Time,PinPosition,ShutterPosition");
 
                 foreach (ChamberStepCls step in HhpData.StepList)
                 {
-                    sw.WriteLine(string.Format("{0},{1},{2},X,{3},{4}",
+                    sw.WriteLine(string.Format("{0},{1},{2},{3},{4}",
                         step.Index,
                         step.Name,
                         step.StepTime,
@@ -1138,20 +1098,20 @@ namespace SFE.TRACK
                 sr = new StreamReader(filename);
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
 
                     if (!isRead)
                     {
-                        if (arr[0].Trim() == "[Data]")
+                        if (arr[0].Trim() == "SetValue")
                         {
-                            CplData.SetValue = Convert.ToSingle(arr[1]);
-                            CplData.AlarmMaxValue = Convert.ToSingle(arr[2]);
-                            CplData.AlarmMinValue = Convert.ToSingle(arr[3]);
-                            CplData.StopMaxValue = Convert.ToSingle(arr[4]);
-                            CplData.StopMinValue = Convert.ToSingle(arr[5]);
+                            arr = ReadLine(sr);
+                            CplData.SetValue = Convert.ToSingle(arr[0]);
+                            CplData.AlarmMaxValue = Convert.ToSingle(arr[1]);
+                            CplData.AlarmMinValue = Convert.ToSingle(arr[2]);
+                            CplData.StopMaxValue = Convert.ToSingle(arr[3]);
+                            CplData.StopMinValue = Convert.ToSingle(arr[4]);
                         }
-                        else if (arr[0].Trim() == "Process")
+                        else if (arr[0].Trim() == "Index")
                         {
                             isRead = true;
                             continue;
@@ -1163,7 +1123,7 @@ namespace SFE.TRACK
                         step.Index = index;
                         step.Name = arr[1];
                         step.StepTime = Convert.ToSingle(arr[2]);
-                        step.IsPinPos = Convert.ToInt32(arr[4]).Equals(1) ? true : false;
+                        step.IsPinPos = Convert.ToInt32(arr[3]).Equals(1) ? true : false;
                         CplData.StepList.Add(step);
                         index++;
                     }
@@ -1196,17 +1156,15 @@ namespace SFE.TRACK
             try
             {
                 sw = new StreamWriter(filename);
-                sw.WriteLine("< CPL Process Flow >");
-                sw.WriteLine(",Setting,Alarm Max,Alarm Min,Stop Max,Stop Min");
-                sw.WriteLine(string.Format("[Data],{0},{1},{2},{3},{4}", CplData.SetValue, CplData.AlarmMaxValue, CplData.AlarmMinValue, CplData.StopMaxValue, CplData.StopMinValue));
+                sw.WriteLine("<CPL Flow>");
+                sw.WriteLine("SetValue,AlarmMax,AlarmMin,StopMax,StopMin");
+                sw.WriteLine(string.Format("{0},{1},{2},{3},{4}", CplData.SetValue, CplData.AlarmMaxValue, CplData.AlarmMinValue, CplData.StopMaxValue, CplData.StopMinValue));
                 sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3");
-                sw.WriteLine(",[string],[sec],,[1 / 0]");
-                sw.WriteLine("Process,Name,Time [sec],Spare,Pin Position");
+                sw.WriteLine("Index,Name,Time,PinPosition");
 
                 foreach (ChamberStepCls step in CplData.StepList)
                 {
-                    sw.WriteLine(string.Format("{0},{1},{2},X,{3}",
+                    sw.WriteLine(string.Format("{0},{1},{2},{3}",
                         step.Index,
                         step.Name,
                         step.StepTime,
@@ -1241,20 +1199,11 @@ namespace SFE.TRACK
                 sr = new StreamReader(filename);
                 while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    string[] arr = line.Split(',');
+                    string[] arr = ReadLine(sr);
 
                     if (!isRead)
                     {
-                        if (arr[0].Trim() == "[Data]")
-                        {
-                            TcpData.SetValue = Convert.ToSingle(arr[1]);
-                            TcpData.AlarmMaxValue = Convert.ToSingle(arr[2]);
-                            TcpData.AlarmMinValue = Convert.ToSingle(arr[3]);
-                            TcpData.StopMaxValue = Convert.ToSingle(arr[4]);
-                            TcpData.StopMinValue = Convert.ToSingle(arr[5]);
-                        }
-                        else if (arr[0].Trim() == "Process")
+                        if (arr[0].Trim() == "Index")
                         {
                             isRead = true;
                             continue;
@@ -1266,7 +1215,7 @@ namespace SFE.TRACK
                         step.Index = index;
                         step.Name = arr[1];
                         step.StepTime = Convert.ToSingle(arr[2]);
-                        step.IsPinPos = Convert.ToInt32(arr[4]).Equals(1) ? true : false;
+                        step.IsPinPos = Convert.ToInt32(arr[3]).Equals(1) ? true : false;
                         TcpData.StepList.Add(step);
                         index++;
                     }
@@ -1299,17 +1248,12 @@ namespace SFE.TRACK
             try
             {
                 sw = new StreamWriter(filename);
-                sw.WriteLine("< CPL Process Flow >");
-                sw.WriteLine(",Setting,Alarm Max,Alarm Min,Stop Max,Stop Min");
-                sw.WriteLine(string.Format("[Data],{0},{1},{2},{3},{4}", TcpData.SetValue, TcpData.AlarmMaxValue, TcpData.AlarmMinValue, TcpData.StopMaxValue, TcpData.StopMinValue));
-                sw.WriteLine();
-                sw.WriteLine("No,0,1,2,3");
-                sw.WriteLine(",[string],[sec],,[1 / 0]");
-                sw.WriteLine("Process,Name,Time [sec],Spare,Pin Position");
+                sw.WriteLine("<TCP Flow>");                
+                sw.WriteLine("Index,Name,Time,PinPosition");
 
                 foreach (ChamberStepCls step in TcpData.StepList)
                 {
-                    sw.WriteLine(string.Format("{0},{1},{2},X,{3}",
+                    sw.WriteLine(string.Format("{0},{1},{2},{3}",
                         step.Index,
                         step.Name,
                         step.StepTime,

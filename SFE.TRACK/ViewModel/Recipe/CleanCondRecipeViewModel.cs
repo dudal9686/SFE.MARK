@@ -25,6 +25,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand AddDetailRelayCommand { get; set; }
         public RelayCommand SaveDetailRelayCommand { get; set; }
         public RelayCommand DeleteDetailRelayCommand { get; set; }
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -45,6 +46,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             AddDetailRelayCommand = new RelayCommand(AddDetailCommand);
             SaveDetailRelayCommand = new RelayCommand(SaveDetailCommand);
             DeleteDetailRelayCommand = new RelayCommand(DeleteDetailCommand);
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
         #region Get Set
@@ -76,7 +78,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Clean Condition] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\CleanCondRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Clean\Cond\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -184,23 +186,30 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveCleanCondRecipe(RecipeFileInfo.FileFullName, RecipeData);
+            if(Global.STDataAccess.SaveCleanCondRecipe(RecipeFileInfo.FileFullName, RecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (RecipeStep != null)
             {
-                RecipeData.StepList.Remove(RecipeStep);
-
-                for (int i = 0; i < RecipeData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    CleanCondStepCls step = RecipeData.StepList[i];
-                    step.Index = i + 1;
+                    RecipeData.StepList.Remove(RecipeStep);
+
+                    for (int i = 0; i < RecipeData.StepList.Count; i++)
+                    {
+                        CleanCondStepCls step = RecipeData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
 
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
 
         private void RecipeDetailDoubleClickCommand(object o)
         {
@@ -231,7 +240,20 @@ namespace SFE.TRACK.ViewModel.Recipe
                 case 5:
                     break;
                 case 6:
-                    if(Global.RecipeOpen(enRecipeMenu.CLEAN_COND, RecipeStep.RecipeName))
+                    enRecipeMenu recipeMenu;
+                    Model.ModuleBaseCls module = Global.GetModule(RecipeStep.BlockNo, RecipeStep.ModuleNo);
+
+                    if(module == null)
+                    {
+                        Global.MessageOpen(enMessageType.OK, "Please select a module.");
+                        return;
+                    }
+
+                    if (module.MachineName.IndexOf("DEV") != -1) recipeMenu = enRecipeMenu.DEV_CLEAN;
+                    else if (module.MachineName.IndexOf("COT") != -1) recipeMenu = enRecipeMenu.COT_CLEAN;
+                    else return;
+
+                    if (Global.RecipeOpen(recipeMenu, RecipeStep.RecipeName))
                     {
                         RecipeStep.RecipeName = Global.STRecipePopUp.SelectRecipeName;
                     }
@@ -245,7 +267,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanCondRecipe\", ref Global.CleanCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Clean\Cond\", ref Global.CleanCondRecipeFileList);
             if (Global.CleanCondRecipeFileList.Count() > 0)
             {
                 RecipeListSelectedIndex = 0;

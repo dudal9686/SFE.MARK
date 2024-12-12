@@ -390,21 +390,22 @@ namespace SFE.TRACK
     public class WaferStepCls : ViewModelBase
     {
         string sName = string.Empty;
-        int nBlokNo = 0;
-        int nModuleNo = 0;
+        int nBlokNo = 2;
+        string sModuleNo = string.Empty;
         int nModuleFunc = 0;
         int nExtraPin = 0;
         string sRecipeName = "-";
-        int[] nModuleNoList = new int[6] { 0,0,0,0,0,0 };
+        int[] nModuleNoList = new int[20];
         int nModuleCount = 0;
         bool isProcess = false;
         int nProcessModule = 0;
         int nIndex = 0;
+        string sType = string.Empty;
         string moduleListDescription = string.Empty;
 
         public WaferStepCls()
         {
-            
+            for (int i = 0; i < 20; i++) nModuleNoList[i] = 0;
         }
 
         public int Index
@@ -425,10 +426,16 @@ namespace SFE.TRACK
             set { nBlokNo = value; RaisePropertyChanged("BlokNo"); }
         }
 
-        public int ModuleNo
+        public string ModuleNo
         {
-            get { return nModuleNo; }
-            set { nModuleNo = value; RaisePropertyChanged("ModuleNo"); }
+            get { return sModuleNo; }
+            set { sModuleNo = value; RaisePropertyChanged("ModuleNo"); }
+        }
+
+        public string Type
+        {
+            get { return sType; }
+            set { sType = value; }
         }
 
         public int ModuleFunc

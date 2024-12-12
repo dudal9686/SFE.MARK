@@ -32,6 +32,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand StopMaxRelayCommand { get; set; }
         public RelayCommand StopMinRelayCommand { get; set; }
 
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -59,7 +60,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             AlarmMinRelayCommand = new RelayCommand(AlarmMinCommand);
             StopMaxRelayCommand = new RelayCommand(StopMaxCommand);
             StopMinRelayCommand = new RelayCommand(StopMinCommand);
-
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -92,7 +93,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[CPL] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessCPLRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Process\CPL\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -190,19 +191,21 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveProcessCPLRecipe(RecipeFileInfo.FileFullName, CplData);
+            if(Global.STDataAccess.SaveProcessCPLRecipe(RecipeFileInfo.FileFullName, CplData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (ChamberStepData != null)
             {
-                CplData.StepList.Remove(ChamberStepData);
-
-                for (int i = 0; i < CplData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    ChamberStepCls step = CplData.StepList[i];
-                    step.Index = i + 1;
+                    CplData.StepList.Remove(ChamberStepData);
+                    for (int i = 0; i < CplData.StepList.Count; i++)
+                    {
+                        ChamberStepCls step = CplData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
@@ -247,7 +250,10 @@ namespace SFE.TRACK.ViewModel.Recipe
                 CplData.StopMinValue = value;
             }
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
         private void RecipeDetailDoubleClickCommand(object o)
         {
             DataGrid grid = o as DataGrid;
@@ -277,7 +283,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessCPLRecipe\", ref Global.CPLProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\CPL\", ref Global.CPLProcessRecipeFileList);
             if (Global.CPLProcessRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

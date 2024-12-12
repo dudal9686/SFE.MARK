@@ -205,6 +205,7 @@ namespace SFE.TRACK.ViewModel.Auto
                     {
                         if (FoupList[i].IsDetect && FoupList[i].IsScan)
                         {
+                            if (!FoupList[i].Use) continue;
                             if (FoupTempList[j].RecipeName == string.Empty || FoupTempList[j].LotID == string.Empty) continue;
                             FoupList[i].RecipeName = FoupTempList[j].RecipeName;
                             FoupList[i].Comment = FoupTempList[j].Comment;
@@ -222,6 +223,7 @@ namespace SFE.TRACK.ViewModel.Auto
                                 WaferCls tempWafer_ = FoupTempList[j].FoupWaferList.Find(x => x.ModuleNo == FoupList[i].FoupWaferList[k].ModuleNo && x.Index == FoupList[i].FoupWaferList[k].Index);
                                 if (tempWafer_ != null)
                                 {
+                                    if (!FoupList[i].FoupWaferList[k].Use) continue;
                                     FoupList[i].FoupWaferList[k].WaferState = tempWafer_.WaferState;
                                     FoupList[i].FoupWaferList[k].Recipe.Name = tempWafer_.Recipe.Name;
                                     FoupList[i].FoupWaferList[k].LotNo = FoupList[i].LotID;

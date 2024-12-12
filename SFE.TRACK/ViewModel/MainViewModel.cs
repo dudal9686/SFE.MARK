@@ -58,7 +58,7 @@ namespace SFE.TRACK.ViewModel
             LoginRelayCommand = new RelayCommand(LoginCommand);
 
             _worker = new MachineReaderWorker();
-
+            Global.MachineWorker = _worker;
             if (_worker.StartWorker(1000, "HMI", @"C:\MachineSet\SFETrack.mm", true) == false)
             {
                 MessageBox.Show("Starting worker failed");
@@ -415,7 +415,7 @@ namespace SFE.TRACK.ViewModel
         }
         public void ClearAlarm(string code = "")
         {
-            //_worker.Controller.ClearAlarm(null);
+            //_worker.Controller.ClearAlarm();
             if (Global.STAlarmList.Count == 0)
             {
                 IsSelectedAlarm = false;
@@ -424,33 +424,41 @@ namespace SFE.TRACK.ViewModel
         }
         private void SetRecipeFileList()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessRecipe\", ref Global.WaferFlowRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummyCondADHRecipe\", ref Global.ADHDummyCondRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummySeqADHRecipe\", ref Global.ADHDummySeqRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessADHRecipe\", ref Global.ADHProcessRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanCondRecipe\", ref Global.CleanCondRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanCOTRecipe\", ref Global.CoaterCleanRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummyCondCOTRecipe\", ref Global.CoaterDummyCondRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummySeqCOTRecipe\", ref Global.CoaterDummySeqRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessCOTRecipe\", ref Global.CoaterProcessRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessCPLRecipe\", ref Global.CPLProcessRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanDEVRecipe\", ref Global.DevCleanRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummyCondDEVRecipe\", ref Global.DevDummyCondRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummySeqDEVRecipe\", ref Global.DevDummySeqRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessDEVRecipe\", ref Global.DevProcessRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummyCondLinkRecipe\", ref Global.DummyCondLinkRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessHHPRecipe\", ref Global.HHPProcessRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessLHPRecipe\", ref Global.LHPProcessRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\PumpRecipe\", ref Global.PumpRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\SystemRecipe\", ref Global.SystemRecipeFileList);
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessTCPRecipe\", ref Global.TCPProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\WaferFlow\", ref Global.WaferFlowRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Cond\ADH\", ref Global.ADHDummyCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\ADH\", ref Global.ADHDummySeqRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\ADH\", ref Global.ADHProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Clean\Cond\", ref Global.CleanCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Clean\COT\", ref Global.CoaterCleanRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Cond\COT\", ref Global.CoaterDummyCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\COT\", ref Global.CoaterDummySeqRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\COT\", ref Global.CoaterProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\CPL\", ref Global.CPLProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Clean\DEV\", ref Global.DevCleanRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Cond\DEV\", ref Global.DevDummyCondRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\DEV\", ref Global.DevDummySeqRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\DEV\", ref Global.DevProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Link\", ref Global.DummyCondLinkRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\HHP\", ref Global.HHPProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\LHP\", ref Global.LHPProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Pump\", ref Global.PumpRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\System\", ref Global.SystemRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\TCP\", ref Global.TCPProcessRecipeFileList);
             Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\JobInfo\", ref Global.JobInfoFileList, ".sfe");
         }
 
         private void LoginCommand()
         {
-            _worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");
-
+            #region Test Source
+            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");
+            //PrgCfgItem item = _worker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
+            //item.Explain = "Lot";
+            //List<string> list = new List<string>();
+            //list.Add("A");
+            //list.Add("B");
+            //item.SetValue(list);
+            #endregion
+            
             if (Global.STLoginInfo.ID != string.Empty)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to log out?"))
@@ -497,7 +505,7 @@ namespace SFE.TRACK.ViewModel
                     Global.STAlarmList.Add(alarm);
                 });
                 SetAlarm();
-            }
+            }             
         }
 
         private void _worker_EvtCommandLaunched(object sender, EvtCommandLaunch e)

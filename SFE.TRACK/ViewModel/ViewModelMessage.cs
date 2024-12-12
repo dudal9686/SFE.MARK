@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
+using MachineCSBaseSim;
 
 namespace SFE.TRACK.ViewModel
 {
@@ -95,6 +96,6 @@ namespace SFE.TRACK.ViewModel
     public class TeachingDataMessageCls : MessageBase
     {
         public double Position { get; set; }
-        public Model.TeachingDataCls Data { get; set; } 
+        public UnitMotor Motor { get; set; } 
     }
 }

@@ -29,7 +29,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand PumpRecipeRelayCommand { get; set; }
         public RelayCommand StopRangeRelayCommand { get; set; }
         public RelayCommand AlarmRangeRelayCommand { get; set; }
-
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -51,6 +51,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             PumpRecipeRelayCommand = new RelayCommand(PumpRecipeCommand);
             StopRangeRelayCommand = new RelayCommand(StopRangeCommand);
             AlarmRangeRelayCommand = new RelayCommand(AlarmRangeCommand);
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -83,7 +84,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater Clean] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\CleanCOTRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Clean\COT\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -179,19 +180,22 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveCleanCOTRecipe(RecipeFileInfo.FileFullName, CotData);
+            if(Global.STDataAccess.SaveCleanCOTRecipe(RecipeFileInfo.FileFullName, CotData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (CotStepData != null)
             {
-                CotData.StepList.Remove(CotStepData);
-
-                for (int i = 0; i < CotData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    CleanStepCls step = CotData.StepList[i];
-                    step.Index = i + 1;
+                    CotData.StepList.Remove(CotStepData);
+
+                    for (int i = 0; i < CotData.StepList.Count; i++)
+                    {
+                        CleanStepCls step = CotData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
@@ -221,7 +225,10 @@ namespace SFE.TRACK.ViewModel.Recipe
                 CotData.PumpRecipe = Global.STRecipePopUp.SelectRecipeName;
             }
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
         private void RecipeDetailDoubleClickCommand(object o)
         {
             DataGrid grid = o as DataGrid;
@@ -249,7 +256,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         #endregion
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\CleanCOTRecipe\", ref Global.CoaterCleanRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Clean\COT\", ref Global.CoaterCleanRecipeFileList);
             if (Global.CoaterCleanRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

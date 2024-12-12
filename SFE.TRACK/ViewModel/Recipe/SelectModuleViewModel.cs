@@ -244,7 +244,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                 }
 
                 if (index == 0) return;
-            }            
+            }           
             else
             {
                 for (int i = 0; i < ModuleList.Count; i++) // CheckModuleCls checkMod in ModuleList)
@@ -263,6 +263,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     CheckModuleCls checkMod = ModuleList[i] as CheckModuleCls;
                     if (checkMod.IsCheck)
                     {
+                        waferStep.BlokNo = checkMod.BlockNo;
                         waferStep.ModuleNoList[index] = checkMod.ModuleNo;
                         waferStep.ModuleListDescription += "2-" + waferStep.ModuleNoList[index].ToString() + ", ";
                         index++;

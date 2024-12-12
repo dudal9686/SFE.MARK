@@ -254,16 +254,16 @@
                         </TreeViewItem>
                     </TreeViewItem>
                     <!--Cleaning Condition Recipe-->
-                    <TreeViewItem IsSelected="{Binding IsCleanCondRecipe}" x:Name="lvCleanCondRecipe">
+                    <!--<TreeViewItem IsSelected="{Binding IsCleanCondRecipe}" x:Name="lvCleanCondRecipe">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="BorderClear" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="Cleaning Condition Recipe" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
-                    </TreeViewItem>
+                    </TreeViewItem>-->
                     <!--Cleaning Recipe-->
-                    <TreeViewItem IsSelected="{Binding IsCotCleanRecipe}">
+                    <!--<TreeViewItem IsSelected="{Binding IsCotCleanRecipe}">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="WasherFluid" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
@@ -286,7 +286,7 @@
                                 </StackPanel>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                    </TreeViewItem>
+                    </TreeViewItem>-->
                 </TreeView>
             </Border>
         </Grid>
@@ -328,7 +328,7 @@
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDummyCondLinkRecipe}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource DummyCondLinkRecipe}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCleanCondRecipe}" Value="True">
+                            <!--<DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCleanCondRecipe}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CleanCondRecipe}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCotCleanRecipe}" Value="True">
@@ -336,7 +336,7 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvDevCleanRecipe}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource DevCleanRecipe}"/>
-                            </DataTrigger>
+                            </DataTrigger>-->
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCotDummySeqRecipe}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CoaterDummySeqRecipe}"/>
                             </DataTrigger>

@@ -29,6 +29,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand SaveDetailRelayCommand { get; set; }
         public RelayCommand DeleteDetailRelayCommand { get; set; }
 
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
         private int RecipeListSelectedIndex_ = -1;
         private int RecipeDetailSelectedIndex_ = -1;
@@ -45,6 +46,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             SaveDetailRelayCommand = new RelayCommand(SaveDetailCommand);
             DeleteDetailRelayCommand = new RelayCommand(DeleteDetailCommand);
             SystemRecipeRelayCommand = new RelayCommand(SystemRecipeCommand);
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -183,22 +185,33 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SavePrcessWaferRecipe(RecipeFileInfo.FileFullName, Waferdata);
+            if(Global.STDataAccess.SavePrcessWaferRecipe(RecipeFileInfo.FileFullName, Waferdata))
+            {
+                Global.MessageOpen(enMessageType.OK, "It has been saved.");
+            }
         }
 
         private void DeleteDetailCommand()
         {
             if (WaferStep != null)
             {
-                Waferdata.WaferStepList.Remove(WaferStep);
-
-                for(int i = 0; i < Waferdata.WaferStepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    WaferStepCls wafer = Waferdata.WaferStepList[i];
-                    wafer.Index = i + 1;
+                    Waferdata.WaferStepList.Remove(WaferStep);
+
+                    for (int i = 0; i < Waferdata.WaferStepList.Count; i++)
+                    {
+                        WaferStepCls wafer = Waferdata.WaferStepList[i];
+                        wafer.Index = i + 1;
+                    }
                 }
             }
-        }        
+        } 
+        
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
 
         private void RecipeDetailDoubleClickCommand(object o)
         {
@@ -253,7 +266,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessRecipe\", ref Global.WaferFlowRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\WaferFlow\", ref Global.WaferFlowRecipeFileList);
             if (Global.WaferFlowRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

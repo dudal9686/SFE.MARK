@@ -195,7 +195,7 @@ namespace SFE.TRACK.ViewModel.Param
                     ParamData.Vel = Global.KeyPad();
                     break;
                 case 5:
-                    if(Global.JogTeachingOpen(ParamData.Pos))
+                    if(Global.JogTeachingOpen(ParamData.Pos, ParamData.Motor))
                     {
                         ParamData.Pos = Global.STTeachingMessage.Position;
                     }

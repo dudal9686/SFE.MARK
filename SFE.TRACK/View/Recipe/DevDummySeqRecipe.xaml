@@ -61,7 +61,7 @@
                     <Border BorderBrush="LightGray" BorderThickness="1" Height="812">
                         <StackPanel Orientation="Vertical" Margin="0 5 0 0">
                             <!--<ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="282" VerticalAlignment="Top" >-->
-                            <DataGrid  x:Name="DataGridRecipeList" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectedIndex="{Binding RecipeListSelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding Source= {x:Static Track:Global.DevDummySeqRecipeFileList}}" AutoGenerateColumns="False" SelectedItem="{Binding RecipeFileInfo, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                            <DataGrid  x:Name="DataGridRecipe" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectedIndex="{Binding RecipeListSelectedIndex}" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding Source= {x:Static Track:Global.DevDummySeqRecipeFileList}}" AutoGenerateColumns="False" SelectedItem="{Binding RecipeFileInfo, Mode=TwoWay, UpdateSourceTrigger=Default}">
 
                                 <DataGrid.Resources>
                                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -89,8 +89,7 @@
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
-                                    <MouseBinding Gesture="WheelClick" Command="{Binding WheelCommand}"/>
+                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding RecipeDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridRecipe}"/>
                                 </DataGrid.InputBindings>
                             </DataGrid>
                             <!--</ScrollViewer>-->
@@ -135,7 +134,7 @@
                     <Border BorderBrush="LightGray" BorderThickness="1" Height="730">
                         <StackPanel Orientation="Vertical" Margin="0 5 0 0">
                             <!--<ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="282" VerticalAlignment="Top" >-->
-                            <DataGrid  x:Name="DataGridRecipe" SelectedIndex="{Binding RecipeDetailSelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding DevData.StepList, Mode=TwoWay, UpdateSourceTrigger=Default}" AutoGenerateColumns="False" SelectedItem="{Binding DevStepData, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                            <DataGrid  x:Name="DataGridRecipeDetail" SelectedIndex="{Binding RecipeDetailSelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding DevData.StepList, Mode=TwoWay, UpdateSourceTrigger=Default}" AutoGenerateColumns="False" SelectedItem="{Binding DevStepData, Mode=TwoWay, UpdateSourceTrigger=Default}">
                                 <DataGrid.Resources>
 
                                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -174,7 +173,7 @@
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>
-                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding RecipeDetailDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridRecipe}"/>
+                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding RecipeDetailDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridRecipeDetail}"/>
                                 </DataGrid.InputBindings>
                             </DataGrid>
                             <!--</ScrollViewer>-->

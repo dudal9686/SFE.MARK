@@ -32,6 +32,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand StopMaxRelayCommand { get; set; }
         public RelayCommand StopMinRelayCommand { get; set; }
 
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -59,6 +60,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             StopMaxRelayCommand = new RelayCommand(StopMaxCommand);
             StopMinRelayCommand = new RelayCommand(StopMinCommand);
 
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -91,7 +93,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[ADH Dummy Seq] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessADHRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\ADH\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -188,19 +190,22 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveDummySeqADHRecipe(RecipeFileInfo.FileFullName, AdhData);
+            if(Global.STDataAccess.SaveDummySeqADHRecipe(RecipeFileInfo.FileFullName, AdhData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (AdhStepData != null)
             {
-                AdhData.StepList.Remove(AdhStepData);
-
-                for (int i = 0; i < AdhData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    ADHStepCls step = AdhData.StepList[i];
-                    step.Index = i + 1;
+                    AdhData.StepList.Remove(AdhStepData);
+
+                    for (int i = 0; i < AdhData.StepList.Count; i++)
+                    {
+                        ADHStepCls step = AdhData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
@@ -244,6 +249,11 @@ namespace SFE.TRACK.ViewModel.Recipe
                 float value = Global.KeyPad(AdhData.StopMinValue);
                 AdhData.StopMinValue = value;
             }
+        }
+
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
         }
 
         private void RecipeDetailDoubleClickCommand(object o)
@@ -302,7 +312,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummySeqADHRecipe\", ref Global.ADHDummySeqRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\ADH\", ref Global.ADHDummySeqRecipeFileList);
             if (Global.ADHDummySeqRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

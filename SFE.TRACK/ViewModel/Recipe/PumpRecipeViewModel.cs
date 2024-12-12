@@ -27,7 +27,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand AddDetailRelayCommand { get; set; }
         public RelayCommand SaveDetailRelayCommand { get; set; }
         public RelayCommand DeleteDetailRelayCommand { get; set; }
-
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private float fGridValue = 0;
@@ -40,6 +40,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             DeleteListRelayCommand = new RelayCommand(DeleteListCommand);
             ReNameListRelayCommand = new RelayCommand(ReNameListCommand);
             SaveDetailRelayCommand = new RelayCommand(SaveDetailCommand);
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -73,7 +74,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Pump Recipe] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\PumpRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Pump\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -168,9 +169,12 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SavePumpRecipe(RecipeFileInfo.FileFullName, PumpRecipeData);
+            if(Global.STDataAccess.SavePumpRecipe(RecipeFileInfo.FileFullName, PumpRecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
         private void RecipeDetailDoubleClickCommand(object o)
         {
             DataGrid grid = o as DataGrid;
@@ -215,7 +219,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\PumpRecipe\", ref Global.PumpRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Pump\", ref Global.PumpRecipeFileList);
             if (Global.PumpRecipeFileList.Count() > 0)
             {
                 RecipeListSelectedIndex = 0;

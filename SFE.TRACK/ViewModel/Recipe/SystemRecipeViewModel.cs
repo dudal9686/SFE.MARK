@@ -24,6 +24,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand AddDetailRelayCommand { get; set; }
         public RelayCommand SaveDetailRelayCommand { get; set; }
         public RelayCommand DeleteDetailRelayCommand { get; set; }
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -44,7 +45,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             AddDetailRelayCommand = new RelayCommand(AddDetailCommand);
             SaveDetailRelayCommand = new RelayCommand(SaveDetailCommand);
             DeleteDetailRelayCommand = new RelayCommand(DeleteDetailCommand);
-
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
         #region Get Set
@@ -76,7 +77,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[System Recipe] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\SystemRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\System\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -172,23 +173,28 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveSystemRecipe(RecipeFileInfo.FileFullName, SystemRecipeData);
+            if (Global.STDataAccess.SaveSystemRecipe(RecipeFileInfo.FileFullName, SystemRecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (SystemRecipeStep != null)
             {
-                SystemRecipeData.StepList.Remove(SystemRecipeStep);
-
-                for (int i = 0; i < SystemRecipeData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    SystemRecipeStepCls step = SystemRecipeData.StepList[i];
-                    step.Index = i + 1;
+                    SystemRecipeData.StepList.Remove(SystemRecipeStep);
+                    for (int i = 0; i < SystemRecipeData.StepList.Count; i++)
+                    {
+                        SystemRecipeStepCls step = SystemRecipeData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
 
         private void RecipeDetailDoubleClickCommand(object o)
         {
@@ -249,7 +255,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\SystemRecipe\", ref Global.SystemRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\System\", ref Global.SystemRecipeFileList);
             if (Global.SystemRecipeFileList.Count() > 0)
             {
                 RecipeListSelectedIndex = 0;

@@ -27,7 +27,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         public RelayCommand StopRangeRelayCommand { get; set; }
         public RelayCommand AlarmRangeRelayCommand { get; set; }
-
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -53,6 +53,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
             StopRangeRelayCommand = new RelayCommand(StopRangeCommand);
             AlarmRangeRelayCommand = new RelayCommand(AlarmRangeCommand);
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -124,19 +125,21 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveCleanCOTRecipe(RecipeFileInfo.FileFullName, DevData);
+            if(Global.STDataAccess.SaveCleanCOTRecipe(RecipeFileInfo.FileFullName, DevData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (DevStepData != null)
             {
-                DevData.StepList.Remove(DevStepData);
-
-                for (int i = 0; i < DevData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    CleanStepCls step = DevData.StepList[i];
-                    step.Index = i + 1;
+                    DevData.StepList.Remove(DevStepData);
+                    for (int i = 0; i < DevData.StepList.Count; i++)
+                    {
+                        CleanStepCls step = DevData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
@@ -150,12 +153,10 @@ namespace SFE.TRACK.ViewModel.Recipe
         {
 
         }
-
-        private void PumpRecipeCommand()
+        private void RecipeDoubleClickCommand(object o)
         {
-
+            if (RecipeFileInfo != null) LoadListCommand();
         }
-
         private void RecipeDetailDoubleClickCommand(object o)
         {
             DataGrid grid = o as DataGrid;

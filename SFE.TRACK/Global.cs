@@ -18,6 +18,8 @@ namespace SFE.TRACK
 {
     public class Global
     {
+        public static MachineReaderWorker MachineWorker = null;
+
         public static List<Model.ModuleBaseCls> STModuleList = new List<Model.ModuleBaseCls>();
         public static List<Model.WaferCls> STWaferList = new List<Model.WaferCls>();
         public static AccessDBCls STAccessDB = new AccessDBCls();
@@ -218,9 +220,10 @@ namespace SFE.TRACK
             return false;
         }
 
-        public static bool JogTeachingOpen(double position)
+        public static bool JogTeachingOpen(double position, UnitMotor motor = null)
         {
             STTeachingMessage.Position = position;
+            STTeachingMessage.Motor = motor;
             View.Jog.JogControl jog = new View.Jog.JogControl();
             jog.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
             Messenger.Default.Send(STTeachingMessage);

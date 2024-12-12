@@ -117,9 +117,10 @@ namespace SFE.TRACK.ViewModel.Auto
                 for(int i = 0; i < lot.StartModuleList.Count; i++)
                 {
                     FoupCls foup = Global.STModuleList.Find(x => x.ModuleNo == lot.StartModuleList[i] && x.ModuleType == enModuleType.FOUP) as FoupCls;
-                    if (!foup.IsScan) continue;
+                    if (!foup.IsScan || !foup.Use) continue;
                     foreach(WaferCls wafer in foup.FoupWaferList)
                     {
+                        if (!wafer.Use) continue;
                         if(wafer.Recipe.Name == string.Empty && wafer.WaferState == enWaferState.WAFER_EXIST)
                         {
                             wafer.Recipe.Name = lot.RecipeName;

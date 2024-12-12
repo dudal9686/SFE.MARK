@@ -28,6 +28,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         public RelayCommand StopRangeRelayCommand { get; set; }
         public RelayCommand AlarmRangeRelayCommand { get; set; }
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -51,6 +52,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
             StopRangeRelayCommand = new RelayCommand(StopRangeCommand);
             AlarmRangeRelayCommand = new RelayCommand(AlarmRangeCommand);
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -83,7 +85,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Dev Dummy Seq] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\DummySeqDEVRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\DEV\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -180,19 +182,22 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveDummySeqDEVRecipe(RecipeFileInfo.FileFullName, DevData);
+            if(Global.STDataAccess.SaveDummySeqDEVRecipe(RecipeFileInfo.FileFullName, DevData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (DevStepData != null)
             {
-                DevData.StepList.Remove(DevStepData);
-
-                for (int i = 0; i < DevData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    SpinChamberStepCls step = DevData.StepList[i];
-                    step.Index = i + 1;
+                    DevData.StepList.Remove(DevStepData);
+
+                    for (int i = 0; i < DevData.StepList.Count; i++)
+                    {
+                        SpinChamberStepCls step = DevData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
@@ -214,7 +219,10 @@ namespace SFE.TRACK.ViewModel.Recipe
                 DevData.AlarmRange = Convert.ToInt32(value);
             }
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
         private void RecipeDetailDoubleClickCommand(object o)
         {
             DataGrid grid = o as DataGrid;
@@ -291,7 +299,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummySeqDEVRecipe\", ref Global.DevDummySeqRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Seq\DEV\", ref Global.DevDummySeqRecipeFileList);
             if (Global.DevDummySeqRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

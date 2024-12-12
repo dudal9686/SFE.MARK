@@ -31,7 +31,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand AlarmMinRelayCommand { get; set; }
         public RelayCommand StopMaxRelayCommand { get; set; }
         public RelayCommand StopMinRelayCommand { get; set; }
-
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -60,6 +60,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             StopMaxRelayCommand = new RelayCommand(StopMaxCommand);
             StopMinRelayCommand = new RelayCommand(StopMinCommand);
 
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
 
@@ -92,7 +93,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[HHP] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessHHPRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Process\HHP\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -190,19 +191,21 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveProcessHHPRecipe(RecipeFileInfo.FileFullName, HhpData);
+            if(Global.STDataAccess.SaveProcessHHPRecipe(RecipeFileInfo.FileFullName, HhpData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (ChamberStepData != null)
             {
-                HhpData.StepList.Remove(ChamberStepData);
-
-                for (int i = 0; i < HhpData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    ChamberStepCls step = HhpData.StepList[i];
-                    step.Index = i + 1;
+                    HhpData.StepList.Remove(ChamberStepData);
+                    for (int i = 0; i < HhpData.StepList.Count; i++)
+                    {
+                        ChamberStepCls step = HhpData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
@@ -247,7 +250,10 @@ namespace SFE.TRACK.ViewModel.Recipe
                 HhpData.StopMinValue = value;
             }
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
         private void RecipeDetailDoubleClickCommand(object o)
         {
             DataGrid grid = o as DataGrid;
@@ -280,7 +286,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\ProcessHHPRecipe\", ref Global.HHPProcessRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Process\HHP\", ref Global.HHPProcessRecipeFileList);
             if (Global.HHPProcessRecipeFileList.Count > 0)
             {
                 RecipeListSelectedIndex = 0;

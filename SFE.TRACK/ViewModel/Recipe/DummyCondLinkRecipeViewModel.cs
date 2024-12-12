@@ -24,6 +24,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand AddDetailRelayCommand { get; set; }
         public RelayCommand SaveDetailRelayCommand { get; set; }
         public RelayCommand DeleteDetailRelayCommand { get; set; }
+        public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
@@ -42,7 +43,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             AddDetailRelayCommand = new RelayCommand(AddDetailCommand);
             SaveDetailRelayCommand = new RelayCommand(SaveDetailCommand);
             DeleteDetailRelayCommand = new RelayCommand(DeleteDetailCommand);
-
+            RecipeDoubleClickRelayCommand = new RelayCommand<object>(RecipeDoubleClickCommand);
             RecipeDetailDoubleClickRelayCommand = new RelayCommand<object>(RecipeDetailDoubleClickCommand);
         }
         #region Get Set
@@ -74,7 +75,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Dummy Condition Link]\n Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\DummyCondLinkRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\Dummy\Link\" + newFileName + ".csv");
 
                     if (!fi.Exists)
                     {
@@ -170,23 +171,28 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            Global.STDataAccess.SaveDummyCondLinkRecipe(RecipeFileInfo.FileFullName, RecipeData);
+            if(Global.STDataAccess.SaveDummyCondLinkRecipe(RecipeFileInfo.FileFullName, RecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
         {
             if (RecipeStep != null)
             {
-                RecipeData.StepList.Remove(RecipeStep);
-
-                for (int i = 0; i < RecipeData.StepList.Count; i++)
+                if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
                 {
-                    DummyConditionLinkStepCls step = RecipeData.StepList[i];
-                    step.Index = i + 1;
+                    RecipeData.StepList.Remove(RecipeStep);
+                    for (int i = 0; i < RecipeData.StepList.Count; i++)
+                    {
+                        DummyConditionLinkStepCls step = RecipeData.StepList[i];
+                        step.Index = i + 1;
+                    }
                 }
             }
         }
-
+        private void RecipeDoubleClickCommand(object o)
+        {
+            if (RecipeFileInfo != null) LoadListCommand();
+        }
 
         private void RecipeDetailDoubleClickCommand(object o)
         {
@@ -233,7 +239,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GetRecipe()
         {
-            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\DummyCondLinkRecipe\", ref Global.DummyCondLinkRecipeFileList);
+            Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\Dummy\Link\", ref Global.DummyCondLinkRecipeFileList);
             if (Global.DummyCondLinkRecipeFileList.Count() > 0)
             {
                 RecipeListSelectedIndex = 0;
