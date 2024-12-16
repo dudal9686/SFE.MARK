@@ -9,8 +9,9 @@
         DataContext="{Binding LotStartViewModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
         x:Name="LotStartView"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="LotStart" Height="470" Width="650">
+        Title="LotStart" Height="455" Width="650">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadRelayCommand}" />
@@ -66,9 +67,9 @@
                 <Button Content="PILOT PROCESS" Height="40" Margin="0 10 0 0" Width="250" FontSize="20" Background="LightSteelBlue" Command="{Binding SetPilotProcessRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
                 <TextBox Text="FALSE" Height="40" Margin="0 1 0 0" Width="250" FontSize="20" IsReadOnly="True" TextAlignment="Center"></TextBox>
 
-                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                    <Button Content="OK" Height="50" Margin="5 0 0 0" Width="120" FontSize="20" Background="LightPink" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
-                    <Button Content="CANCEL" Height="50" Margin="5 0 0 0" Width="120" FontSize="20" Background="White" Command="{Binding CanCelRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
+                <StackPanel Orientation="Horizontal" Margin="0 32 0 0">
+                    <Button Content="OK" Height="50" Margin="5 0 0 0" Width="120" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
+                    <Button Content="CANCEL" Height="50" Margin="5 0 0 0" Width="120" FontSize="20" Background="LightPink" Command="{Binding CanCelRelayCommand}" CommandParameter="{Binding ElementName=LotStartView}"></Button>
                 </StackPanel>
             </StackPanel>
         </Grid>

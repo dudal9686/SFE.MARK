@@ -145,23 +145,25 @@ namespace SFE.TRACK.DB
             return ExecuteReader(query, ref dt);
         }
 
-        public bool SaveDispenseInfo(int blockNo, int moduleNo)
+        public bool GetDispenseInfo(ref DataTable dt)
+        {
+            string query = string.Format("SELECT * FROM tbDispenseInfo");
+            return ExecuteReader(query, ref dt);
+        }
+
+        public bool SaveDispenseInfo()
         {
             string query = string.Empty;
             bool isDone = true;
-            Model.ModuleBaseCls module = Global.GetModule(blockNo, moduleNo);
 
-            if (module == null) return false;
-
-            for(int i = 0; i < module.DispenseList.Count; i++)
+            for (int i = 0; i < Global.STDispenseList.Count; i++)
             {
-                DispenseInfoCls info = module.DispenseList[i];
-                query = string.Format("UPDATE tbDispenseInfo SET Use = {0}, DummyUse = {1}, RecipeUse= {2} WHERE BlockNo = {3} AND ModuleNo = {4} AND DispNo = {5}",
+                DispenseInfoCls info = Global.STDispenseList[i];
+                query = string.Format("UPDATE tbDispenseInfo SET Use = {0}, DummyUse = {1}, RecipeUse= {2} WHERE Type = '{3}' AND DispNo = {4}",
                                         info.IsUse.Equals(true) ? 1 : 0,
                                         info.IsUseDummy.Equals(true) ? 1 : 0,
                                         info.IsUseRecipe.Equals(true) ? 1 : 0,
-                                        blockNo,
-                                        moduleNo,
+                                        info.Type,
                                         info.DispNo);
 
                 isDone = ExecuteNonQuery(query);

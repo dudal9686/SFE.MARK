@@ -102,22 +102,20 @@ namespace SFE.TRACK.ViewModel.Recipe
 
                 int dispIndex = 0;
 
-                Model.ModuleBaseCls module = Global.STModuleList.Find(x => x.MachineName.IndexOf("COT") != -1);
+                //Model.ModuleBaseCls module = Global.STModuleList.Find(x => x.MachineName.IndexOf("COT") != -1);
+                List<DispenseInfoCls> DispenseList = Global.STDispenseList.FindAll(x => x.Type == "COT");
 
-                if (module != null)
+                foreach (DummyConditionStepCls step in Recipe.StepList)
                 {
-                    foreach (DummyConditionStepCls step in Recipe.StepList)
+                    for (int i = 0; i < DispenseList.Count; i++)
                     {
-                        for (int i = 0; i < module.DispenseList.Count; i++)
-                        {
-                            dispIndex = Global.GetDispenseIndex(step.DispenseNo);
+                        dispIndex = Global.GetDispenseIndex(step.DispenseNo);
 
-                            if (dispIndex == -1) continue;
+                        if (dispIndex == -1) continue;
 
-                            DispenseInfoCls dispense = module.DispenseList[i];
+                        DispenseInfoCls dispense = DispenseList[i];
 
-                            if (dispIndex == dispense.DispNo) { step.DipsenseDisplay = dispense.DispName; break; }
-                        }
+                        if (dispIndex == dispense.DispNo) { step.DipsenseDisplay = dispense.DispName; break; }
                     }
                 }
             }
@@ -291,21 +289,19 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void SetRecipeDispense()
         {
-            Model.ModuleBaseCls module = Global.STModuleList.Find(x => x.MachineName.IndexOf("COT") != -1);
+            //Model.ModuleBaseCls module = Global.STModuleList.Find(x => x.MachineName.IndexOf("COT") != -1);
+            List<DispenseInfoCls> DispenseList = Global.STDispenseList.FindAll(x => x.Type == "COT");
 
-            if (module != null)
+            int dispIndex = -1;
+            dispIndex = Global.GetDispenseIndex(StepRecipe.DispenseNo);
+
+            if (dispIndex != -1)
             {
-                int dispIndex = -1;
-                dispIndex = Global.GetDispenseIndex(StepRecipe.DispenseNo);
-
-                if (dispIndex != -1)
+                for (int i = 0; i < DispenseList.Count; i++)
                 {
-                    for (int i = 0; i < module.DispenseList.Count; i++)
-                    {
-                        DispenseInfoCls dispense = module.DispenseList[i];
+                    DispenseInfoCls dispense = DispenseList[i];
 
-                        if (dispIndex == dispense.DispNo) { StepRecipe.DipsenseDisplay = dispense.DispName; break; }
-                    }
+                    if (dispIndex == dispense.DispNo) { StepRecipe.DipsenseDisplay = dispense.DispName; break; }
                 }
             }
         }

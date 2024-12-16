@@ -6,9 +6,13 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
              xmlns:Track="clr-namespace:SFE.TRACK"
+             xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
              DataContext="{Binding CoaterProcessRecipeViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="880" d:DesignWidth="1574">
+    <UserControl.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"/>
@@ -165,10 +169,46 @@
                                     <DataGridTextColumn Header="Dispense No" Foreground="Black" Width="150" Binding="{Binding DispDisplay}" FontSize="16"/>
                                     <DataGridTextColumn Header="Arm1&#x0a; Pos" Foreground="Black" Width="80" Binding="{Binding Arm1Pos}" FontSize="16"/>
                                     <DataGridTextColumn Header="Arm1&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm1Speed}" FontSize="16"/>
-                                    <DataGridTextColumn Header="Arm1&#x0a; Wait" Foreground="Black" Width="70" Binding="{Binding IsArm1MoveWait}" FontSize="16"/>
+
+                                    <DataGridTemplateColumn Header="Arm1&#x0a; Wait" Width="70">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsArm1MoveWait, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="15 1 0 0" IsChecked="{Binding Path=IsArm1MoveWait, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    
+                                    
                                     <DataGridTextColumn Header="Arm2&#x0a; Pos" Foreground="Black" Width="80" Binding="{Binding Arm2Pos}" FontSize="16"/>
                                     <DataGridTextColumn Header="Arm2&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm2Speed}" FontSize="16"/>
-                                    <DataGridTextColumn Header="Arm2&#x0a; Wait" Foreground="Black" Width="70" Binding="{Binding IsArm2MoveWait}" FontSize="16"/>
+
+
+                                    <DataGridTemplateColumn Header="Arm2&#x0a; Wait" Width="70">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsArm2MoveWait, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="15 1 0 0" IsChecked="{Binding Path=IsArm2MoveWait, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>

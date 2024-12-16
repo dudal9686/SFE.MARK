@@ -8,9 +8,10 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         DataContext="{Binding JobStartViewModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
         x:Name="JobStartView"
         mc:Ignorable="d"
-        Title="JobStart" Height="500" Width="1000">
+        Title="JobStart" Height="480" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7.5*"/>
@@ -61,8 +62,8 @@
                 <Button Content="Delete Job" Height="40" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightSalmon" Command="{Binding DeleteJobRelayCommand}"></Button>
                 <Button Content="Previous Job" Height="40" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightSteelBlue" Command="{Binding PreJobRelayCommand}"></Button>
                 <Button Content="Host Job" Height="40" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightSteelBlue" Command="{Binding HostJobRelayCommand}"></Button>
-                <Button Content="OK" Height="60" Margin="0 110 0 0" Width="230" FontSize="20" Background="LightPink" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=JobStartView}"></Button>
-                <Button Content="Cancel" Height="60" Margin="0 10 0 0" Width="230" FontSize="20" Background="White" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=JobStartView}"></Button>
+                <Button Content="OK" Height="60" Margin="0 110 0 0" Width="230" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=JobStartView}"></Button>
+                <Button Content="Cancel" Height="60" Margin="0 10 0 0" Width="230" FontSize="20" Background="LightPink" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=JobStartView}"></Button>
             </StackPanel>
         </Grid>
     </Grid>

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
         xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
         mc:Ignorable="d"
         
@@ -11,6 +12,9 @@
         x:Name="MotorInitalView"
         WindowStartupLocation="CenterScreen"
         Title="MotorInitail" Height="1050" Width="1000" WindowStyle="None">
+    <Window.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9.3*"/>
@@ -59,10 +63,24 @@
                                 </DataGrid.RowStyle>-->
 
                                 <DataGrid.Columns>
-                                    <DataGridCheckBoxColumn Header="Check" Binding="{Binding IsHomeChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100">
-                                    </DataGridCheckBoxColumn>
-                                    <DataGridTextColumn Header="Type"  Foreground="Black" Width="200" Binding="{Binding AxisID}" FontSize="18"/>
-                                    <DataGridTextColumn Header="Module" Foreground="Black" Width="250" Binding="{Binding ModuleName}" FontSize="18"/>
+                                    <DataGridTemplateColumn Header="Check" Width="150">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsHomeChecked, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="60 1 0 0" IsChecked="{Binding Path=IsHomeChecked, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="1.3" ScaleY="1.3" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Type"  Foreground="Black" Width="180" Binding="{Binding AxisID}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Module" Foreground="Black" Width="240" Binding="{Binding ModuleName}" FontSize="18"/>
                                     <DataGridTextColumn Header="HomeState" Foreground="Black" Width="200" Binding="{Binding HomeSituation}" FontSize="20">
                                         <DataGridTextColumn.CellStyle>
                                             <Style TargetType="DataGridCell">

@@ -15,6 +15,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using CommonServiceLocator;
+using SFE.TRACK.ViewModel.Recipe;
 //using Microsoft.Practices.ServiceLocation;
 
 namespace SFE.TRACK.ViewModel
@@ -93,7 +94,7 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Recipe.ADHDummyCondRecipeViewModel>();
             SimpleIoc.Default.Register<Recipe.CoaterDummyCondRecipeViewModel>();
             SimpleIoc.Default.Register<Recipe.DevDummyCondRecipeViewModel>();
-            SimpleIoc.Default.Register<Recipe.SelectRecipeViewModel>();
+            SimpleIoc.Default.Register<SelectRecipeViewModel>();
             SimpleIoc.Default.Register<Recipe.ArmPositionViewModel>();
             SimpleIoc.Default.Register<Recipe.SelectDispenseViewModel>();
             SimpleIoc.Default.Register<Account.UserAccountViewModel>();

@@ -16,8 +16,8 @@ namespace SFE.TRACK.ViewModel.Util
     {
         List<DispenseInfoCls> DispenseList_ { get; set; }
         public DispenseInfoCls DispenseInfo { get; set; }
-        public List<ModuleBaseCls> ModuleList { get; set; }
-        public ModuleBaseCls ModuleInfo { get; set; } = null;
+        public List<DispenseInfoCls> ModuleList { get; set; } = new List<DispenseInfoCls>();
+        public DispenseInfoCls ModuleInfo { get; set; } = null;
         public RelayCommand SaveDispenseRelayCommand { get; set; }
         public RelayCommand<object> DispenseDetailDoubleClickRelayCommand { get; set; }
         int SelectedIndex_ = 0;
@@ -27,7 +27,10 @@ namespace SFE.TRACK.ViewModel.Util
         {
             SaveDispenseRelayCommand = new RelayCommand(SaveDispenseCommand);
             DispenseDetailDoubleClickRelayCommand = new RelayCommand<object>(DispenseDetailDoubleClickCommand);
-            ModuleList = Global.STModuleList.FindAll(x => x.MachineName.IndexOf("DEV") != -1 || x.MachineName.IndexOf("COT") != -1 || x.MachineName.IndexOf("ADH") != -1);
+            //ModuleList = Global.STModuleList.FindAll(x => x.MachineName.IndexOf("DEV") != -1 || x.MachineName.IndexOf("COT") != -1 || x.MachineName.IndexOf("ADH") != -1);
+            DispenseInfoCls info = new DispenseInfoCls(); info.Type = "COT"; ModuleList.Add(info);
+            info = new DispenseInfoCls(); info.Type = "DEV"; ModuleList.Add(info);
+            info = new DispenseInfoCls(); info.Type = "ADH"; ModuleList.Add(info);
 
             if (ModuleList.Count == 0) SelectedIndex = -1;
             else
@@ -52,7 +55,7 @@ namespace SFE.TRACK.ViewModel.Util
                 if (SelectedIndex != -1)
                 {
                     ModuleInfo = ModuleList[SelectedIndex];
-                    DispenseList = ModuleInfo.DispenseList.ToList();
+                    DispenseList = Global.STDispenseList.FindAll(x=>x.Type == ModuleInfo.Type).ToList();
                 }
 
                 RaisePropertyChanged("SelectedIndex"); 
@@ -74,7 +77,7 @@ namespace SFE.TRACK.ViewModel.Util
             }
             else
             {
-                if (Global.STDataAccess.SaveDispenseInfo(ModuleInfo.BlockNo, ModuleInfo.ModuleNo)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+                if (Global.STDataAccess.SaveDispenseInfo()) Global.MessageOpen(enMessageType.OK, "It has been saved.");
                 else Global.MessageOpen(enMessageType.OK, "Not saved.");
             }
         }

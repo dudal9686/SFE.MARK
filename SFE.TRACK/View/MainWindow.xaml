@@ -181,15 +181,10 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <Border BorderBrush="Black" BorderThickness="3" CornerRadius="5">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <GradientStop Color="#00004f" Offset="0"/>
-                        <GradientStop Color="#00004f" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
+            <Border BorderBrush="Black" BorderThickness="3" CornerRadius="5" Background="{Binding TitleColor}">
 
-                <ListView ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" Background="#00004f" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" IsSynchronizedWithCurrentItem="True">
+
+                <ListView ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" Background="{Binding TitleColor}" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" IsSynchronizedWithCurrentItem="True">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

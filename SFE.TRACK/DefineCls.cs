@@ -393,7 +393,7 @@ namespace SFE.TRACK
         int nBlokNo = 2;
         string sModuleNo = string.Empty;
         int nModuleFunc = 0;
-        int nExtraPin = 0;
+        bool isExtraPin = false;
         string sRecipeName = "-";
         int[] nModuleNoList = new int[20];
         int nModuleCount = 0;
@@ -444,10 +444,10 @@ namespace SFE.TRACK
             set { nModuleFunc = value; RaisePropertyChanged("ModuleFunc"); }
         }
 
-        public int ExtraPin
+        public bool IsExtraPin
         {
-            get { return nExtraPin; }
-            set { nExtraPin = value; RaisePropertyChanged("ExtraPin"); }
+            get { return isExtraPin; }
+            set { isExtraPin = value; RaisePropertyChanged("IsExtraPin"); }
         }
 
         public string RecipeName
@@ -2099,6 +2099,7 @@ namespace SFE.TRACK
     {
         int index = 0;
         uint dispNo = 0;
+        string type = string.Empty;
         string dispName = string.Empty;
         bool isUse = false;
         bool isUseDummy = false;
@@ -2118,6 +2119,11 @@ namespace SFE.TRACK
         {
             get { return dispNo; }
             set { dispNo = value; RaisePropertyChanged("DispNo"); }
+        }
+        public string Type
+        {
+            get { return type; }
+            set { type = value; RaisePropertyChanged("Type"); }
         }
         public string DispName
         {

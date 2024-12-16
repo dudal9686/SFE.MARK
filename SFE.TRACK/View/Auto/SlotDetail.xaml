@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
         DataContext="{Binding SlotDetailViewModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
         mc:Ignorable="d"
         x:Name="SlotDetailView"
-        Title="SlotDetail" Height="705" Width="400">
+        Title="SlotDetail" Height="690" Width="400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5.2*"/>

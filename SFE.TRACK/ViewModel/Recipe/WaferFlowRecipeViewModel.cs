@@ -79,7 +79,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             {
                 if(Global.MessageOpen(enMessageType.OKCANCEL, "[Process_Wafer] Would you like to create a file ?"))
                 {
-                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\ProcessRecipe\" + newFileName + ".csv");
+                    FileInfo fi = new FileInfo(@"C:\MachineSet\SFETrack\Recipe\WaferFlow\" + newFileName + ".csv");
 
                     if (!fi.Exists) 
                     { 
@@ -255,7 +255,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     if(Global.RecipeOpen(recipeMenu, WaferStep.RecipeName))WaferStep.RecipeName = Global.STRecipePopUp.SelectRecipeName;
                     break;
                 case 4:
-                    if (Global.MessageOpen(enMessageType.OKCANCEL, "Extra Pin Change?")) WaferStep.ExtraPin = WaferStep.ExtraPin.Equals(0) ? 1 : 0;
+                    //if (Global.MessageOpen(enMessageType.OKCANCEL, "Extra Pin Change?")) WaferStep.IsExtraPin = WaferStep.IsExtraPin.Equals(false) ? true : false;
                     break;
                 default:
                     break;

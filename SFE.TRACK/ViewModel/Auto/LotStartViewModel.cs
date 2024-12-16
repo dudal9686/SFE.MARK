@@ -199,14 +199,17 @@ namespace SFE.TRACK.ViewModel.Auto
             int index = 0;
             for (int i = 0; i < FoupList.Count; i++)
             {
-                for(int j = 0; j < FoupTempList.Count; j++)
+                if (!FoupList[i].Use) continue;
+                for (int j = 0; j < FoupTempList.Count; j++)
                 {
-                    if(FoupList[i].BlockNo == FoupTempList[j].BlockNo && FoupList[i].ModuleNo == FoupTempList[j].ModuleNo)
+                    if (FoupList[i].BlockNo == FoupTempList[j].BlockNo && FoupList[i].ModuleNo == FoupTempList[j].ModuleNo)
                     {
                         if (FoupList[i].IsDetect && FoupList[i].IsScan)
                         {
-                            if (!FoupList[i].Use) continue;
-                            if (FoupTempList[j].RecipeName == string.Empty || FoupTempList[j].LotID == string.Empty) continue;
+                            if (FoupTempList[j].RecipeName == string.Empty || FoupTempList[j].LotID == string.Empty)
+                            {
+                                continue;
+                            }
                             FoupList[i].RecipeName = FoupTempList[j].RecipeName;
                             FoupList[i].Comment = FoupTempList[j].Comment;
                             FoupList[i].LotID = FoupTempList[j].LotID;

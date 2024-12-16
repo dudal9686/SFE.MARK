@@ -12,8 +12,7 @@ using System.Collections.ObjectModel;
 namespace SFE.TRACK.ViewModel.Auto
 {
     public class CassetteSlotViewModel : ViewModelBase
-    {
-        
+    {        
         List<WaferCls> waferList { get; set; }
         List<FoupCls> foupTempList { get; set; }
         public RelayCommand<string> SlotDetailRelayCommand { get; set; }

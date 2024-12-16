@@ -93,9 +93,9 @@ namespace SFE.TRACK.ViewModel.Util
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-           if(System.Convert.ToBoolean(value) == true)  return new SolidColorBrush(Colors.White);
+           if(System.Convert.ToBoolean(value) == true)  return new SolidColorBrush(Colors.LightBlue);
 
-            return new SolidColorBrush(Colors.DarkGray);
+            return new SolidColorBrush(Colors.LightPink);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
              xmlns:Track="clr-namespace:SFE.TRACK"
+             xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              DataContext="{Binding WaferFlowRecipeViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="880" d:DesignWidth="1574">
+    <UserControl.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"/>
@@ -149,7 +153,23 @@
                                     <DataGridTextColumn Header="Name" Foreground="Black" Width="250" Binding="{Binding Name}" FontSize="18"/>
                                     <DataGridTextColumn Header="Block/Module No." Foreground="Black" Width="190" Binding="{Binding ModuleListDescription}" FontSize="18"/>
                                     <DataGridTextColumn Header="Recipe Name" Foreground="Black" Width="350" Binding="{Binding RecipeName}" FontSize="18"/>
-                                    <DataGridTextColumn Header="Extra Pin" Foreground="Black" Width="120" Binding="{Binding ExtraPin}" FontSize="18"/>
+
+                                    <DataGridTemplateColumn Header="Extra Pin" Width="120">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsExtraPin, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="40 1 0 0" IsChecked="{Binding Path=IsExtraPin, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>

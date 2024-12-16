@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace SFE.TRACK.ViewModel.Recipe
 {
@@ -18,6 +19,8 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand<Window> CancelRelayCommand { get; set; }
         public RelayCommand<object> GridDoubleClickRelayCommand { get; set; }
         private ObservableCollection<DirFileListCls> list_ = null;// new List<DirFileListCls>();
+        public RelayCommand<object> CheckClickRelayCommand { get; set; }
+        DirFileListCls SelectedItem_ { get; set; }
         int SelectedIndex_ = -1;
 
         public SelectRecipeViewModel()
@@ -26,6 +29,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             OKRelayCommand = new RelayCommand<Window>(OKCommand);
             CancelRelayCommand = new RelayCommand<Window>(CancelCommand);
             GridDoubleClickRelayCommand = new RelayCommand<object>(GridDoubleClickCommand);
+            CheckClickRelayCommand = new RelayCommand<object>(CheckClickCommand);
         }
 
         ~SelectRecipeViewModel()
@@ -41,6 +45,14 @@ namespace SFE.TRACK.ViewModel.Recipe
                 SelectedIndex_ = value;
                 RaisePropertyChanged("SelectedIndex");
             }
+        }
+
+        public DirFileListCls SelectedItem
+        {
+            get { return SelectedItem_; }
+            set { 
+                SelectedItem_ = value; 
+                RaisePropertyChanged("SelectedItem"); }
         }
 
         public ObservableCollection<DirFileListCls> list
@@ -163,6 +175,21 @@ namespace SFE.TRACK.ViewModel.Recipe
                 if (SelectedIndex == i) file.IsCheck = true;
                 else file.IsCheck = false;
             }
+        }
+
+        private void CheckClickCommand(object o)
+        {
+            DataGridRow row = o as DataGridRow;
+            if (row == null) return;
+
+            DirFileListCls file = row.DataContext as DirFileListCls;
+            if (file == null) return;
+            
+            foreach(DirFileListCls item in list)
+            {
+                if (file != item) item.IsCheck = false;
+            }
+
         }
     }
 }

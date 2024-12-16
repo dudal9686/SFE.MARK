@@ -51,20 +51,16 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void OnReceiveMessageAction(PopUpDispenseCls o)
         {
-            Model.ModuleBaseCls module;
-            module = GetModule(o.ModuleType.ToString());
+            List<DispenseInfoCls> DispenseList_ = Global.STDispenseList.FindAll(x => x.Type == o.ModuleType.ToString());
 
-            if (module != null)
+            if (o.DummyOrRecipeUse == "RECIPEUSE") DispenseList = DispenseList_.Where(x => x.IsUse == true && x.IsUseRecipe == true).ToList();
+            else DispenseList = DispenseList_.Where(x => x.IsUse == true && x.IsUseDummy == true).ToList();
+
+            foreach (DispenseInfoCls info in DispenseList) info.IsCheck = false;
+
+            for (int i = 0; i < Global.STDispenseIndex.Length; i++)
             {
-                if(o.DummyOrRecipeUse == "RECIPEUSE") DispenseList = module.DispenseList.Where(x => x.IsUse == true && x.IsUseRecipe == true).ToList();
-                else DispenseList = module.DispenseList.Where(x => x.IsUse == true && x.IsUseDummy == true).ToList();
-
-                foreach (DispenseInfoCls info in DispenseList) info.IsCheck = false;
-
-                for (int i = 0; i < Global.STDispenseIndex.Length; i++)
-                {
-                    if (Convert.ToBoolean(o.DispenseValue & Global.STDispenseIndex[i])) CheckDispense(i + 1);
-                }                
+                if (Convert.ToBoolean(o.DispenseValue & Global.STDispenseIndex[i])) CheckDispense(i + 1);
             }
         }
 

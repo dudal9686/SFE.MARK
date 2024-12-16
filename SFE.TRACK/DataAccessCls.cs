@@ -55,29 +55,24 @@ namespace SFE.TRACK
                         if (moduleBase.ModuleState == enModuleState.NONE) moduleBase.ModuleState = enModuleState.NOTINITIAL;
                     }
 
-                    if(moduleBase.MachineName.IndexOf("DEV") != -1 || moduleBase.MachineName.IndexOf("COT") != -1 || moduleBase.MachineName.IndexOf("ADH") != -1)
-                    {
-                        GetDispenseInfo(ref moduleBase);
-                    }
-
                     Global.STModuleList.Add(moduleBase);
                 }
             }
             else isDone = false;
             GetWafer();
-
+            GetDispenseInfo();
             dt.Clear();
             dt.Dispose();
 
             return isDone;
         }
 
-        private bool GetDispenseInfo(ref ModuleBaseCls module)
+        private bool GetDispenseInfo()
         {
             bool isDone = true;
             DataTable dt = new DataTable();
 
-            if (Global.STAccessDB.GetDispenseInfo(module.BlockNo, module.ModuleNo, ref dt))
+            if (Global.STAccessDB.GetDispenseInfo(ref dt))
             {
                 if (dt.Rows.Count > 0)
                 {
@@ -85,12 +80,13 @@ namespace SFE.TRACK
                     {
                         DispenseInfoCls dispInfo = new DispenseInfoCls();
                         dispInfo.Index = i + 1;
+                        dispInfo.Type = dt.Rows[i]["Type"].ToString();
                         dispInfo.DispNo = Convert.ToUInt32(dt.Rows[i]["DispNo"]);
                         dispInfo.DispName = dt.Rows[i]["DispName"].ToString();
                         dispInfo.IsUse = Convert.ToInt32(dt.Rows[i]["Use"]).Equals(0) ? false : true;
                         dispInfo.IsUseDummy = Convert.ToInt32(dt.Rows[i]["DummyUse"]).Equals(0) ? false : true;
                         dispInfo.IsUseRecipe = Convert.ToInt32(dt.Rows[i]["RecipeUse"]).Equals(0) ? false : true;
-                        module.DispenseList.Add(dispInfo);
+                        Global.STDispenseList.Add(dispInfo);
                     }
                 }
             }
@@ -99,9 +95,9 @@ namespace SFE.TRACK
             return isDone;
         }
 
-        public bool SaveDispenseInfo(int blockNo, int moduleNo)
+        public bool SaveDispenseInfo()
         {
-            return Global.STAccessDB.SaveDispenseInfo(blockNo, moduleNo);
+            return Global.STAccessDB.SaveDispenseInfo();
         }
 
         private void GetWafer()
@@ -258,7 +254,7 @@ namespace SFE.TRACK
                         for(int i = 0; i < stepData.ModuleCount; i++) stepData.ModuleNoList[i] = Convert.ToInt32(arrModule[i]);
 
                         stepData.RecipeName = arr[5].Trim(); 
-                        stepData.ExtraPin = Convert.ToInt32(arr[6].Trim());
+                        stepData.IsExtraPin = Convert.ToInt32(arr[6].Trim()).Equals(1) ? true : false;
                         stepData.ModuleListDescription = string.Empty;
                         for(int i = 0; i < stepData.ModuleCount; i++)
                         {
@@ -325,7 +321,7 @@ namespace SFE.TRACK
                     stepData.BlokNo,
                     stepData.ModuleNo,
                     stepData.RecipeName,
-                    stepData.ExtraPin));
+                    stepData.IsExtraPin.Equals(true) ? 1 : 0));
                 }
             }
             catch (Exception e)

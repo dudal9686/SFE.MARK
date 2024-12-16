@@ -10,6 +10,7 @@ using CoreCSMac;
 using MachineCSBaseSim;
 using MachineDefine;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace SFE.TRACK.ViewModel
 {
@@ -47,7 +48,8 @@ namespace SFE.TRACK.ViewModel
         List<UnitMotor> MotorList = null;
         List<UnitCustom> CustomUnitList = null;
 
-        System.Windows.Media.SolidColorBrush TitleColor_ = System.Windows.Media.Brushes.MidnightBlue;
+        System.Windows.Media.SolidColorBrush TitleColor_ = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
+        //(Color)ColorConverter.ConvertFromString("#FFDFD991");;
         MachineReaderWorker _worker;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -419,7 +421,7 @@ namespace SFE.TRACK.ViewModel
             if (Global.STAlarmList.Count == 0)
             {
                 IsSelectedAlarm = false;
-                TitleColor = System.Windows.Media.Brushes.MidnightBlue;
+                TitleColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
             }
         }
         private void SetRecipeFileList()
@@ -450,13 +452,7 @@ namespace SFE.TRACK.ViewModel
         private void LoginCommand()
         {
             #region Test Source
-            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");
-            //PrgCfgItem item = _worker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
-            //item.Explain = "Lot";
-            //List<string> list = new List<string>();
-            //list.Add("A");
-            //list.Add("B");
-            //item.SetValue(list);
+            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");            
             #endregion
             
             if (Global.STLoginInfo.ID != string.Empty)
@@ -505,6 +501,8 @@ namespace SFE.TRACK.ViewModel
                     Global.STAlarmList.Add(alarm);
                 });
                 SetAlarm();
+
+                Global.MessageOpen(enMessageType.OK, "Thread Dialog Suceess");
             }             
         }
 

@@ -78,6 +78,7 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void FoupDetailDoubleClickCommand(object o)
         {
+            if (!Wafer.Use) return;
             if (Wafer.WaferState == enWaferState.WAFER_EXIST) { Wafer.WaferState = enWaferState.WAFER_NONE; Wafer.Recipe.Name = string.Empty; }
             else if (Wafer.WaferState == enWaferState.WAFER_NONE) Wafer.WaferState = enWaferState.WAFER_EXIST;
         }

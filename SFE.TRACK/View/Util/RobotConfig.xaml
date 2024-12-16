@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SFE.TRACK.View.Util"
+             xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
              DataContext="{Binding RobotConfigViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="880" d:DesignWidth="1574">
+    <UserControl.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Vertical" Margin="5">
 
@@ -41,10 +45,55 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="BlockNo" Foreground="Black" Width="200" Binding="{Binding BlockNo}" FontSize="15"/>
                                 <DataGridTextColumn Header="ModuleNo" Foreground="Black" Width="200" Binding="{Binding ModuleNo}" FontSize="15"/>
-                                <DataGridTextColumn Header="Name" Foreground="Black" Width="500" Binding="{Binding MachineFullName}" FontSize="17"/>
-                                <DataGridCheckBoxColumn Binding="{Binding IsUseCRA, Mode=TwoWay}" Header="Use CRA" Width="200"/>
-                                <DataGridCheckBoxColumn Binding="{Binding IsUsePRA, Mode=TwoWay}" Header="Use PRA" Width="200"/>
-                                <DataGridCheckBoxColumn Binding="{Binding IsUseIRA, Mode=TwoWay}" Header="Use IRA" Width="200"/>
+                                <DataGridTextColumn Header="Name" Foreground="Black" Width="545" Binding="{Binding MachineFullName}" FontSize="17"/>
+                                <DataGridTemplateColumn Header="Use CRA" Width="200">
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Background" Value="{Binding Path=IsUseCRA, Converter={StaticResource UseValueConverter}}"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.CellStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Margin="90 1 0 0" IsChecked="{Binding Path=IsUseCRA, UpdateSourceTrigger=PropertyChanged}">
+                                                <CheckBox.LayoutTransform>
+                                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                </CheckBox.LayoutTransform>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Use PRA" Width="200">
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Background" Value="{Binding Path=IsUsePRA, Converter={StaticResource UseValueConverter}}"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.CellStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Margin="90 0 0 0" IsChecked="{Binding Path=IsUsePRA, UpdateSourceTrigger=PropertyChanged}">
+                                                <CheckBox.LayoutTransform>
+                                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                </CheckBox.LayoutTransform>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Use IRA" Width="200">
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Background" Value="{Binding Path=IsUseIRA, Converter={StaticResource UseValueConverter}}"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.CellStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Margin="90 0 0 0" IsChecked="{Binding Path=IsUseIRA, UpdateSourceTrigger=PropertyChanged}">
+                                                <CheckBox.LayoutTransform>
+                                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                </CheckBox.LayoutTransform>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
 
                             <DataGrid.InputBindings>

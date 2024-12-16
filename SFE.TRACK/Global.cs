@@ -27,8 +27,7 @@ namespace SFE.TRACK
         public static Log.LogCls STLog = new Log.LogCls();
         public static List<AxisInfoCls> STAxis = new List<AxisInfoCls>();
         public static JobInfoCls STJobInfo = new JobInfoCls();
-
-
+        
         public static List<IODataCls> STDIList = new List<IODataCls>();
         public static List<IODataCls> STDOList = new List<IODataCls>();
         public static List<AIODataCls> STAIOList = new List<AIODataCls>();
@@ -37,7 +36,7 @@ namespace SFE.TRACK
 
         public static ObservableCollection<AlarmLogCls> STAlarmList { get; set; } = new ObservableCollection<AlarmLogCls>();
         public static ObservableCollection<AlarmLogCls> STWarningList { get; set; } = new ObservableCollection<AlarmLogCls>();
-
+        public static List<DispenseInfoCls> STDispenseList { get; set; } = new List<DispenseInfoCls>();
         //RegisterViewMain 에서 단독으로 하려 했으나 ViewModel에서 메모리를 가지고 있기 떄문에 글로벌에서 가지고 있는다.
         public static List<LoginInfoCls> STUserList = new List<LoginInfoCls>();
         public static LoginInfoCls STLoginInfo = new LoginInfoCls(); //로그인 후 권한 설정
@@ -108,16 +107,20 @@ namespace SFE.TRACK
 
         public static bool MessageOpen(enMessageType msgType, string message)
         {
-            Alarm.AlarmMessage alarmMessage = new Alarm.AlarmMessage();
-            alarmMessage.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
-            STMessagePopUp.MessageType = msgType;
-            STMessagePopUp.Message = message;
-            Messenger.Default.Send(STMessagePopUp);
-            alarmMessage.ShowDialog();
+            bool isReturn = false;
+            Alarm.AlarmMessage alarmMessage = null; ;
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                alarmMessage = new Alarm.AlarmMessage();
+                alarmMessage.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+                STMessagePopUp.MessageType = msgType;
+                STMessagePopUp.Message = message;
+                Messenger.Default.Send(STMessagePopUp);
+                alarmMessage.ShowDialog();
+                if (alarmMessage.DialogResult.HasValue && alarmMessage.DialogResult.Value) isReturn = true;
+            });
 
-            if (alarmMessage.DialogResult.HasValue && alarmMessage.DialogResult.Value) return true;
-
-            return false;
+            return isReturn;
         }
 
         public static bool KeyBoard(ref string value)

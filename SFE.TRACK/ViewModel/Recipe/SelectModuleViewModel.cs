@@ -204,6 +204,16 @@ namespace SFE.TRACK.ViewModel.Recipe
                         checkModule.BlockNo = modBase.BlockNo;
                         checkModule.ModuleNo = modBase.ModuleNo;
                         checkModule.IsCheck = false;
+
+                        for(int i = 0; i < waferStep.ModuleCount; i++)
+                        { 
+                            if(checkModule.ModuleNo == waferStep.ModuleNoList[i])
+                            {
+                                checkModule.IsCheck = true;
+                                break;
+                            }
+
+                        }
                         index++;
                         ModuleList.Add(checkModule);
                     }                    

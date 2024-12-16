@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SFE.TRACK.View.Util"
              xmlns:Track="clr-namespace:SFE.TRACK"
+             xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              DataContext="{Binding DispenseConfigViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="880" d:DesignWidth="1574">
+    <UserControl.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3.5*"/>
@@ -39,21 +43,8 @@
                                     </Style>
                                 </DataGrid.Resources>
 
-                                <!--<DataGrid.RowStyle>
-                                    <Style TargetType="{x:Type DataGridRow}">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="Background" Value="PapayaWhip"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.RowStyle>-->
-
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Block No"  Foreground="Black" Width="120" Binding="{Binding BlockNo}" FontSize="18"/>
-                                    <DataGridTextColumn Header="Module No"  Foreground="Black" Width="120" Binding="{Binding ModuleNo}" FontSize="18"/>
-                                    <DataGridTextColumn Header="Name" Foreground="Black" Width="290" Binding="{Binding MachineName}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Dispense Group" Foreground="Black" Width="530" Binding="{Binding Type}" FontSize="18"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <!--</ScrollViewer>-->
@@ -109,9 +100,57 @@
                                     <DataGridTextColumn Header="No"  Foreground="Black" Width="100" Binding="{Binding Index}" FontSize="17"/>
                                     <DataGridTextColumn Header="Disp No" Foreground="Black" Width="150" Binding="{Binding DispNo}" FontSize="15"/>
                                     <DataGridTextColumn Header="Name" Foreground="Black" Width="290" Binding="{Binding DispName}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Use" Foreground="Black" Width="150" Binding="{Binding IsUse}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Dummy Use" Foreground="Black" Width="150" Binding="{Binding IsUseDummy}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Recipe Use" Foreground="Black" Width="150" Binding="{Binding IsUseRecipe}" FontSize="17"/>
+
+                                    <DataGridTemplateColumn Header="Use" Width="150">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsUse, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="60 1 0 0" IsChecked="{Binding Path=IsUse, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="Dummy Use" Width="150">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsUseDummy, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="60 1 0 0" IsChecked="{Binding Path=IsUseDummy, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="Recipe Use" Width="150">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsUseRecipe, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="60 1 0 0" IsChecked="{Binding Path=IsUseRecipe, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>

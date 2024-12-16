@@ -43,7 +43,7 @@ namespace SFE.TRACK.Model
 
         public RelayCommand ModuleClickRelayCommand { get; set; }
 
-        public ObservableCollection<DispenseInfoCls> DispenseList { get; set; } = new ObservableCollection<DispenseInfoCls>();
+        //public ObservableCollection<DispenseInfoCls> DispenseList { get; set; } = new ObservableCollection<DispenseInfoCls>();
 
         public ModuleBaseCls() 
         {
