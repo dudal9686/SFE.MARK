@@ -66,10 +66,12 @@ namespace SFE.TRACK.ViewModel.Auto
             {
                 axis.IsHomeChecked = !check;
 
-                if (axis.HomeSituation == enHomeState.HOME_NONE) axis.HomeSituation = enHomeState.HOMMING;
-                else if (axis.HomeSituation == enHomeState.HOMMING) axis.HomeSituation = enHomeState.HOME_OK;
-                else if (axis.HomeSituation == enHomeState.HOME_OK) axis.HomeSituation = enHomeState.HOME_ERROR;
-                else if (axis.HomeSituation == enHomeState.HOME_ERROR) axis.HomeSituation = enHomeState.HOME_NONE;
+                //홈밍 트리거 신호
+
+                //if (axis.HomeSituation == enHomeState.HOME_NONE) axis.HomeSituation = enHomeState.HOMMING;
+                //else if (axis.HomeSituation == enHomeState.HOMMING) axis.HomeSituation = enHomeState.HOME_OK;
+                //else if (axis.HomeSituation == enHomeState.HOME_OK) axis.HomeSituation = enHomeState.HOME_ERROR;
+                //else if (axis.HomeSituation == enHomeState.HOME_ERROR) axis.HomeSituation = enHomeState.HOME_NONE;
             }
             check = !check;
         }

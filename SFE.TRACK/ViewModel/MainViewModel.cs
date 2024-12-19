@@ -11,6 +11,9 @@ using MachineCSBaseSim;
 using MachineDefine;
 using System.Windows.Threading;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Threading;
 
 namespace SFE.TRACK.ViewModel
 {
@@ -30,16 +33,9 @@ namespace SFE.TRACK.ViewModel
     {
         public RelayCommand ShutDownRelayCommand  { get; set; }
         public RelayCommand LoginRelayCommand { get; set; }
-        bool isSelectedAuto = true;
-        bool isSelectedRecipe = false;
-        bool isSelectedIO = false;
-        bool isSelectedParam = false;
-        bool isSelectedMaint = false;
-        bool isSelectedUtil = false;
-        bool isSelectedGem = false;
-        bool isSelectedLog = false;
-        bool isSelectedAlarm = false;
 
+        ObservableCollection<bool> isEnabledMenu { get; set; }
+        ObservableCollection<bool> isSelectedMenu { get; set; }
         List<LMBase> LmList = null;
         List<AssyBase> AssyList = null;
         List<UnitIO> DIList = null;
@@ -49,19 +45,21 @@ namespace SFE.TRACK.ViewModel
         List<UnitCustom> CustomUnitList = null;
 
         System.Windows.Media.SolidColorBrush TitleColor_ = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
-        //(Color)ColorConverter.ConvertFromString("#FFDFD991");;
         MachineReaderWorker _worker;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
-        {                      
+        {
+            Language.Localization.Initialize();
             ShutDownRelayCommand = new RelayCommand(ShutDownCommand);
             LoginRelayCommand = new RelayCommand(LoginCommand);
-
+            IsEnabledMenu = new ObservableCollection<bool>();
+            isSelectedMenu = new ObservableCollection<bool>();
+            for (int i = 0; i < 10; i++) { IsEnabledMenu.Add(true); IsSelectedMenu.Add(true); }
             _worker = new MachineReaderWorker();
             Global.MachineWorker = _worker;
-            if (_worker.StartWorker(1000, "HMI", @"C:\MachineSet\SFETrack.mm", true) == false)
+            if (_worker.StartWorker(Global.MMI_ID, "HMI", @"C:\MachineSet\SFETrack.mm", true) == false)
             {
                 MessageBox.Show("Starting worker failed");
                 return;
@@ -88,65 +86,21 @@ namespace SFE.TRACK.ViewModel
         }
 
         #region MainMenu
-        public bool IsSelectedAuto
+        public ObservableCollection<bool> IsEnabledMenu
         {
-            get { return isSelectedAuto; }
-            set { isSelectedAuto = value; RaisePropertyChanged("IsSelectedAuto"); }
+            get { return isEnabledMenu; }
+            set { isEnabledMenu = value; RaisePropertyChanged("IsEnabledMenu"); }
         }
-
-        public bool IsSelectRceipe
+        public ObservableCollection<bool> IsSelectedMenu
         {
-            get { return isSelectedRecipe; }
-            set { isSelectedRecipe = value; RaisePropertyChanged("IsSelectRceipe"); }
+            get { return isSelectedMenu; }
+            set { isSelectedMenu = value; RaisePropertyChanged("IsSelectedMenu"); }
         }
-
-        public bool IsSelectedIO
-        {
-            get { return isSelectedIO; }
-            set { isSelectedIO = value; RaisePropertyChanged("IsSelectedIO"); }
-        }
-
-        public bool IsSelectedParam
-        {
-            get { return isSelectedParam; }
-            set { isSelectedParam = value; RaisePropertyChanged("IsSelectedParam"); }
-        }
-
-        public bool IsSelectedMaint
-        {
-            get { return isSelectedMaint; }
-            set { isSelectedMaint = value; RaisePropertyChanged("IsSelectedMaint"); }
-        }
-
-        public bool IsSelectedUtil
-        {
-            get { return isSelectedUtil; }
-            set { isSelectedUtil = value; RaisePropertyChanged("IsSelectedUtil"); }
-        }
-
-        public bool IsSelectedGem
-        {
-            get { return isSelectedGem; }
-            set { isSelectedGem = value; RaisePropertyChanged("IsSelectedGem"); }
-        }
-
-        public bool IsSelectedLog
-        {
-            get { return isSelectedLog; }
-            set { isSelectedLog = value; RaisePropertyChanged("IsSelectedLog"); }
-        }
-
-        public bool IsSelectedAlarm
-        {
-            get { return isSelectedAlarm; }
-            set { isSelectedAlarm = value; RaisePropertyChanged("IsSelectedAlarm"); }
-        }
-
         public System.Windows.Media.SolidColorBrush TitleColor
         {
             get { return TitleColor_; }
             set { TitleColor_ = value; RaisePropertyChanged("TitleColor"); }
-        }
+        }        
         #endregion
 
         private void InitJobProcess()
@@ -344,7 +298,7 @@ namespace SFE.TRACK.ViewModel
                 arr = io.MyNameInfo.Information.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 data.IO = io;
                 data.BlockNo = 2;
-                data.IOType = enIOType.DI;
+                data.IOType = enIOType.DO;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = true;
 
@@ -383,7 +337,7 @@ namespace SFE.TRACK.ViewModel
                 arr = io.MyNameInfo.Information.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 data.IO = io;
                 data.BlockNo = 2;
-                data.IOType = enIOType.DI;
+                data.IOType = enIOType.AI;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = false;
 
@@ -412,7 +366,11 @@ namespace SFE.TRACK.ViewModel
 
         public void SetAlarm()
         {
-            IsSelectedAlarm = true;
+            for(int i = 0; i < IsSelectedMenu.Count; i++)
+            {
+                if (i == (int)enMainMenu.ALARM) IsSelectedMenu[i] = true;
+                else IsSelectedMenu[i] = false;
+            }
             TitleColor = System.Windows.Media.Brushes.Red;
         }
         public void ClearAlarm(string code = "")
@@ -420,7 +378,6 @@ namespace SFE.TRACK.ViewModel
             //_worker.Controller.ClearAlarm();
             if (Global.STAlarmList.Count == 0)
             {
-                IsSelectedAlarm = false;
                 TitleColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
             }
         }
@@ -452,7 +409,8 @@ namespace SFE.TRACK.ViewModel
         private void LoginCommand()
         {
             #region Test Source
-            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");            
+            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");
+            //IsEnabledMenu[(int)enMainMenu.RECIPE] = false;
             #endregion
             
             if (Global.STLoginInfo.ID != string.Empty)
@@ -480,7 +438,7 @@ namespace SFE.TRACK.ViewModel
         {
             if (e.m_Params.Length == 0) // alarm cleared
             {
-
+                //_worker.Controller.ClearAlarm();
             }
             else // alarm occured
             {

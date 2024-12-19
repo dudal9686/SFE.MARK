@@ -133,6 +133,22 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">
+            <Canvas>
+            <StackPanel Canvas.Left="160">
+                    <Button Width="190" Height="100" FontSize="20" Command="{Binding RecipeTransferRelayCommand}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <materialDesign:PackIcon Kind="Transfer" Foreground="Blue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock FontSize="18" Margin="0 8 0 0">Recipe Transfer</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Width="190" Height="100" FontSize="20" Command="{Binding DummyRecipeRelayCommand}" Margin="0 3 0 0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <materialDesign:PackIcon Kind="File" Foreground="Blue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock FontSize="18" Margin="0 8 0 0">Dummy Recipe</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            </Canvas>
             <StackPanel Margin="650 0 0 0">
 
                 <Button Width="150" Height="100" FontSize="20" Command="{Binding LotStartRelayCommand}">

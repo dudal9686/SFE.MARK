@@ -241,7 +241,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     }
                     break;
                 case 2:
-                    fGridValue = Global.KeyPad(StepRecipe.WaferCnt);
+                    fGridValue = Convert.ToSingle(Global.KeyPad(StepRecipe.WaferCnt));
                     StepRecipe.WaferCnt = Convert.ToInt32(fGridValue);
                     break;
                 case 3:

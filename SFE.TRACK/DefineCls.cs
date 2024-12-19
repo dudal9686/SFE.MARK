@@ -231,6 +231,7 @@ namespace SFE.TRACK
         UTILITY,
         GEM,
         LOG,
+        ALARM,
     };
 
     public enum enDispenseNo : uint

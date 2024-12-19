@@ -7,6 +7,9 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows;
+using MachineCSBaseSim;
+using SFE.TRACK.Model;
+using System.Collections.ObjectModel;
 
 namespace SFE.TRACK.ViewModel.Jog
 {
@@ -21,7 +24,9 @@ namespace SFE.TRACK.ViewModel.Jog
         public RelayCommand PitchClickRelayCommand { get; set; }
         bool[] isVelocity = new bool[3] { true, false, false };
         float pitchLen = 0.1f;
-        enJogMode jogMode = enJogMode.LOW;
+        TSpeedPack speedPack = new TSpeedPack();
+        public AxisInfoCls Axis { get; set; }
+
         public JogControlViewModel()
         {
             MouseDownPlusRelayCommand = new RelayCommand(MouseDownPlusCommand);
@@ -37,9 +42,6 @@ namespace SFE.TRACK.ViewModel.Jog
         {
             get { return isVelocity; }
             set { isVelocity = value;
-                if (isVelocity[0]) jogMode = enJogMode.LOW;
-                else if (isVelocity[1]) jogMode = enJogMode.HIGH;
-                else if (isVelocity[2]) jogMode = enJogMode.PITCH;
                 RaisePropertyChanged("IsVelocity"); }
         }
 
@@ -51,35 +53,83 @@ namespace SFE.TRACK.ViewModel.Jog
 
         private void OnReceiveMessageAction(TeachingDataMessageCls o)
         {
-            
+            this.Axis = o.Axis;
         }
 
         private void MouseDownPlusCommand()
         {
-            Console.WriteLine(jogMode);
+            if (IsVelocity[0])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = 10;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[1])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = 50;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[2])
+            {
+                speedPack.acc = Axis.ACC;
+                speedPack.dec = Axis.DEC;
+                speedPack.speed = Axis.VEL;
+                Axis.Motor.DoSCurveMove((double)PitchLen, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+            }
+
             Console.WriteLine("AAAAA");
         }
 
         private void MouseUpPlusCommand()
         {
-            Console.WriteLine("BBBBB");
+            if (IsVelocity[0] || IsVelocity[1])
+            {
+                Axis.Motor.StopMove();
+            }
         }
 
         private void MouseDownMinusCommand()
         {
-            Console.WriteLine(jogMode);
+            if (IsVelocity[0])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = -10;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[1])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = -50;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[2])
+            {
+                speedPack.acc = Axis.ACC;
+                speedPack.dec = Axis.DEC;
+                speedPack.speed = Axis.VEL;
+                Axis.Motor.DoSCurveMove((-1) * (double)PitchLen, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+            }
             Console.WriteLine("CCCCC");
         }
 
         private void MouseUpMinusCommand()
         {
+            if (IsVelocity[0] || IsVelocity[1])
+            {
+                Axis.Motor.StopMove();
+            }
             Console.WriteLine("DDDDD");
         }
 
         private void OKCommand(Window window)
         {
             //현 위치 값.
-            Global.STTeachingMessage.Position = 0;
+            Global.STTeachingMessage.Position = Axis.ActualPosition;
             window.DialogResult = true;
         }
 

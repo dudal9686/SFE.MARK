@@ -52,7 +52,11 @@ namespace SFE.TRACK
                 MessageDialogStyle.AffirmativeAndNegative, mySettings);
 
             if (result == MessageDialogResult.Affirmative)
+            {
+                Global.IsShutDown = true;
+                System.Threading.Thread.Sleep(500);
                 this.Shutdown_ = true;
+            }
 
             if (this.Shutdown_)
             {

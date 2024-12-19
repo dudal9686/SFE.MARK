@@ -8,6 +8,7 @@
              xmlns:Track="clr-namespace:SFE.TRACK"
              DataContext="{Binding MaintSupportViewModel, Source={StaticResource Locator}}"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
              mc:Ignorable="d" 
              d:DesignHeight="880" d:DesignWidth="1574">
     <i:Interaction.Triggers>
@@ -15,6 +16,9 @@
             <i:InvokeCommandAction Command="{Binding LoadRelayCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <UserControl.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </UserControl.Resources>
     <Grid>        
         <Grid>
             <StackPanel Orientation="Vertical" Margin="5">
@@ -48,10 +52,45 @@
                                     <DataGridTextColumn Header="Block" Foreground="Black" Width="130" Binding="{Binding Path=BlockNo }" FontSize="15"/>
                                     <DataGridTextColumn Header="Module" Foreground="Black" Width="130" Binding="{Binding ModuleNo}" FontSize="15"/>
                                     <DataGridTextColumn Header="Item" Foreground="Black" Width="300" Binding="{Binding Item}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Watch" Foreground="Black" Width="150" Binding="{Binding IsWatch}" FontSize="17"/>
+
+                                    <DataGridTemplateColumn Header="Watch" Width="150">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsWatch, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="55 1 0 0" IsChecked="{Binding Path=IsWatch,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    
                                     <DataGridTextColumn Header="Warn Value" Foreground="Black" Width="150" Binding="{Binding WarnLevel}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Limit Value" Foreground="Black" Width="150" Binding="{Binding LimitValue}" FontSize="17"/>                                    
-                                    <DataGridTextColumn Header="Alarm" Foreground="Black" Width="150" Binding="{Binding IsAlarm}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Limit Value" Foreground="Black" Width="150" Binding="{Binding LimitValue}" FontSize="17"/>
+
+                                    <DataGridTemplateColumn Header="Alarm" Width="150">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsAlarm, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="55 1 0 0" IsChecked="{Binding Path=IsAlarm,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    
                                     <DataGridTextColumn Header="Unit" Foreground="Black" Width="200" Binding="{Binding UnitDisplay}" FontSize="17"/>
                                     <DataGridTextColumn Header="Amount" Foreground="Black" Width="200" Binding="{Binding AmountDisplay}" FontSize="17"/>
                                 </DataGrid.Columns>

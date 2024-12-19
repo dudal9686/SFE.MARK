@@ -18,6 +18,8 @@ namespace SFE.TRACK.ViewModel.Auto
         public RelayCommand JobStartRelayCommand { get; set; }
         public RelayCommand InitialRelayCommand { get; set; }
         public RelayCommand StopRelayCommand { get; set; }
+        public RelayCommand DummyRecipeRelayCommand { get; set; }
+        public RelayCommand RecipeTransferRelayCommand { get; set; }
 
         public AutoMainViewModel()
         {
@@ -25,7 +27,8 @@ namespace SFE.TRACK.ViewModel.Auto
             JobStartRelayCommand = new RelayCommand(JobStartCommand);
             InitialRelayCommand = new RelayCommand(InitialCommand);
             StopRelayCommand = new RelayCommand(StopCommand);
-
+            DummyRecipeRelayCommand = new RelayCommand(DummyRecipeCommand);
+            RecipeTransferRelayCommand = new RelayCommand(RecipeTransferCommand);
         }
 
         ~AutoMainViewModel()
@@ -92,6 +95,18 @@ namespace SFE.TRACK.ViewModel.Auto
             {
                 //Command
             }
+        }
+        private void RecipeTransferCommand()
+        {
+            View.Auto.RecipeTransfer trans = new View.Auto.RecipeTransfer();
+            trans.Owner = Application.Current.MainWindow;
+            trans.ShowDialog();
+        }
+        private void DummyRecipeCommand()
+        {
+            View.Auto.RegistDummyLinkRecipe link = new View.Auto.RegistDummyLinkRecipe();
+            link.Owner = Application.Current.MainWindow;
+            link.ShowDialog();
         }
 
         private void SendJobData()

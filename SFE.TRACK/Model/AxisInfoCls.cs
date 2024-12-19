@@ -17,8 +17,10 @@ namespace SFE.TRACK.Model
     {
         string axisID = string.Empty;
         int axisNo = 0;
-        double actualPosition = 0.0f;
+        double actualPosition = 10.0f;
         double commandPosition = 0.0f;
+        double manualFirstTeachingPosition = 0;
+        double manualSecondTeachingPosition = 0;
         string parent = string.Empty;
         int blockNo = 2;
         int moduleNo = 0;
@@ -34,7 +36,7 @@ namespace SFE.TRACK.Model
         bool inMotion = false;
         bool inPosition = false;
         bool isHome = false;
-
+        public bool IsRepeatMode = false;
         enHomeState homeSituation = enHomeState.HOME_NONE;
 
         int acc = 0;
@@ -43,7 +45,7 @@ namespace SFE.TRACK.Model
 
         bool isOwn = false;
 
-        public UnitMotor Motor;
+        public UnitMotor Motor { get; set; }
 
         SolidColorBrush servoState = new SolidColorBrush();
         SolidColorBrush alarmState = new SolidColorBrush();
@@ -283,6 +285,18 @@ namespace SFE.TRACK.Model
             set { commandPosition = value; RaisePropertyChanged("CommandPosition"); }
         }
 
+        public double ManualFirstTeachingPosition
+        {
+            get { return manualFirstTeachingPosition; }
+            set { manualFirstTeachingPosition = value; RaisePropertyChanged("ManualFirstTeachingPosition"); }
+        }
+
+        public double ManualSecondTeachingPosition
+        {
+            get { return manualSecondTeachingPosition; }
+            set { manualSecondTeachingPosition = value; RaisePropertyChanged("ManualSecondTeachingPosition"); }
+        }
+
         public int ACC
         {
             get { return acc; }
@@ -343,6 +357,7 @@ namespace SFE.TRACK.Model
         {
             Motor.StopMove();
             Console.WriteLine("StopCommand");
+            if (IsRepeatMode) IsRepeatMode = false;
         }
         private void AlarmResetCommand()
         {
@@ -351,6 +366,4 @@ namespace SFE.TRACK.Model
             Console.WriteLine("AlarmResetCommand");
         }
     }
-
-    
 }

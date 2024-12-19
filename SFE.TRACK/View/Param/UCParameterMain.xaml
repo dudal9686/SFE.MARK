@@ -59,7 +59,7 @@
 
                     <Border BorderBrush="LightGray" BorderThickness="1" Height="810">
                         <StackPanel Orientation="Vertical" Margin="0 5 0 0">
-                            <DataGrid  x:Name="GridDataTeachPos" ItemsSource="{Binding TeachingModuleList, Mode=TwoWay,UpdateSourceTrigger=Default}"  Height="800" SelectedIndex="{Binding SelecteModuleIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False" SelectedItem="{Binding ParamModule, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                            <DataGrid  x:Name="GridDataTeachPos" ItemsSource="{Binding TeachingModuleList, Mode=TwoWay,UpdateSourceTrigger=Default}"  Height="800" SelectedIndex="{Binding SelectedModuleIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False" SelectedItem="{Binding ParamModule, Mode=TwoWay, UpdateSourceTrigger=Default}">
                                 <DataGrid.Resources>
 
                                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -98,7 +98,7 @@
 
                     <Border BorderBrush="LightGray" BorderThickness="1" Height="810">
                         <StackPanel Orientation="Vertical" Margin="0 5 0 0">
-                            <DataGrid  x:Name="DataGridTeachData" ItemsSource="{Binding TeachingData, Mode=TwoWay, UpdateSourceTrigger=Default}" Height="800" SelectedIndex="{Binding SelectTeachingedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Left" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False" SelectedItem="{Binding ParamData, Mode=TwoWay, UpdateSourceTrigger=Default}">
+                            <DataGrid  x:Name="DataGridTeachData" ItemsSource="{Binding TeachingData, Mode=TwoWay, UpdateSourceTrigger=Default}" Height="800" SelectedIndex="{Binding SelectedTeachingedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Left" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False" SelectedItem="{Binding ParamData, Mode=TwoWay, UpdateSourceTrigger=Default}">
                                 <DataGrid.Resources>
 
                                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -109,12 +109,12 @@
                                     </Style>
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Value" Foreground="Black" Width="340" Binding="{Binding TeachingName}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Unit" Foreground="Black"  Width="200" Binding="{Binding Motor.MyNameInfo.Name}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Acc" Foreground="Black" Width="200" Binding="{Binding Acc}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Dec" Foreground="Black" Width="200" Binding="{Binding Dec}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Vel" Foreground="Black" Width="200" Binding="{Binding Vel}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Position" Foreground="Black" Width="200" Binding="{Binding Pos}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Value" CanUserSort="True" Foreground="Black" Width="340" Binding="{Binding TeachingName}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Unit" CanUserSort="True" Foreground="Black"  Width="200" Binding="{Binding Motor.MyNameInfo.Name}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Acc" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Acc,StringFormat={}{0:F2}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Dec" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Dec,StringFormat={}{0:F2}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Vel" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Vel,StringFormat={}{0:F2}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Position" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Pos,StringFormat={}{0:F2}}" FontSize="17"/>
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>

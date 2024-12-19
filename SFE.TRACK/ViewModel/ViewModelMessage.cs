@@ -96,6 +96,6 @@ namespace SFE.TRACK.ViewModel
     public class TeachingDataMessageCls : MessageBase
     {
         public double Position { get; set; }
-        public UnitMotor Motor { get; set; } 
+        public Model.AxisInfoCls Axis { get; set; } 
     }
 }

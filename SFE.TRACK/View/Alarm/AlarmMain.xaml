@@ -20,12 +20,18 @@
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Error" Foreground="Red" Width="20" Height="40" VerticalAlignment="Center"/>
                         <TextBlock Text="Alarm Message" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
-                        <Button Command="{Binding ClearAlarmRelayCommand}" ToolTip="Clear" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="650 0 0 0">
+                        <Button Command="{Binding ClearAlarmRelayCommand}" ToolTip="Clear" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="550 0 0 0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <materialDesign:PackIcon Kind="MessageCheck" Foreground="Yellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="ClearThick" Foreground="OrangeRed" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding BuzzerOffRelayCommand}" ToolTip="Clear" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="70 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="BellCheck" Foreground="Orange" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
+                    
                 </materialDesign:ColorZone>
 
                 <StackPanel >
@@ -61,7 +67,7 @@
                         <TextBlock Text="Warning Message" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
                         <Button Command="{Binding ClearWarningRelayCommand}" ToolTip="Clear" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="650 0 0 0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <materialDesign:PackIcon Kind="MessageCheck" Foreground="Yellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="ClearThick" Foreground="OrangeRed" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

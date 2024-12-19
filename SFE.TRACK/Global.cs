@@ -40,7 +40,11 @@ namespace SFE.TRACK
         //RegisterViewMain 에서 단독으로 하려 했으나 ViewModel에서 메모리를 가지고 있기 떄문에 글로벌에서 가지고 있는다.
         public static List<LoginInfoCls> STUserList = new List<LoginInfoCls>();
         public static LoginInfoCls STLoginInfo = new LoginInfoCls(); //로그인 후 권한 설정
-
+        
+        public static int MCS_ID = 1;
+        public static int CHAMBER_ID = 100;
+        public static int MMI_ID = 1000;
+        public static bool IsShutDown = false;
         //Maint Suppot List
         public static List<MaintSupportCls> STMaintSupportList = new List<MaintSupportCls>();
 
@@ -223,10 +227,10 @@ namespace SFE.TRACK
             return false;
         }
 
-        public static bool JogTeachingOpen(double position, UnitMotor motor = null)
+        public static bool JogTeachingOpen(double position, AxisInfoCls axis = null)
         {
             STTeachingMessage.Position = position;
-            STTeachingMessage.Motor = motor;
+            STTeachingMessage.Axis = axis;
             View.Jog.JogControl jog = new View.Jog.JogControl();
             jog.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
             Messenger.Default.Send(STTeachingMessage);

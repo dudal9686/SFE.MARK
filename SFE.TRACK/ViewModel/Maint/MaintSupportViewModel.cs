@@ -73,7 +73,7 @@ namespace SFE.TRACK.ViewModel.Maint
             switch(index)
             {
                 case 3: 
-                    if(Global.MessageOpen(enMessageType.OKCANCEL, "Change?")) MaintInfo.IsWatch = !MaintInfo.IsWatch;
+                    //if(Global.MessageOpen(enMessageType.OKCANCEL, "Change?")) MaintInfo.IsWatch = !MaintInfo.IsWatch;
                     break;
                 case 4:
                     MaintInfo.WarnLevel = Convert.ToInt32(Global.KeyPad(MaintInfo.WarnLevel));
@@ -82,7 +82,7 @@ namespace SFE.TRACK.ViewModel.Maint
                     MaintInfo.LimitValue = Convert.ToInt32(Global.KeyPad(MaintInfo.LimitValue));
                     break;
                 case 6:
-                    if (Global.MessageOpen(enMessageType.OKCANCEL, "Change?")) MaintInfo.IsAlarm = !MaintInfo.IsAlarm;
+                    //if (Global.MessageOpen(enMessageType.OKCANCEL, "Change?")) MaintInfo.IsAlarm = !MaintInfo.IsAlarm;
                     break;
                 case 7:
                     if(MaintInfo.Type == 0)

@@ -9,6 +9,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using SFE.TRACK.Model;
+using MachineCSBaseSim;
+using System.Threading;
 
 namespace SFE.TRACK.ViewModel.Motor
 {
@@ -16,22 +18,21 @@ namespace SFE.TRACK.ViewModel.Motor
     {
         List<AxisInfoCls> list { get; set; }
         string AxisInfo_ = "Axis Status";
-        public AxisInfoCls Axis { get; set; }
+        AxisInfoCls Axis_ { get; set; }
         bool[] isVelocity = new bool[3] { true, false, false };
-        public RelayCommand<object> VelocityGridDoubleClickRelayCommand { get; set; }
-        
+        public RelayCommand<object> VelocityGridDoubleClickRelayCommand { get; set; }        
         public RelayCommand MouseDownPlusRelayCommand { get; set; }
         public RelayCommand MouseUpPlusRelayCommand { get; set; }
         public RelayCommand MouseDownMinusRelayCommand { get; set; }
         public RelayCommand MouseUpMinusRelayCommand { get; set; }
-
-        double firstPosition = 0;
-        double secondPosition = 0;
         public RelayCommand FirstMoveRelayCommand { get; set; }
         public RelayCommand SecondMoveRelayCommand { get; set; }
         public RelayCommand FirstTeachingRelayCommand { get; set; }
         public RelayCommand SecondTeachingRelayCommand { get; set; }
         public RelayCommand RepeatRelayCommand { get; set; }
+        public RelayCommand PitchClickRelayCommand { get; set; }
+        TSpeedPack speedPack = new TSpeedPack();
+        float pitch = 0.1f;        
 
         public MotorControlViewModel()
         {
@@ -45,6 +46,8 @@ namespace SFE.TRACK.ViewModel.Motor
             SecondMoveRelayCommand = new RelayCommand(SecondMoveCommand);
             FirstTeachingRelayCommand = new RelayCommand(FirstTeachingCommand);
             SecondTeachingRelayCommand = new RelayCommand(SecondTeachingCommand);
+            PitchClickRelayCommand = new RelayCommand(PitchClickCommand);
+            RepeatRelayCommand = new RelayCommand(RepeatCommand);
         }        
 
         public bool[] IsVelocity
@@ -53,43 +56,158 @@ namespace SFE.TRACK.ViewModel.Motor
             set { isVelocity = value; RaisePropertyChanged("IsVelocity"); }
         }
 
+        public AxisInfoCls Axis
+        {
+            get { return Axis_; }
+            set { Axis_ = value; RaisePropertyChanged("Axis"); }
+        }
+
+        public float Pitch
+        {
+            get { return pitch; }
+            set { pitch = value; RaisePropertyChanged("Pitch"); }
+        }
+
         private void MouseDownPlusCommand()
         {
+            if (IsVelocity[0])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = 10;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[1])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = 50;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[2])
+            {
+                speedPack.acc = Axis.ACC;
+                speedPack.dec = Axis.DEC;
+                speedPack.speed = Axis.VEL;
+                Axis.Motor.DoSCurveMove((double)Pitch, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+            }
             Console.WriteLine("AAAAA");
         }
 
         private void MouseUpPlusCommand()
         {
-            Console.WriteLine("BBBBB");
+            if (IsVelocity[0] || IsVelocity[1])
+            {
+                Axis.Motor.StopMove();
+            }
         }
 
         private void MouseDownMinusCommand()
         {
-            Console.WriteLine("CCCCC");
+            if (IsVelocity[0])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = -10;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[1])
+            {
+                speedPack.acc = 100;
+                speedPack.dec = 100;
+                speedPack.speed = -50;
+                Axis.Motor.DoVelocityMove(speedPack);
+            }
+            else if (IsVelocity[2])
+            {
+                speedPack.acc = Axis.ACC;
+                speedPack.dec = Axis.DEC;
+                speedPack.speed = Axis.VEL;
+                Axis.Motor.DoSCurveMove((-1) * (double)Pitch, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+            }
         }
 
         private void MouseUpMinusCommand()
         {
+            if (IsVelocity[0] || IsVelocity[1])
+            {
+                Axis.Motor.StopMove();
+            }
             Console.WriteLine("DDDDD");
         }
 
         private void FirstMoveCommand()
         {
-
+            if (!Axis.Motor.IsServoOn)
+            {
+                Global.MessageOpen(enMessageType.OK, "Please servo on.");
+                return;
+            }
+            speedPack.acc = Axis.ACC;
+            speedPack.dec = Axis.DEC;
+            speedPack.speed = Axis.VEL;
+            speedPack.timeout = 3000;
+            Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
         }
         private void SecondMoveCommand()
         {
-
+            if (!Axis.Motor.IsServoOn)
+            {
+                Global.MessageOpen(enMessageType.OK, "Please servo on.");
+                return;
+            }
+            speedPack.acc = Axis.ACC;
+            speedPack.dec = Axis.DEC;
+            speedPack.speed = Axis.VEL;
+            speedPack.timeout = 3000;
+            Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
         }
         private void FirstTeachingCommand()
         {
-
+            Axis.ManualFirstTeachingPosition = Axis.ActualPosition;
         }
         private void SecondTeachingCommand()
         {
-
+            Axis.ManualSecondTeachingPosition = Axis.ActualPosition;
         }
+        private void PitchClickCommand()
+        {
+            Pitch = Global.KeyPad(Pitch);   
+        }
+        private void RepeatCommand()
+        {
+            if (Axis == null) return;
+            if (!Axis.Motor.IsServoOn) return;
+            if (Axis.Motor.IsAlarm) return;
+            Axis.IsRepeatMode = true;
+            Task.Run(() => DoWork());
+        }
+        private async Task DoWork()
+        {
+            int index = 0;
+            await Task.Run(() =>
+            {
+                while(Axis.IsRepeatMode)
+                {
+                    if (Axis == null) break;
+                    if (!Axis.Motor.IsServoOn) break;
+                    if (Axis.Motor.IsAlarm) break;
 
+                    speedPack.acc = Axis.ACC;
+                    speedPack.dec = Axis.DEC;
+                    speedPack.speed = Axis.VEL;
+                    speedPack.timeout = 3000;
+                    
+                    if(index == 0) Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                    else if (index == 1) Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                    Thread.Sleep(100);
+                    index++;
+                    if (index == 2) index = 0;
+                }
+            });
+            Axis.IsRepeatMode = false;
+            Console.WriteLine("End");
+        }
         public List<AxisInfoCls> AxisList
         {
             get { return list; }
@@ -113,17 +231,6 @@ namespace SFE.TRACK.ViewModel.Motor
                 Console.WriteLine(Axis.ServoState);
             }
             else AxisInfo = "Axis Status";
-        }
-
-        public double FirstPosition
-        {
-            get { return firstPosition; }
-            set { firstPosition = value; RaisePropertyChanged("FirstPosition"); }
-        }
-        public double SecondPosition
-        {
-            get { return secondPosition; }
-            set { secondPosition = value; RaisePropertyChanged("SecondPosition"); }
         }
         private void VelocityGridDoubleClickCommand(object o)
         {

@@ -26,7 +26,7 @@ namespace SFE.TRACK.Model
         public string MainTitle
         {
             get { return mainTitle; }
-            set { mainTitle = value; RaisePropertyChanged(""); }
+            set { mainTitle = value; RaisePropertyChanged("MainTitle"); }
         }
         public bool IsOwn
         {

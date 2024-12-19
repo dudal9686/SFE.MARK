@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
              xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
              xmlns:Track="clr-namespace:SFE.TRACK"
+             xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              DataContext="{Binding ADHDummyCondRecipeViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="880" d:DesignWidth="1574">
+    <UserControl.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3.5*"/>
@@ -150,7 +154,22 @@
                                     <DataGridTextColumn Header="Cond" Foreground="Black" Width="65" Binding="{Binding CondDisplay}" FontSize="15"/>
                                     <DataGridTextColumn Header="Timing" Foreground="Black" Width="85" Binding="{Binding TimingDisplay}" FontSize="15"/>
                                     <DataGridTextColumn Header="Recipe&#x0a;Name" Foreground="Black" Width="120" Binding="{Binding Recipe}" FontSize="13"/>
-                                    <DataGridTextColumn Header="Recipe&#x0a;Use" Foreground="Black" Width="80" Binding="{Binding IsRecipeUse}" FontSize="15"/>
+                                    <DataGridTemplateColumn Header="Recipe&#x0a;Use" Width="80">
+                                        <DataGridTemplateColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Path=IsRecipeUse, Converter={StaticResource UseValueConverter}}"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.CellStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="20 1 0 0" IsChecked="{Binding Path=IsRecipeUse, UpdateSourceTrigger=PropertyChanged}">
+                                                    <CheckBox.LayoutTransform>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                    </CheckBox.LayoutTransform>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="Recipe&#x0a;Cnt" Foreground="Black" Width="80" Binding="{Binding RecipeCnt}" FontSize="15"/>
                                     <DataGridTextColumn Header="Recipe&#x0a;Interval" Foreground="Black" Width="80" Binding="{Binding RecipeInterval}" FontSize="15"/>
                                     <DataGridTextColumn Header="Recipe&#x0a;Time" Foreground="Black" Width="80" Binding="{Binding RecipeTime}" FontSize="15"/>

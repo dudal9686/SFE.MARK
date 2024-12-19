@@ -25,7 +25,7 @@
                     <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="MidnightBlue" Foreground="White" Padding="7" CornerRadius="1"  ClipToBounds="False">
                         <StackPanel Orientation="Horizontal" Margin="180 0 0 0">
                             <TextBlock Text="Current Position : " FontWeight="Bold"  VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18"></TextBlock>
-                            <TextBlock Text="15.123" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold"></TextBlock>
+                            <TextBlock Text="{Binding Axis.ActualPosition, StringFormat={}{0:F2}}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold"></TextBlock>
                         </StackPanel>
                     </materialDesign:ColorZone>
                 </StackPanel>
@@ -35,10 +35,10 @@
         </Grid>
         <Grid Grid.Row="1" Background="#8F98A5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton Content="Low"   IsChecked="{Binding IsVelocity[0]}" FontSize="15"/>
-                <RadioButton Content="High"  IsChecked="{Binding IsVelocity[0]}" FontSize="15" Margin="20 0 0 0"/>
-                <RadioButton Content="Pitch" IsChecked="{Binding IsVelocity[0]}" FontSize="15" Margin="20 0 0 0"/>
-                <TextBlock Width="100" Background="Black" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="20" Text="0.5" Margin="100 0 0 0">
+                <RadioButton Content="Low"   IsChecked="{Binding IsVelocity[0], Mode=TwoWay}" FontSize="15"/>
+                <RadioButton Content="High"  IsChecked="{Binding IsVelocity[1], Mode=TwoWay}" FontSize="15" Margin="20 0 0 0"/>
+                <RadioButton Content="Pitch" IsChecked="{Binding IsVelocity[2], Mode=TwoWay}" FontSize="15" Margin="20 0 0 0"/>
+                <TextBlock Width="100" Background="Black" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="20" Text="{Binding PitchLen, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="100 0 0 0">
                     <TextBlock.InputBindings>
                         <MouseBinding Command="{Binding PitchClickRelayCommand}" MouseAction="LeftClick"></MouseBinding>
                     </TextBlock.InputBindings>

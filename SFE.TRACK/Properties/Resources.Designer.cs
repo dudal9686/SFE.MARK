@@ -22,7 +22,7 @@ namespace SFE.TRACK.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SFE.TRACK.Properties {
         ///   이 클래스에서 사용하는 캐시된 ResourceManager 인스턴스를 반환합니다.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SFE.TRACK.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SFE.TRACK.Properties {
         ///   재정의합니다.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,12 +61,94 @@ namespace SFE.TRACK.Properties {
         }
         
         /// <summary>
+        ///   Alarm과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string ALARM {
+            get {
+                return ResourceManager.GetString("ALARM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Auto과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string AUTO {
+            get {
+                return ResourceManager.GetString("AUTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Log과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string LOG {
+            get {
+                return ResourceManager.GetString("LOG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static System.Drawing.Bitmap Logo {
+        public static System.Drawing.Bitmap Logo {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        public static System.Drawing.Bitmap Logo_Eng {
+            get {
+                object obj = ResourceManager.GetObject("Logo_Eng", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Maint과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string MAINT {
+            get {
+                return ResourceManager.GetString("MAINT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Motor I/O과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string MOTOR {
+            get {
+                return ResourceManager.GetString("MOTOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Parameter과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string PARAMETER {
+            get {
+                return ResourceManager.GetString("PARAMETER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recipe과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string RECIPE {
+            get {
+                return ResourceManager.GetString("RECIPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Utility과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string UTIL {
+            get {
+                return ResourceManager.GetString("UTIL", resourceCulture);
             }
         }
     }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SFE.TRACK.Pad"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="KeyPad" Height="381" Width="500"
         WindowStartupLocation="CenterScreen">
@@ -23,10 +24,10 @@
             <Border>
                 <WrapPanel>
                     <StackPanel>
-                        <Button  Height="68" Width="112" Content="1" FontSize="30"  x:Name="btn01" Click="btn01_Click"/>
+                        <Button  Height="68" Content="1" FontSize="30" Width="112" x:Name="btn01" ToolTip="Enter Your ID" Margin="0,0,0,0" Click="btn01_Click"/>
                     </StackPanel>
                     <StackPanel>
-                        <Button  Height="68" Width="112" Content="2" FontSize="30" x:Name="btn02" Click="btn02_Click"/>
+                        <Button  Height="68" Content="2" FontSize="30" Width="112" x:Name="btn02" ToolTip="Enter Your ID" Margin="0,0,0,0" Click="btn02_Click"/>
                     </StackPanel>
                     <StackPanel>
                         <Button  Height="68" Width="112" Content="3" FontSize="30" x:Name="btn03" Click="btn03_Click"/>
@@ -56,7 +57,7 @@
                         <Button  Height="68" Width="112" Content="0" FontSize="30" x:Name="btn00" Click="btn00_Click"/>
                     </StackPanel>
                     <StackPanel>
-                        <Button  Height="68" Width="112" Content="Del" FontSize="30" x:Name="btnDel" Click="btnDel_Click"/>
+                        <Button  Height="68" Width="112" Content="Del" Foreground="Blue" FontSize="30" x:Name="btnDel" Click="btnDel_Click"/>
                     </StackPanel>
                 </WrapPanel>
             </Border>
@@ -64,16 +65,16 @@
         <Grid Grid.Row="1" Grid.Column="1">
             <StackPanel>
                 <StackPanel>
-                    <Button Height="68" Content="RESET" FontSize="30" x:Name="btnReset" Click="btnReset_Click"/>
+                    <Button Height="68" Content="RESET" FontSize="30" Foreground="Black" x:Name="btnReset" Click="btnReset_Click"></Button>
                 </StackPanel>
                 <StackPanel>
-                    <Button Height="68" Content="." FontSize="30" x:Name="btnComma" Click="btnComma_Click"/>
+                    <Button Height="68" Content="." FontSize="30" x:Name="btnComma" Click="btnComma_Click"></Button>
                 </StackPanel>
                 <StackPanel>
-                    <Button Height="68" Content="OK" FontSize="30" x:Name="btnOK" Click="btnOK_Click"/>
+                    <Button Height="68" Content="OK" Foreground="Blue" FontSize="30" x:Name="btnOK" Click="btnOK_Click"/>
                 </StackPanel>
                 <StackPanel>
-                    <Button Height="68" Content="CANCEL" FontSize="30" x:Name="btnCancel" Click="btnCancel_Click"/>
+                    <Button Height="68" Content="CANCEL" Foreground="IndianRed" FontSize="30" x:Name="btnCancel" Click="btnCancel_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

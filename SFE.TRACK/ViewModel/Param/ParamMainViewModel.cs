@@ -18,8 +18,8 @@ namespace SFE.TRACK.ViewModel.Param
         public RelayCommand<object> TeachDataDoubleClickRelayCommand { get; set; }
         public RelayCommand SaveTeachingRelayCommand { get; set; }
         List<TeachingDataCls> teachingData { get; set; }
-        int selecteModuleIndex = 0;
-        int selectTeachingedIndex = 0;
+        int selectedModuleIndex = 0;
+        int selectedTeachingedIndex = 0;
         ParamModuleCls paramModule { get; set; }
         TeachingDataCls paramData { get; set; }
         string teachingName = string.Empty;
@@ -57,15 +57,34 @@ namespace SFE.TRACK.ViewModel.Param
 
             List<TeachingDataCls> list = Global.STTeachingData.FindAll(x => x.MainTitle == o.Name);
             TeachingModuleList.Clear();
-            foreach (TeachingDataCls data in list)
+
+            //COT, DEV 는 모터 타입으로 나뉜다.
+            if (o.Name.IndexOf("COT") != -1 || o.Name.IndexOf("DEV") != -1)
             {
-                if (!ModuleCompareList(data.ModuleName))
+                foreach (TeachingDataCls data in list)
                 {
-                    ParamModuleCls param = new ParamModuleCls();
-                    param.BlockNo = data.BlockNo;
-                    param.ModuleNo = data.ModuleNo;
-                    param.ModuleName = data.ModuleName;
-                    TeachingModuleList.Add(param);
+                    if (!ModuleCompareList(data.Motor.MyNameInfo.Name))
+                    {
+                        ParamModuleCls param = new ParamModuleCls();
+                        param.BlockNo = data.BlockNo;
+                        param.ModuleNo = data.ModuleNo;
+                        param.ModuleName = data.Motor.MyNameInfo.Name;
+                        TeachingModuleList.Add(param);
+                    }
+                }
+            }
+            else
+            {
+                foreach (TeachingDataCls data in list)
+                {
+                    if (!ModuleCompareList(data.ModuleName))
+                    {
+                        ParamModuleCls param = new ParamModuleCls();
+                        param.BlockNo = data.BlockNo;
+                        param.ModuleNo = data.ModuleNo;
+                        param.ModuleName = data.ModuleName;
+                        TeachingModuleList.Add(param);
+                    }
                 }
             }
 
@@ -74,7 +93,7 @@ namespace SFE.TRACK.ViewModel.Param
             if (TeachingModuleList.Count != 0)
             {
                 ParamModule = TeachingModuleList[0];
-                selecteModuleIndex = 0;
+                SelectedModuleIndex = 0;
             }
         }
 
@@ -107,11 +126,16 @@ namespace SFE.TRACK.ViewModel.Param
 
         private void GetTeachingData()
         {
-            TeachingData = Global.STTeachingData.FindAll(x => x.MainTitle == Global.STTeachModuleMessage.Name && x.BlockNo == ParamModule.BlockNo && x.ModuleNo == ParamModule.ModuleNo);
+            //COT, DEV는 모터 타입으로 나뉜다.
+            if(Global.STTeachModuleMessage.Name.IndexOf("COT") != -1 || Global.STTeachModuleMessage.Name.IndexOf("DEV") != -1)
+                TeachingData = Global.STTeachingData.FindAll(x => x.Motor.MyNameInfo.Name == TeachingName && x.BlockNo == ParamModule.BlockNo && x.ModuleNo == ParamModule.ModuleNo);
+            else 
+                TeachingData = Global.STTeachingData.FindAll(x => x.MainTitle == Global.STTeachModuleMessage.Name && x.BlockNo == ParamModule.BlockNo && x.ModuleNo == ParamModule.ModuleNo);
+            
             if(TeachingData.Count != 0)
             {
                 ParamData = TeachingData[0];
-                SelectTeachingedIndex = 0;
+                SelectedTeachingedIndex = 0;
             }
         }
 
@@ -131,8 +155,8 @@ namespace SFE.TRACK.ViewModel.Param
             set { paramModule = value;
                 if (ParamModule != null)
                 {
-                    GetTeachingData();
                     TeachingName = paramModule.ModuleName;
+                    GetTeachingData();                    
                 }
                 RaisePropertyChanged("ParamModule");
             }
@@ -146,15 +170,15 @@ namespace SFE.TRACK.ViewModel.Param
                 RaisePropertyChanged("ParamData");
             }
         }
-        public int SelecteModuleIndex
+        public int SelectedModuleIndex
         {
-            get { return selecteModuleIndex; }
-            set { selecteModuleIndex = value; RaisePropertyChanged("SelecteModuleIndex"); }
+            get { return selectedModuleIndex; }
+            set { selectedModuleIndex = value; RaisePropertyChanged("SelectedModuleIndex"); }
         }
-        public int SelectTeachingedIndex
+        public int SelectedTeachingedIndex
         {
-            get { return selectTeachingedIndex; }
-            set { selectTeachingedIndex = value; RaisePropertyChanged("SelectTeachingedIndex"); }
+            get { return selectedTeachingedIndex; }
+            set { selectedTeachingedIndex = value; RaisePropertyChanged("SelectedTeachingedIndex"); }
         }
         public List<TeachingDataCls> TeachingData
         {
@@ -182,6 +206,12 @@ namespace SFE.TRACK.ViewModel.Param
             switch(index)
             {
                 case 0:
+                    AxisInfoCls axis = Global.STAxis.Find(x => x.AxisID == ParamData.Motor.MyNameInfo.Name);
+                    if (axis == null) break;
+                    if (Global.JogTeachingOpen(ParamData.Pos, axis))
+                    {
+                        ParamData.Pos = Global.STTeachingMessage.Position;
+                    }
                     break;
                 case 1:
                     break;
@@ -194,11 +224,9 @@ namespace SFE.TRACK.ViewModel.Param
                 case 4:
                     ParamData.Vel = Global.KeyPad();
                     break;
-                case 5:
-                    if(Global.JogTeachingOpen(ParamData.Pos, ParamData.Motor))
-                    {
-                        ParamData.Pos = Global.STTeachingMessage.Position;
-                    }
+                case 5:                    
+                    float pos = Convert.ToSingle(ParamData.Pos);
+                    ParamData.Pos = Global.KeyPad(pos);
                     break;
 
             }

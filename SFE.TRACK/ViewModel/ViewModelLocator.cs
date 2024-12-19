@@ -54,6 +54,8 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Auto.CassetteSlotViewModel>();
             SimpleIoc.Default.Register<Auto.MotorInitialViewModel>();
             SimpleIoc.Default.Register<Auto.StopControlViewModel>();
+            SimpleIoc.Default.Register<Auto.RecipeTransferViewModel>();
+            SimpleIoc.Default.Register<Auto.RegistDummyLinkRecipeViewModel>();
             SimpleIoc.Default.Register<Gem.GemMainViewModel>();
             SimpleIoc.Default.Register<Log.LogMainViewModel>();
             SimpleIoc.Default.Register<Maint.MaintMainViewModel>();
@@ -162,6 +164,14 @@ namespace SFE.TRACK.ViewModel
         public Auto.StopControlViewModel StopControlViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Auto.StopControlViewModel>(); }
+        }
+        public Auto.RecipeTransferViewModel RecipeTransferViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Auto.RecipeTransferViewModel>(); }
+        }
+        public Auto.RegistDummyLinkRecipeViewModel RegistDummyLinkRecipeViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Auto.RegistDummyLinkRecipeViewModel>(); }
         }
         #endregion
 

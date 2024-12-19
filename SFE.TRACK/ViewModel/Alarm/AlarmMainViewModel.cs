@@ -12,6 +12,7 @@ namespace SFE.TRACK.ViewModel.Alarm
     {
         public RelayCommand ClearAlarmRelayCommand { get; set; }
         public RelayCommand ClearWarningRelayCommand { get; set; }
+        public RelayCommand BuzzerOffRelayCommand { get; set; }
         public AlarmLogCls AlarmSelectedItem { get; set; }
         public AlarmLogCls WarningSelectedItem { get; set; }        
 
@@ -22,6 +23,7 @@ namespace SFE.TRACK.ViewModel.Alarm
         {
             ClearAlarmRelayCommand = new RelayCommand(ClearAlarmCommand);
             ClearWarningRelayCommand = new RelayCommand(ClearWarningCommand);
+            BuzzerOffRelayCommand = new RelayCommand(BuzzerOffCommand);
         }
 
         public int AlarmSelectedIndex
@@ -46,6 +48,11 @@ namespace SFE.TRACK.ViewModel.Alarm
         {
             if (WarningSelectedItem == null) return;
             Global.STAlarmList.Clear();
+        }
+
+        private void BuzzerOffCommand()
+        {
+            //Buzzer Off
         }
     }
 }
