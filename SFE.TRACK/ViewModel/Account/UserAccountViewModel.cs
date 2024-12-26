@@ -76,6 +76,8 @@ namespace SFE.TRACK.ViewModel.Account
             if(!isMatch)
             {
                 Global.MessageOpen(enMessageType.OK, "Invalid.");
+                password.Password = string.Empty;
+                return;
             }
 
             ID = string.Empty;

@@ -61,8 +61,6 @@ namespace SFE.TRACK.ViewModel.Maint
 
         private void CreateCommand()
         {
-            if (UserInfo == null) return;
-            
             View.Account.AccountModify regist = new View.Account.AccountModify();
             Global.STUserRegistMessage.PassWordBox = null;
             Global.STUserRegistMessage.Type = 0;

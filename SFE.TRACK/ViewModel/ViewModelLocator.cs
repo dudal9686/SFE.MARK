@@ -103,6 +103,11 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Account.AccountModifyViewModel>();
             SimpleIoc.Default.Register<Jog.JogControlViewModel>();
             SimpleIoc.Default.Register<Alarm.AlarmMainViewModel>();
+            SimpleIoc.Default.Register<Language.LanguageViewModel>();
+            SimpleIoc.Default.Register<Motion.MotionMainViewModel>();
+            SimpleIoc.Default.Register<Motion.MotionPRAViewModel>();
+            SimpleIoc.Default.Register<Motion.MotionCRAViewModel>();
+            SimpleIoc.Default.Register<Motion.MotionIRAViewModel>();
         }
 
         public MainViewModel MainViewModel
@@ -334,6 +339,25 @@ namespace SFE.TRACK.ViewModel
         }
         #endregion
 
+        #region Motion
+        public Motion.MotionMainViewModel MotionMainViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Motion.MotionMainViewModel>(); }
+        }
+        public Motion.MotionPRAViewModel MotionPRAViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Motion.MotionPRAViewModel>(); }
+        }
+        public Motion.MotionIRAViewModel MotionIRAViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Motion.MotionIRAViewModel>(); }
+        }
+        public Motion.MotionCRAViewModel MotionCRAViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Motion.MotionCRAViewModel>(); }
+        }
+        #endregion
+
         #region Param
         public Param.ParamMainViewModel ParamMainViewModel
         {
@@ -368,6 +392,13 @@ namespace SFE.TRACK.ViewModel
         public Jog.JogControlViewModel JogControlViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Jog.JogControlViewModel>(); }
+        }
+        #endregion
+
+        #region Lang
+        public Language.LanguageViewModel LanguageViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Language.LanguageViewModel>(); }
         }
         #endregion
 

@@ -46,5 +46,17 @@ namespace SFE.TRACK.Properties {
                 this["RECIPE_TRANSFER"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("zh-CN")]
+        public string LANG_CODE {
+            get {
+                return ((string)(this["LANG_CODE"]));
+            }
+            set {
+                this["LANG_CODE"] = value;
+            }
+        }
     }
 }

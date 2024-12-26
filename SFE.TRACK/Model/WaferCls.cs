@@ -206,6 +206,7 @@ namespace SFE.TRACK.Model
             wafer_.ID = this.ID;
             wafer_.WaferState = this.WaferState;
             wafer_.Recipe = this.Recipe;
+            wafer_.WaferData = this.WaferData;
             wafer_.BlockNo = this.BlockNo;
             wafer_.ModuleNo = this.ModuleNo;
             wafer_.waferColor = this.WaferColor;

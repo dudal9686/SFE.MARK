@@ -842,7 +842,7 @@ namespace SFE.TRACK
             {
                 sw = new StreamWriter(filename);
                 sw.WriteLine("<ADH Flow>");
-                sw.WriteLine("SetValue,AlarmMax,AlarmMix,StopMax,StopMin");
+                sw.WriteLine("SetValue,AlarmMax,AlarmMin,StopMax,StopMin");
                 sw.WriteLine(string.Format("{0},{1},{2},{3},{4}", adhData.SetValue, adhData.AlarmMaxValue, adhData.AlarmMinValue, adhData.StopMaxValue, adhData.StopMinValue));
                 
                 sw.WriteLine();

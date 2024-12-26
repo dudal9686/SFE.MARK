@@ -79,6 +79,16 @@ namespace SFE.TRACK.Properties {
         }
         
         /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        public static System.Drawing.Bitmap InterfacePosition {
+            get {
+                object obj = ResourceManager.GetObject("InterfacePosition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Log과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         public static string LOG {
@@ -117,6 +127,15 @@ namespace SFE.TRACK.Properties {
         }
         
         /// <summary>
+        ///   Motion과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string MOTION {
+            get {
+                return ResourceManager.GetString("MOTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Motor I/O과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         public static string MOTOR {
@@ -131,6 +150,35 @@ namespace SFE.TRACK.Properties {
         public static string PARAMETER {
             get {
                 return ResourceManager.GetString("PARAMETER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        public static System.Drawing.Bitmap PickMotion {
+            get {
+                object obj = ResourceManager.GetObject("PickMotion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        public static System.Drawing.Bitmap PlaceMotion {
+            get {
+                object obj = ResourceManager.GetObject("PlaceMotion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Do you want to save?  Save and run the software again.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string PROGRAM_RESTART {
+            get {
+                return ResourceManager.GetString("PROGRAM.RESTART", resourceCulture);
             }
         }
         

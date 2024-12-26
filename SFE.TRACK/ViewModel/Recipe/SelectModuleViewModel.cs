@@ -108,6 +108,20 @@ namespace SFE.TRACK.ViewModel.Recipe
                         }
                     }
                     break;
+                case "MOTIONMODULE":
+                    list = Global.STModuleList.FindAll(x => (x.BlockNo == 1 && x.ModuleNo == 0) || (x.BlockNo == 2 && x.ModuleNo != 0 && x.Use == true));
+                    foreach (ModuleBaseCls modBase in list)
+                    {
+                        checkModule = new CheckModuleCls();
+                        checkModule.Index = index;
+                        checkModule.Display = string.Format("{0} {1}-{2}", modBase.MachineName, modBase.BlockNo, modBase.ModuleNo);
+                        checkModule.BlockNo = modBase.BlockNo;
+                        checkModule.ModuleNo = modBase.ModuleNo;
+                        checkModule.IsCheck = false;
+                        index++;
+                        ModuleList.Add(checkModule);
+                    }
+                    break;
                 case "SYSTEM":
                 case "DUMMY":
                     if(moduleType == "SYSTEM") list = Global.STModuleList.FindAll(x => x.BlockNo != 1 && x.ModuleNo != 0 && x.Use == true && 
@@ -225,7 +239,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         {
             int index = 0;
             if(moduleType == "ALL") waferStep.Name = GetModuleName();
-            else if(moduleType == "SYSTEM" || moduleType == "DUMMY")
+            else if(moduleType == "SYSTEM" || moduleType == "DUMMY" || moduleType == "MOTIONMODULE")
             {
                 for (int i = 0; i < ModuleList.Count; i++)
                 {
@@ -294,7 +308,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void ModuleDoubleClickCommand(object o)
         {
-            if (moduleType == "ALL" || moduleType == "SYSTEM" || moduleType == "SYSTEMCONTROL" || moduleType == "DUMMY")
+            if (moduleType == "ALL" || moduleType == "SYSTEM" || moduleType == "SYSTEMCONTROL" || moduleType == "DUMMY" || moduleType == "MOTIONMODULE")
             {
                 if (SelectedIndex != -1)
                 {

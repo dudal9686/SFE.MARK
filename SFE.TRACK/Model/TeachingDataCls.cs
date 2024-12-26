@@ -23,6 +23,7 @@ namespace SFE.TRACK.Model
         string teachingName = string.Empty;
         bool isArray = false;
         bool isOwn = false;
+        int timeOut = 10000;
         public string MainTitle
         {
             get { return mainTitle; }
@@ -62,6 +63,7 @@ namespace SFE.TRACK.Model
                 Dec = GetData().speedPack.dec;
                 Vel = GetData().speedPack.speed;
                 Pos = GetData().position;
+                TimeOut = GetData().speedPack.timeout;
                 RaisePropertyChanged("Motor");
             }
         }
@@ -91,6 +93,11 @@ namespace SFE.TRACK.Model
             get { return pos; }
             set { pos = value; RaisePropertyChanged("Pos"); }
         }
+        public int TimeOut
+        {
+            get { return timeOut; }
+            set { timeOut = value; RaisePropertyChanged("TimeOut"); }
+        }
         public string ModuleName
         {
             get
@@ -105,7 +112,7 @@ namespace SFE.TRACK.Model
         }
         public void SetData()
         {
-            Motor.SetTeachingPosition(TeachingName, Pos, Vel, Acc, Dec, 5000);
+            Motor.SetTeachingPosition(TeachingName, Pos, Vel, Acc, Dec, TimeOut);
         }
     }
 }

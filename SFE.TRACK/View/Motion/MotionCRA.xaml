@@ -1,0 +1,232 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Motion.MotionCRA"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Model="clr-namespace:SFE.TRACK.Model"
+             xmlns:local="clr-namespace:SFE.TRACK.View.Motion"
+             DataContext="{Binding MotionCRAViewModel, Source={StaticResource Locator}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="880" d:DesignWidth="1574">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="2.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Canvas>
+                <Border BorderBrush="#00004f" CornerRadius="5" BorderThickness="0" Canvas.Left="0" Canvas.Top="0" Margin="1 0 0 0">
+                    <GroupBox Width="650" Height="120" materialDesign:ColorZoneAssist.Mode="Custom" Background="#00004f" materialDesign:ColorZoneAssist.Background="#00004f" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Select" Height="20" Width="20" VerticalAlignment="Center" Background="#00004f"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontSize="25" Text="Choice Cassette" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="Cassette 1" FontSize="10" IsChecked="{Binding IsCheck[0]}" Margin="10 0 0 0">
+                                <RadioButton.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </RadioButton.LayoutTransform>
+                            </RadioButton>
+                            <RadioButton Content="Cassette 2" FontSize="10" IsChecked="{Binding IsCheck[1]}" Margin="20 0 0 0">
+                                <RadioButton.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </RadioButton.LayoutTransform>
+                            </RadioButton>
+                            <RadioButton Content="Cassette 3" FontSize="10" IsChecked="{Binding IsCheck[2]}" Margin="20 0 0 0">
+                                <RadioButton.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </RadioButton.LayoutTransform>
+                            </RadioButton>
+                            <RadioButton Content="Cassette 4" FontSize="10" IsChecked="{Binding IsCheck[3]}" Margin="20 0 0 0">
+                                <RadioButton.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </RadioButton.LayoutTransform>
+                            </RadioButton>
+                        </StackPanel>
+                    </GroupBox>
+                </Border>
+            </Canvas>
+            <Canvas>
+                <Border BorderBrush="Navy" CornerRadius="5" BorderThickness="0" Canvas.Left="652" Canvas.Top="0" Margin="1 0 0 0">
+                    <GroupBox Width="130" Height="120" materialDesign:ColorZoneAssist.Mode="Custom" Background="#00004f" materialDesign:ColorZoneAssist.Background="#8F98AC" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontSize="25" Text="  Index" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Width="120" Height="70" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Text="{Binding CstIndex}">
+                                <TextBlock.InputBindings>
+                                    <MouseBinding Command="{Binding CstIndexRelayCommand}" MouseAction="LeftClick"></MouseBinding>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox>
+                </Border>
+            </Canvas>
+            <Canvas>
+                <Border BorderBrush="#00004f" CornerRadius="5" BorderThickness="0" Canvas.Left="0" Canvas.Top="0" Margin="1 130 0 0">
+                    <GroupBox Width="783" Height="230" materialDesign:ColorZoneAssist.Mode="Custom" Background="#00004f" materialDesign:ColorZoneAssist.Background="#00004f" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="GuitarPick" Height="20" Width="20" VerticalAlignment="Center" Background="#00004f"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontSize="25" Text="Pick Motion" />
+                                    
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="../../Resources/PickMotion.png" Stretch="Fill" Width="780"></Image>
+                        </StackPanel>
+                    </GroupBox>
+                </Border>
+            </Canvas>
+            <Canvas>
+                <Border BorderBrush="#00004f" CornerRadius="5" BorderThickness="0" Canvas.Left="0" Canvas.Top="0" Margin="1 370 0 0">
+                    <GroupBox Width="783" Height="230" materialDesign:ColorZoneAssist.Mode="Custom" Background="#00004f" materialDesign:ColorZoneAssist.Background="#00004f" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Place" Height="20" Width="20" VerticalAlignment="Center" Background="#00004f"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontSize="25" Text="Place Motion" />
+                                    
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="../../Resources/PlaceMotion.png" Stretch="Fill" Width="780"></Image>
+                        </StackPanel>
+                    </GroupBox>
+                </Border>
+            </Canvas>
+            <Canvas>
+                <Border BorderBrush="#00004f" CornerRadius="5" BorderThickness="0" Canvas.Left="0" Canvas.Top="0" Margin="1 610 0 0">
+                    <GroupBox Width="783" Height="230" materialDesign:ColorZoneAssist.Mode="Custom" Background="#00004f" materialDesign:ColorZoneAssist.Background="#00004f" materialDesign:ColorZoneAssist.Foreground="White" Style="{StaticResource MetroGroupBox}" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Exchange" Height="20" Width="20" VerticalAlignment="Center" Background="#00004f"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontSize="25" Text="Robot Exchange Position" />
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="../../Resources/InterfacePosition.png" Stretch="Uniform" Width="780"></Image>
+                        </StackPanel>
+                    </GroupBox>
+                </Border>
+            </Canvas>
+            <Canvas>
+                <Button Content="Motion" FontSize="15" Margin="520 0 0 0" Command="{Binding PickMotionRelayCommand}" Canvas.Top="135" Canvas.Left="180"/>
+                <Button Content="Motion" FontSize="15" Margin="520 0 0 0" Command="{Binding PlaceMotionRelayCommand}" Canvas.Top="375" Canvas.Left="180"/>
+                <Button Content="Motion" FontSize="15" Margin="520 0 0 0" Command="{Binding RobotChangeMotionRelayCommand}" Canvas.Top="615" Canvas.Left="180"/>
+            </Canvas>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Border BorderBrush="Gray" BorderThickness="0.3" Margin="0 0 0 0">
+                <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+                    <materialDesign:ColorZone BorderBrush="White" Height="40" BorderThickness="0" Mode="Custom" Background="LightSlateGray" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Input" Width="20" Height="20" Foreground="White" Margin="2 5 0 0"/>
+                            <TextBlock Text="DI" Foreground="White" FontSize="18" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                        </StackPanel>
+                    </materialDesign:ColorZone>
+                    <DataGrid >
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="#161D6F"/>
+                                <Setter Property="FontSize" Value="17"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="100" Header="No"/>
+                            <DataGridTextColumn Width="200" Header="Description"/>
+                            <DataGridTextColumn Width="90" Header="Status"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+            <StackPanel Orientation="Horizontal" Margin="0,80,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0 0 0 0">
+                    <ItemsControl ItemsSource="{Binding Path=DIList}" Width="380">
+                        <ItemsControl.Resources>
+                            <DataTemplate DataType="{x:Type Model:IODataCls}">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Foreground="DarkSlateGray" Width="100" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}X{0:D3}}" Margin="20 10 0 0"/>
+                                        <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="0 0 0 0"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="30 0 0 0">
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.Resources>
+                    </ItemsControl>
+                </ScrollViewer>
+
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="2">
+            <Border BorderBrush="Gray" BorderThickness="0.3" Margin="0 0 0 0">
+                <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+                    <materialDesign:ColorZone BorderBrush="White" Height="40" BorderThickness="0" Mode="Custom" Background="LightSlateGray" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Output" Width="20" Height="20" Foreground="White" Margin="2 5 0 0"/>
+                            <TextBlock Text="DO" Foreground="White" FontSize="18" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                        </StackPanel>
+                    </materialDesign:ColorZone>
+                    <DataGrid >
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="#161D6F"/>
+                                <Setter Property="FontSize" Value="17"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="100" Header="No"/>
+                            <DataGridTextColumn Width="200" Header="Description"/>
+                            <DataGridTextColumn Width="90" Header="Status"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+            <StackPanel Orientation="Horizontal" Margin="0,80,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0 0 0 0">
+                    <ItemsControl ItemsSource="{Binding Path=DOList}" Width="380">
+                        <ItemsControl.Resources>
+                            <DataTemplate DataType="{x:Type Model:IODataCls}">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Foreground="DarkSlateGray" Width="100" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}Y{0:D3}}" Margin="20 10 0 0"/>
+                                        <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="0 0 0 0"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="30 0 0 0" Command="{Binding IORelayCommand}">
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.Resources>
+                    </ItemsControl>
+                </ScrollViewer>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -225,8 +225,9 @@ namespace SFE.TRACK
     {
         AUTO = 0,
         RECIPE,
-        MOTION,
+        MOTOR,
         PARAMETER,
+        MOTIONMOVING,
         MAINT,
         UTILITY,
         GEM,

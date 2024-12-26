@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Command;
 using System.Windows;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Messaging;
+using System.Windows.Media;
 
 namespace SFE.TRACK.Model
 {    
@@ -37,8 +38,11 @@ namespace SFE.TRACK.Model
         bool isUseCRA = false; //챔버마다 사용할 암
         bool isUseIRA = false;
         bool isUsePRA = false;
+        bool isHomeChecked = false;//모듈별 관리
+        enHomeState homeSituation = enHomeState.HOME_NONE;
         enMaintenanceMode maintMode = enMaintenanceMode.NONE;
-        System.Windows.Media.SolidColorBrush moduleColor = new System.Windows.Media.SolidColorBrush();
+        SolidColorBrush moduleColor = new SolidColorBrush();
+        SolidColorBrush homeState = new SolidColorBrush();
         WaferCls wafer { get; set; }
 
         public RelayCommand ModuleClickRelayCommand { get; set; }
@@ -59,6 +63,31 @@ namespace SFE.TRACK.Model
         {
             get { return blockNo; }
             set { blockNo = value; RaisePropertyChanged("BlockNo"); }
+        }
+
+        public bool IsHomeChecked
+        {
+            get { return isHomeChecked; }
+            set { isHomeChecked = value; RaisePropertyChanged("IsHomeChecked"); }
+        }
+
+        public enHomeState HomeSituation
+        {
+            get { return homeSituation; }
+            set
+            {
+                homeSituation = value;
+                if (homeSituation == enHomeState.HOME_NONE) { HomeState = System.Windows.Media.Brushes.DarkGray; }
+                else if (homeSituation == enHomeState.HOME_OK) { HomeState = System.Windows.Media.Brushes.GreenYellow; }
+                else if (homeSituation == enHomeState.HOMMING) { HomeState = System.Windows.Media.Brushes.Yellow; }
+                else if (homeSituation == enHomeState.HOME_ERROR) { HomeState = System.Windows.Media.Brushes.Red; }
+                RaisePropertyChanged("HomeSituation");
+            }
+        }
+        public SolidColorBrush HomeState
+        {
+            get { return homeState; }
+            set { homeState = value; RaisePropertyChanged("HomeState"); }
         }
 
         public int ModuleNo

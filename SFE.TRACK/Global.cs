@@ -19,7 +19,6 @@ namespace SFE.TRACK
     public class Global
     {
         public static MachineReaderWorker MachineWorker = null;
-
         public static List<Model.ModuleBaseCls> STModuleList = new List<Model.ModuleBaseCls>();
         public static List<Model.WaferCls> STWaferList = new List<Model.WaferCls>();
         public static AccessDBCls STAccessDB = new AccessDBCls();

@@ -33,7 +33,7 @@ namespace SFE.TRACK.ViewModel
     {
         public RelayCommand ShutDownRelayCommand  { get; set; }
         public RelayCommand LoginRelayCommand { get; set; }
-
+        public RelayCommand LanguageRelayCommand { get; set; }
         ObservableCollection<bool> isEnabledMenu { get; set; }
         ObservableCollection<bool> isSelectedMenu { get; set; }
         List<LMBase> LmList = null;
@@ -51,9 +51,10 @@ namespace SFE.TRACK.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            Language.Localization.Initialize();
+            SFE.TRACK.Language.Localization.Initialize();
             ShutDownRelayCommand = new RelayCommand(ShutDownCommand);
             LoginRelayCommand = new RelayCommand(LoginCommand);
+            LanguageRelayCommand = new RelayCommand(LanguageCommand);
             IsEnabledMenu = new ObservableCollection<bool>();
             isSelectedMenu = new ObservableCollection<bool>();
             for (int i = 0; i < 10; i++) { IsEnabledMenu.Add(true); IsSelectedMenu.Add(true); }
@@ -69,7 +70,7 @@ namespace SFE.TRACK.ViewModel
             _worker.EvtCommandStatusChanged += _worker_EvtCommandStatusChanged;
             _worker.EvtCommandResultComes += _worker_EvtCommandResultComes;
             _worker.EvtInfoReloaded += _worker_EvtInfoReloaded;
-            _worker.EvtPrgCfgReloaded += _worker_EvtPrgCfgReloaded1;
+            _worker.EvtPrgCfgReloaded += _worker_EvtPrgCfgReloaded;
             _worker.Controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
 
             InitData();
@@ -83,6 +84,12 @@ namespace SFE.TRACK.ViewModel
             foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
             foup_.IsDetect = true;
             foup_.IsScan = true;
+
+            SpinChamberCls spinUnit = Global.STModuleList.Find(x => x.MachineName == "COT") as SpinChamberCls;
+            spinUnit.ModuleState = enModuleState.PREPROCESS;
+            spinUnit.Wafer = foup_.FoupWaferList[0].Clone();
+            spinUnit.Wafer.WaferState = enWaferState.WAFER_PROCESS;
+            foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
         }
 
         #region MainMenu
@@ -157,7 +164,6 @@ namespace SFE.TRACK.ViewModel
                 {
                     string[] arr = axis.Motor.MyNameInfo.Information.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                     axis.ModuleNo = Convert.ToInt32(arr[arr.Length - 1]);
-
                 }
                 Global.STAxis.Add(axis);
             }
@@ -375,7 +381,7 @@ namespace SFE.TRACK.ViewModel
         }
         public void ClearAlarm(string code = "")
         {
-            //_worker.Controller.ClearAlarm();
+            //_worker.Controller.ClearAlarm(null);
             if (Global.STAlarmList.Count == 0)
             {
                 TitleColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
@@ -425,8 +431,14 @@ namespace SFE.TRACK.ViewModel
             }
 
             View.Account.UserAccount login = new View.Account.UserAccount();
-            login.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+            login.Owner = Application.Current.MainWindow;
             login.ShowDialog();
+        }
+
+        private void LanguageCommand()
+        {
+            SFE.TRACK.Language.LanguageView lang = new SFE.TRACK.Language.LanguageView();
+            lang.ShowDialog();
         }
 
         private void ShutDownCommand()
@@ -460,7 +472,7 @@ namespace SFE.TRACK.ViewModel
                 });
                 SetAlarm();
 
-                Global.MessageOpen(enMessageType.OK, "Thread Dialog Suceess");
+                //Global.MessageOpen(enMessageType.OK, "Thread Dialog Suceess");
             }             
         }
 
@@ -478,6 +490,10 @@ namespace SFE.TRACK.ViewModel
             {
                 EnumCommand_Action eValue = item.GetCommand<EnumCommand_Action>();
                 if (eValue == EnumCommand_Action.Door___DoAction)
+                {
+
+                }
+                else if(eValue == EnumCommand_Action.StatusChange___ServoOn)
                 {
 
                 }
@@ -519,7 +535,7 @@ namespace SFE.TRACK.ViewModel
             CommandStatus status = e.Status;
         }
 
-        private void _worker_EvtPrgCfgReloaded1(object sender, LibEvtArgs e)
+        private void _worker_EvtPrgCfgReloaded(object sender, LibEvtArgs e)
         {
             PrgCfgItem item = (PrgCfgItem)e.GetParam();
             if (Enum.TryParse<EnumConfigGroup>(item.GroupName, out var enumGroup) == false) return;
@@ -535,16 +551,174 @@ namespace SFE.TRACK.ViewModel
             {
 
             }
-        }
-
-        private void _worker_EvtPrgCfgReloaded(object sender, EventArgs e)
-        {
-
+            else if (enumGroup == EnumConfigGroup.Motor_CRA_X)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CRA_X>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CRA_Y)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CRA_Y>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CRA_Z)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CRA_Z>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_PRA_X1)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_PRA_X1>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_PRA_X2)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_PRA_X2>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_PRA_X3)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_PRA_X3>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_PRA_Y)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_PRA_Y>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_PRA_Z)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_PRA_Z>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_PRA_T)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_PRA_T>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_D1_X1)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_D1_X1>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_D1_X2)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_D1_X2>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_C1_X1)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_C1_X1>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_C1_X2)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_C1_X2>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_C1_BT)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_C1_BT>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_C1_PP)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_C1_PP>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_D2_X1)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_D2_X1>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_D2_X2)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_D2_X2>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB01_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB01_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB02_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB02_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB03_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB03_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB04_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB04_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB05_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB05_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB06_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB06_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB07_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB07_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB08_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB08_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB09_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB09_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB10_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB10_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB11_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB11_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if (enumGroup == EnumConfigGroup.Motor_CB12_Pin)
+            {
+                if (Enum.TryParse<EnumConfig_Motor_CB12_Pin>(item.Name, out var enumItem) == false) return;
+                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
         }
 
         private void _worker_EvtInfoReloaded(object sender, EventArgs e)
         {
 
+        }
+
+        private void SetTeachingData(string group, string name, PrgCfgItem item)
+        {
+            group = group.Replace("Motor_", "");
+            name = name.Replace("Teaching_", "");
+            foreach (TeachingDataCls data in Global.STTeachingData)
+            {
+                if(data.Motor.MyNameInfo.Name == group && data.TeachingName == name)
+                {
+                    string[] arr = item.Contents.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    data.Pos = Convert.ToDouble(arr[0]);
+                    data.Vel = Convert.ToDouble(arr[1]);
+                    data.Acc = Convert.ToDouble(arr[2]);
+                    data.Dec = Convert.ToDouble(arr[3]);
+                    data.TimeOut = Convert.ToInt32(arr[4]);
+                }
+            }
         }
     }
 }

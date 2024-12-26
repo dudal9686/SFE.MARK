@@ -6,12 +6,16 @@
         xmlns:local="clr-namespace:SFE.TRACK.View.Recipe"
         DataContext="{Binding ArmPositionViewModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterScreen"
+        xmlns:Util="clr-namespace:SFE.TRACK.ViewModel.Util"
         mc:Ignorable="d"
         x:Name="SelArmPos"
         Title="Select Arm Position" Height="500" Width="500">
+    <Window.Resources>
+        <Util:UseValueConverter x:Key="UseValueConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="8*"/>
+            <RowDefinition Height="8.5*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
@@ -26,7 +30,22 @@
                 </DataGrid.Resources>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}"  Header="Index" FontSize="19" Width="100"/>
-                    <DataGridCheckBoxColumn Binding="{Binding IsCheck, Mode=TwoWay}" Header="Check" Width="100"/>
+                    <DataGridTemplateColumn Header="Check" Width="100">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Background" Value="{Binding Path=IsCheck, Converter={StaticResource UseValueConverter}}"/>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Margin="33 1 0 0" IsChecked="{Binding Path=IsCheck,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False">
+                                    <CheckBox.LayoutTransform>
+                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                    </CheckBox.LayoutTransform>
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Binding="{Binding Display}" Header="Recipe Name" FontSize="19" Width="275"/>
                 </DataGrid.Columns>
                 <DataGrid.InputBindings>
@@ -34,11 +53,11 @@
                 </DataGrid.InputBindings>
             </DataGrid>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="LightGray">
             <Canvas HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <Button Width="150" Height="70" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SelArmPos}" Margin="-250 0 0 0" >OK</Button>
-                    <Button Width="150" Height="70" FontSize="20" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SelArmPos}" Margin="50 0 0 0">Cancel</Button>
+                <StackPanel Orientation="Horizontal" Canvas.Top="15">
+                    <Button Width="150" Height="60" FontSize="20" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=SelArmPos}" Margin="-250 0 0 0" >OK</Button>
+                    <Button Width="150" Height="60" FontSize="20" Background="LightPink" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=SelArmPos}" Margin="50 0 0 0">Cancel</Button>
                 </StackPanel>
             </Canvas>
         </Grid> 

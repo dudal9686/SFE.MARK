@@ -19,22 +19,20 @@ namespace SFE.TRACK
         Mutex mutex;
         public App()
         {
-            
+            string mutexName = "SFE.TRACK";
+            bool isProcess;
+            mutex = new Mutex(true, mutexName, out isProcess);
+
+            if (!isProcess)
+            {
+                System.Windows.MessageBox.Show("program is already running.(SFE.MARK)");
+                Application.Current.Shutdown();
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            string mutexName = "SFE.TRACK";
-            bool isProcess;
-            mutex = new Mutex(true, mutexName, out isProcess);
-
-            if(!isProcess)
-            {
-                System.Windows.MessageBox.Show("program is already running.(SFE.MARK)");
-                Shutdown();
-            }
 
             Process[] process = Process.GetProcessesByName("IPCNetServer");
             if (process.Length == 0)
@@ -45,12 +43,12 @@ namespace SFE.TRACK
                 }
                 catch { }
             }
+            //en-US, zh-CN
+            CultureInfo cultureInfo = new CultureInfo(SFE.TRACK.Properties.Settings.Default.LANG_CODE);
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
 
-            //SFE.TRACK.Properties.Resources.Culture = new CultureInfo("zh-CN"); //zh-CN , en-US
-            string lang = "en-US"; //zh-CN  en-US
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(lang);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
-
+            
         }
     }
 }

@@ -96,7 +96,7 @@ namespace SFE.TRACK.Model
         private void IOCommand()
         {
             Console.WriteLine("IO({0}) = {1} ({2})", IOType.ToString(), Name, IONum);
-            IO.SetValue(!IO.ReadIO());
+            IO.WriteIO(!IO.ReadIO(), null);
         }
     }
 

@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="SFE.TRACK.View.Motion.MotionMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:SFE.TRACK.View.Motion"
+             xmlns:ViewModel="clr-namespace:SFE.TRACK.ViewModel.Motion"
+             DataContext="{Binding MotionMainViewModel, Source={StaticResource Locator}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="880" d:DesignWidth="1920">
+    <UserControl.Resources>
+        <DataTemplate x:Key="CRAMotion" DataType="{x:Type local:MotionCRA}">
+            <local:MotionCRA/>
+        </DataTemplate>
+        <DataTemplate x:Key="PRAMotion" DataType="{x:Type local:MotionPRA}">
+            <local:MotionPRA/>
+        </DataTemplate>
+        <DataTemplate x:Key="IRAMotion" DataType="{x:Type local:MotionIRA}">
+            <local:MotionIRA/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.8*"/>
+            <ColumnDefinition Width="8.2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <materialDesign:ColorZone  Mode="Custom" Background="#00004f" Padding="7" CornerRadius="5" ClipToBounds="False">
+                <StackPanel Height="40" Orientation="Horizontal">
+                    <materialDesign:PackIcon HorizontalAlignment="Left" Kind="Motion" Width="30" Height="35" Foreground="White" Margin="0 5 10 0"/>
+                    <Label Content="Motion" Foreground="White" FontSize="30" Margin="10 -10"/>
+                </StackPanel>
+            </materialDesign:ColorZone>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightGray" Margin="0 50 0 0">
+                <TreeView FontSize="18" FontFamily = "Consolar" Background="White">
+                    <TreeViewItem IsSelected="{Binding IsCRA}" x:Name="lvCRA">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArmBarrierUp" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="CRA" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem IsSelected="{Binding IsPRA}" x:Name="lvPRA">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArmBarrier" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="PRA" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem IsSelected="{Binding IsIRA}" x:Name="lvIRA">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArmBarrierDown" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="IRA" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>
+            </Border>
+        </Grid>
+        <Grid Grid.Column="1">
+            <ContentControl Content="{Binding}" Grid.ColumnSpan="2">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCRA}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CRAMotion}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvPRA}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PRAMotion}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvIRA}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource IRAMotion}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </Grid>
+</UserControl>

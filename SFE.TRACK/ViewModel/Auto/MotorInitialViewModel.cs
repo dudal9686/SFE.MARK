@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using CoreCSBase.IPC;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using SFE.TRACK.Model;
+using MachineDefine;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -19,7 +21,8 @@ namespace SFE.TRACK.ViewModel.Auto
         public RelayCommand<object> HomeCheckDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> HomeCheckClickRelayCommand { get; set; }
         public RelayCommand AllCheckRelayCommand { get; set; }
-        public AxisInfoCls Axis { get; set; }
+        public ModuleBaseCls Module { get; set; }
+        public List<ModuleBaseCls> ModuleList { get; set; }
         int selectedIndex = 0;
         bool check = false;
 
@@ -30,12 +33,9 @@ namespace SFE.TRACK.ViewModel.Auto
             HomeCheckDoubleClickRelayCommand = new RelayCommand<object>(HomeCheckDoubleClickCommand);
             HomeCheckClickRelayCommand = new RelayCommand<object>(HomeCheckClickCommand);
             AllCheckRelayCommand = new RelayCommand(AllCheckCommand);
-        }
 
-        public List<AxisInfoCls> AxisList
-        {
-            get { return Global.STAxis; }
-            set { Global.STAxis = value; }
+            ModuleList = Global.STModuleList.FindAll(x => (x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER || x.ModuleType == enModuleType.CRA || x.ModuleType == enModuleType.PRA) && x.Use == true);
+            foreach (ModuleBaseCls module in ModuleList) module.HomeSituation = enHomeState.HOME_NONE;
         }
 
         public int SelectedIndex
@@ -46,10 +46,14 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void OKCommand(Window window)
         {
-            foreach(Model.AxisInfoCls axis in Global.STAxis)
+            foreach(Model.ModuleBaseCls module in ModuleList)
             {
-                //ModuleBaseCls module = Global.GetModule(axis.BlockNo, axis.ModuleNo);
-                //Console.WriteLine("{0} [{1}]", module.MachineTitle, axis.AxisID);
+                string moduleName = string.Format("{0}-{1}", module.BlockNo, module.ModuleNo);
+                Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, moduleName);
+                List<AxisInfoCls> list = Global.STAxis.FindAll(x => x.BlockNo == module.BlockNo && x.ModuleNo == module.ModuleNo);
+                Console.WriteLine("============= Module Start [" + module.MachineTitle + "]");
+                foreach (AxisInfoCls axis in list) { Console.WriteLine(axis.AxisID); axis.Motor.DoHomming(); }
+                Console.WriteLine("============= Module End [" + module.MachineTitle + "]");
             }
 
             window.DialogResult = true;
@@ -62,9 +66,9 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void AllCheckCommand()
         {
-            foreach (AxisInfoCls axis in Global.STAxis)
+            foreach (Model.ModuleBaseCls module in ModuleList)
             {
-                axis.IsHomeChecked = !check;
+                module.IsHomeChecked = !check;
 
                 //홈밍 트리거 신호
 
@@ -83,7 +87,7 @@ namespace SFE.TRACK.ViewModel.Auto
 
             if (index == 0)
             {
-                Axis.IsHomeChecked = !Axis.IsHomeChecked;
+                Module.IsHomeChecked = !Module.IsHomeChecked;
             }
         }
 
@@ -94,23 +98,11 @@ namespace SFE.TRACK.ViewModel.Auto
 
             switch(index)
             {
-                case 0:
+                //case 0:
                 case 1:
-                case 3:
-                case 4:
-                    Axis.IsHomeChecked = !Axis.IsHomeChecked;
-                    break;
                 case 2:
-                    bool ishomecheck = Axis.IsHomeChecked;
-                    foreach(AxisInfoCls axis in Global.STAxis)
-                    {
-                        if (axis.BlockNo == Axis.BlockNo && axis.ModuleNo == Axis.ModuleNo) axis.IsHomeChecked = !ishomecheck;
-                    }
+                    Module.IsHomeChecked = !Module.IsHomeChecked;
                     break;
-            }
-
-            if (index == 0)
-            {
                 
             }
         }

@@ -143,6 +143,13 @@ namespace SFE.TRACK.ViewModel.Motor
                 Global.MessageOpen(enMessageType.OK, "Please servo on.");
                 return;
             }
+
+            if(Axis.Alarm)
+            {
+                Global.MessageOpen(enMessageType.OK, "Axis Servo Alarm.");
+                return;
+            }
+
             speedPack.acc = Axis.ACC;
             speedPack.dec = Axis.DEC;
             speedPack.speed = Axis.VEL;
@@ -154,6 +161,11 @@ namespace SFE.TRACK.ViewModel.Motor
             if (!Axis.Motor.IsServoOn)
             {
                 Global.MessageOpen(enMessageType.OK, "Please servo on.");
+                return;
+            }
+            if (Axis.Alarm)
+            {
+                Global.MessageOpen(enMessageType.OK, "Axis Servo Alarm.");
                 return;
             }
             speedPack.acc = Axis.ACC;
@@ -197,9 +209,25 @@ namespace SFE.TRACK.ViewModel.Motor
                     speedPack.dec = Axis.DEC;
                     speedPack.speed = Axis.VEL;
                     speedPack.timeout = 3000;
-                    
-                    if(index == 0) Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
-                    else if (index == 1) Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+
+                    if (index == 0)
+                    {
+                        Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        while (Axis.IsRepeatMode)
+                        {
+                            if (Axis.InPosition && !Axis.Motor.IsMoving) break;
+                            Thread.Sleep(5);
+                        }
+                    }
+                    else if (index == 1)
+                    {
+                        Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        while (Axis.IsRepeatMode && !Axis.Motor.IsMoving)
+                        {
+                            if (Axis.InPosition) break;
+                            Thread.Sleep(5);
+                        }
+                    }
                     Thread.Sleep(100);
                     index++;
                     if (index == 2) index = 0;

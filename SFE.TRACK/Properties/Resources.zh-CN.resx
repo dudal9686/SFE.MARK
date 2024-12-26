@@ -136,11 +136,17 @@
   <data name="MAINT" xml:space="preserve">
     <value>维护</value>
   </data>
+  <data name="MOTION" xml:space="preserve">
+    <value>运动</value>
+  </data>
   <data name="MOTOR" xml:space="preserve">
     <value>电机/输入输出</value>
   </data>
   <data name="PARAMETER" xml:space="preserve">
     <value>范围</value>
+  </data>
+  <data name="PROGRAM.RESTART" xml:space="preserve">
+    <value>是否要保存？保存并再次运行软件.</value>
   </data>
   <data name="RECIPE" xml:space="preserve">
     <value>食谱</value>

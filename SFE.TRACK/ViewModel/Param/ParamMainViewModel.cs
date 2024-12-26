@@ -166,7 +166,7 @@ namespace SFE.TRACK.ViewModel.Param
             get { return paramData; }
             set
             {
-                paramData = value;                
+                paramData = value;
                 RaisePropertyChanged("ParamData");
             }
         }
@@ -206,14 +206,13 @@ namespace SFE.TRACK.ViewModel.Param
             switch(index)
             {
                 case 0:
+                case 1:
                     AxisInfoCls axis = Global.STAxis.Find(x => x.AxisID == ParamData.Motor.MyNameInfo.Name);
                     if (axis == null) break;
                     if (Global.JogTeachingOpen(ParamData.Pos, axis))
                     {
                         ParamData.Pos = Global.STTeachingMessage.Position;
                     }
-                    break;
-                case 1:
                     break;
                 case 2:
                     ParamData.Acc = Global.KeyPad();

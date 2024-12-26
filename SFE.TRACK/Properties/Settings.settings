@@ -8,5 +8,8 @@
     <Setting Name="RECIPE_TRANSFER" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="LANG_CODE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">zh-CN</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoreCSBase.IPC;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using MachineDefine;
 
 namespace SFE.TRACK.ViewModel.Alarm
 {
@@ -52,7 +54,7 @@ namespace SFE.TRACK.ViewModel.Alarm
 
         private void BuzzerOffCommand()
         {
-            //Buzzer Off
+            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___BuzzerOff, "OFF");
         }
     }
 }
