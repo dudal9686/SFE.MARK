@@ -240,6 +240,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     break;
                 case 1:
                     View.Recipe.SelectModule selectModule = new View.Recipe.SelectModule();
+                    selectModule.Owner = System.Windows.Application.Current.MainWindow;
                     selectModule.ShowDialog();
                     break;
                 case 2:

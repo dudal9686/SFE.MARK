@@ -12,7 +12,7 @@ using System.Windows;
 using System.IO;
 using SFE.TRACK.ViewModel;
 using GalaSoft.MvvmLight.Messaging;
-using MachineCSBaseSim;
+using CoreCSRunSim;
 
 namespace SFE.TRACK
 {
@@ -41,7 +41,7 @@ namespace SFE.TRACK
         public static LoginInfoCls STLoginInfo = new LoginInfoCls(); //로그인 후 권한 설정
         
         public static int MCS_ID = 1;
-        public static int CHAMBER_ID = 100;
+        public static int CHAMBER_ID = 55;
         public static int MMI_ID = 1000;
         public static bool IsShutDown = false;
         //Maint Suppot List

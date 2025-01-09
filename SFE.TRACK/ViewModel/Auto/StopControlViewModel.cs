@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using System.Windows;
+using CoreCSBase.IPC;
+using MachineDefine;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -24,10 +26,12 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void StopCommand(Window o)
         {
+            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, "Stop");
             o.DialogResult = true;
         }
         private void RecoveryCommand(Window o)
         {
+            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, "Recovery");
             o.DialogResult = true;
         }
         private void CancelCommand(Window o)

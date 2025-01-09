@@ -35,7 +35,6 @@ namespace SFE.TRACK.ViewModel.Motion
             get { return isCheck; }
             set { isCheck = value; RaisePropertyChanged("IsCheck"); }
         }
-
         public int CstIndex
         {
             get { return cstIndex; }
@@ -49,23 +48,21 @@ namespace SFE.TRACK.ViewModel.Motion
             if (CstIndex < 1) CstIndex = 1;
             if (CstIndex > 25) CstIndex = 25;
         }
-
         private void PickMotionCommand()
         {
             int cstNo = GetCstNo();
             string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
+            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
         }
-
         private void PlaceMotionCommand()
         {
             int cstNo = GetCstNo();
             string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PlaceManualMove, msg);
+            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PlaceManualMove, msg);
         }
         private void RobotChangeMotionCommand()
         {
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___RobotInterFacePosition, "");
+            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___RobotInterFacePosition, "");
         }
         private int GetCstNo()
         {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using CoreCSBase;
 using CoreCSBase.IPC;
 using CoreCSMac;
-using MachineCSBaseSim;
+using CoreCSRunSim;
 using MachineDefine;
 using System.Windows.Threading;
 using System.Windows.Media;
@@ -55,7 +55,7 @@ namespace SFE.TRACK.ViewModel
             ShutDownRelayCommand = new RelayCommand(ShutDownCommand);
             LoginRelayCommand = new RelayCommand(LoginCommand);
             LanguageRelayCommand = new RelayCommand(LanguageCommand);
-            IsEnabledMenu = new ObservableCollection<bool>();
+            isEnabledMenu = new ObservableCollection<bool>();
             isSelectedMenu = new ObservableCollection<bool>();
             for (int i = 0; i < 10; i++) { IsEnabledMenu.Add(true); IsSelectedMenu.Add(true); }
             _worker = new MachineReaderWorker();
@@ -133,6 +133,13 @@ namespace SFE.TRACK.ViewModel
             MotorList = _worker.Controller.GetMotor();
             CustomUnitList = _worker.Controller.GetCustom();
 
+
+            foreach(AssyBase custom in AssyList)
+            {
+                Console.WriteLine(custom.MyNameInfo.Name);
+            }
+
+
             SetRecipeFileList();
             SetAxisData();
             SetTeachingData();
@@ -141,8 +148,6 @@ namespace SFE.TRACK.ViewModel
             
             return true;
         }
-        //이미 지정된 축 정보를 dll을 통해 가져와야 한다.
-
         private void SetAxisData()
         {
             foreach (UnitMotor motor in MotorList)
@@ -217,7 +222,6 @@ namespace SFE.TRACK.ViewModel
                         else //ADH, Chamber, Coater, Developer
                         {
                             string[] arr = axis.Motor.MyNameInfo.Information.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                            arr = axis.Motor.MyNameInfo.Information.Split('\r');
                             teachingData.ModuleNo = Convert.ToInt32(arr[arr.Length - 1]);
                             teachingData.MainTitle = Global.GetModule(2, teachingData.ModuleNo).MachineName;
                             teachingData.IsOwn = false;
@@ -438,6 +442,7 @@ namespace SFE.TRACK.ViewModel
         private void LanguageCommand()
         {
             SFE.TRACK.Language.LanguageView lang = new SFE.TRACK.Language.LanguageView();
+            lang.Owner = Application.Current.MainWindow;
             lang.ShowDialog();
         }
 
@@ -517,6 +522,19 @@ namespace SFE.TRACK.ViewModel
             else if (command == EnumCommand.Status)
             {
                 EnumCommand_Status eValue = item.GetCommand<EnumCommand_Status>();
+
+                if(eValue == EnumCommand_Status.UnitStatus___SendStart)
+                {
+
+                }
+                else if(eValue == EnumCommand_Status.UnitStatus___SendStop)
+                {
+
+                }
+                else if(eValue == EnumCommand_Status.MCS___LotStatus)
+                {
+                    
+                }
             }
 
             e.SetResult(CommandResult.Success, "done");

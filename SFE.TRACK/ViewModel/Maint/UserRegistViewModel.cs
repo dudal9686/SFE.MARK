@@ -64,6 +64,7 @@ namespace SFE.TRACK.ViewModel.Maint
             View.Account.AccountModify regist = new View.Account.AccountModify();
             Global.STUserRegistMessage.PassWordBox = null;
             Global.STUserRegistMessage.Type = 0;
+            regist.Owner = System.Windows.Application.Current.MainWindow;
             Messenger.Default.Send(Global.STUserRegistMessage);
             regist.ShowDialog();
 
@@ -84,6 +85,7 @@ namespace SFE.TRACK.ViewModel.Maint
             Global.STUserRegistMessage.Type = 1;
             Global.STUserRegistMessage.PassWordBox = regist.tbLogInPW;
             Global.STUserRegistMessage.AuthLevel = (int)UserInfo.AuthLevel;
+            regist.Owner = System.Windows.Application.Current.MainWindow;
             Messenger.Default.Send(Global.STUserRegistMessage);
             regist.ShowDialog();
 

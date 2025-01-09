@@ -46,9 +46,7 @@ namespace SFE.TRACK
             //en-US, zh-CN
             CultureInfo cultureInfo = new CultureInfo(SFE.TRACK.Properties.Settings.Default.LANG_CODE);
             Thread.CurrentThread.CurrentCulture = cultureInfo;
-            Thread.CurrentThread.CurrentUICulture = cultureInfo;
-
-            
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;            
         }
     }
 }

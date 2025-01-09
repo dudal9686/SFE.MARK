@@ -7,7 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Media;
-using MachineCSBaseSim;
+using CoreCSRunSim;
 using MachineDefine;
 using SFE.TRACK.ViewModel;
 
@@ -254,6 +254,7 @@ namespace SFE.TRACK.Model
                 RaisePropertyChanged("InPosition");
             }
         }
+
 
         public SolidColorBrush InMotionState
         {

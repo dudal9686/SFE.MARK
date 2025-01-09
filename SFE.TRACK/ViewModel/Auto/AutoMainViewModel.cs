@@ -153,6 +153,8 @@ namespace SFE.TRACK.ViewModel.Auto
             {
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
                 item.SetValue(jobList);
+
+                //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.UnitStatus___SendStart, "", true, 5000);
             }
 
             jobList.Clear();

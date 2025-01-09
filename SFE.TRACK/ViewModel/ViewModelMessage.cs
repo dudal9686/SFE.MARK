@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
-using MachineCSBaseSim;
+using CoreCSRunSim;
 
 namespace SFE.TRACK.ViewModel
 {

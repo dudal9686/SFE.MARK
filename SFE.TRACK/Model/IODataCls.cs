@@ -7,7 +7,7 @@ using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MachineCSBaseSim;
+using CoreCSRunSim;
 
 namespace SFE.TRACK.Model
 {

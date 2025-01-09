@@ -67,7 +67,7 @@ namespace SFE.TRACK.ViewModel.Motion
             moduleNo = Module.ModuleNo;
 
             string msg = string.Format("PRA,{0},{1},{2},{3}", GetArmIndex(), blockNo, moduleNo, 1);
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
+            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
 
             //Protocol
         }
@@ -84,7 +84,7 @@ namespace SFE.TRACK.ViewModel.Motion
             moduleNo = Module.ModuleNo;
 
             string msg = string.Format("PRA,{0},{1},{2},{3}", GetArmIndex(), blockNo, moduleNo, 1);
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PlaceManualMove, msg);
+            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PlaceManualMove, msg);
         }
 
         private int GetArmIndex()

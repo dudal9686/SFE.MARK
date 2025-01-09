@@ -9,7 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using SFE.TRACK.Model;
-using MachineCSBaseSim;
+using CoreCSRunSim;
 using System.Threading;
 
 namespace SFE.TRACK.ViewModel.Motor
@@ -153,7 +153,7 @@ namespace SFE.TRACK.ViewModel.Motor
             speedPack.acc = Axis.ACC;
             speedPack.dec = Axis.DEC;
             speedPack.speed = Axis.VEL;
-            speedPack.timeout = 3000;
+            speedPack.timeout = 10000;
             Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
         }
         private void SecondMoveCommand()
@@ -171,7 +171,7 @@ namespace SFE.TRACK.ViewModel.Motor
             speedPack.acc = Axis.ACC;
             speedPack.dec = Axis.DEC;
             speedPack.speed = Axis.VEL;
-            speedPack.timeout = 3000;
+            speedPack.timeout = 10000;
             Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
         }
         private void FirstTeachingCommand()
@@ -208,33 +208,32 @@ namespace SFE.TRACK.ViewModel.Motor
                     speedPack.acc = Axis.ACC;
                     speedPack.dec = Axis.DEC;
                     speedPack.speed = Axis.VEL;
-                    speedPack.timeout = 3000;
+                    speedPack.timeout = 10000;
 
                     if (index == 0)
                     {
                         Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
                         while (Axis.IsRepeatMode)
                         {
-                            if (Axis.InPosition && !Axis.Motor.IsMoving) break;
-                            Thread.Sleep(5);
+                            if (Axis.InPosition && !Axis.Motor.IsMoving && !Axis.Motor.IsAlarm) break;
+                            Thread.Sleep(1);
                         }
                     }
                     else if (index == 1)
                     {
                         Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
-                        while (Axis.IsRepeatMode && !Axis.Motor.IsMoving)
+                        while (Axis.IsRepeatMode)
                         {
-                            if (Axis.InPosition) break;
-                            Thread.Sleep(5);
+                            if (Axis.InPosition && !Axis.Motor.IsMoving && !Axis.Motor.IsAlarm) break;
+                            Thread.Sleep(1);
                         }
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(1);
                     index++;
                     if (index == 2) index = 0;
                 }
             });
             Axis.IsRepeatMode = false;
-            Console.WriteLine("End");
         }
         public List<AxisInfoCls> AxisList
         {
