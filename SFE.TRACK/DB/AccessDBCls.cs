@@ -258,5 +258,55 @@ namespace SFE.TRACK.DB
             string query = string.Format("UPDATE tbCassette SET `Usage` = {0} WHERE `CstNo` = {1} AND `Index` = {2}", use, cstNo, index);
             return ExecuteNonQuery(query);
         }
+
+        public bool GetMonitoringData(ref DataTable dt)
+        {
+            string query = string.Format("SELECT * FROM tbMonitoringData");
+            return ExecuteReader(query, ref dt);
+        }
+        /// <summary>
+        /// csv 에 있는 데이터를 한번에 import 하려고 만든 함수
+        /// </summary>
+        /// <returns></returns>
+        public bool SetImportMonitoringData()
+        {
+            string query = string.Empty;
+            for (int i = 0; i < Global.STMonitoringList.Count; i++)
+            {
+                MonitoringDataCls data = Global.STMonitoringList[i];
+                query = string.Format("INSERT INTO tbMonitoringData(`BlockNo`,`ModuleNo`,`MeasDataName`,`ControllerName`,`Use`,`InitTemp`,`OverTemp`,`SettlingDetermTime`,`SettlingTimeOut`,`RangeMax`,`RangeMin`) VALUES({0},{1},'{2}','{3}',{4},{5},{6},{7},{8},{9},{10})",
+                    data.BlockNo,
+                    data.ModuleNo,
+                    data.MeasDataName,
+                    data.ControllerName,
+                    data.IsUse.Equals(true) ? 1 : 0,
+                    data.InitTemp,
+                    data.OverTemp,
+                    data.SettlingDetermTime,
+                    data.SettlingTimeOut,
+                    data.RangeMax,
+                    data.RangeMin);
+                ExecuteNonQuery(query);
+            }
+            
+            return true;
+        }
+
+        public bool SetMonitoringData(MonitoringDataCls data)
+        {
+            string query = string.Format("UPDATE tbMonitoringData SET `Use`={0},`InitTemp`={1},`OverTemp`={2},`SettlingDetermTime`={3},`SettlingTimeOut`={4},`RangeMax`={5},`RangeMin`={6} " +
+                "WHERE `BlockNo`={7} AND `ModuleNo`={8} AND `ControllerName`='{9}'",
+                data.IsUse.Equals(true) ? 1 : 0,
+                data.InitTemp,
+                data.OverTemp,
+                data.SettlingDetermTime,
+                data.SettlingTimeOut,
+                data.RangeMax,
+                data.RangeMin,
+                data.BlockNo,
+                data.ModuleNo,
+                data.ControllerName);
+            return ExecuteNonQuery(query);
+        }
     }
 }

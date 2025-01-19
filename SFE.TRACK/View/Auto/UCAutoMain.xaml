@@ -165,11 +165,17 @@
                 </Button>
             </StackPanel>
             <Canvas>
-                <StackPanel >
-                    <Button Width="150" Height="203" FontSize="20" Command="{Binding InitialRelayCommand}" Margin="3 0 0 0">
+                <StackPanel Orientation="Vertical">
+                    <Button Width="150" Height="100" FontSize="20" Command="{Binding InitialRelayCommand}" Margin="3 0 0 0">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Home" Foreground="SandyBrown" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <TextBlock FontSize="20" Margin="0 8 0 0">INITIAL</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="150" Height="100" FontSize="20" Command="{Binding HomeRelayCommand}" Margin="3 3 0 0">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="AxisArrow" Foreground="LightCoral" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock FontSize="20" Margin="0 8 0 0">Home</TextBlock>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -180,6 +186,16 @@
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Stop" Foreground="Red" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <TextBlock FontSize="20" Margin="5 0 0 0">STOP</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Canvas>
+            <Canvas>
+                <StackPanel Margin="349.4 0 0 0">
+                    <Button Width="148" Height="100" FontSize="20" Command="{Binding MonitoringRelayCommand}" Margin="3 0 0 0">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="MonitorCrt" Foreground="Green" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock FontSize="20" Margin="5 0 0 0">Monitoring</TextBlock>
                         </StackPanel>
                     </Button>
                 </StackPanel>

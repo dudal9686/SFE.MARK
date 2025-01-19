@@ -66,24 +66,27 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.acc = 100;
                 speedPack.dec = 100;
                 speedPack.speed = 10;
-                Axis.Motor.DoVelocityMove(speedPack);
-
+                command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, (int)enJogMode.LOW);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                else Axis.Motor.DoVelocityMove(speedPack);
             }
             else if (IsVelocity[1])
             {
                 speedPack.acc = 100;
                 speedPack.dec = 100;
-                speedPack.speed = 50;
-                Axis.Motor.DoVelocityMove(speedPack);
+                speedPack.speed = 20;
+                command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, (int)enJogMode.HIGH);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                else Axis.Motor.DoVelocityMove(speedPack);
             }
             else if (IsVelocity[2])
             {
-                speedPack.acc = Axis.ACC;
-                speedPack.dec = Axis.DEC;
-                speedPack.speed = Axis.VEL;
-                command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
-                MotorInfo motorInfo = (MotorInfo)Axis.Motor.MyNameInfo;
-                if (motorInfo.TrdParty == "SFE_CAN") Global.MachineWorker.SendCommand(55, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___RelativeMove, command);
+                speedPack.acc = speedPack.acc.Equals(0) ? 100 : Axis.ACC;
+                speedPack.dec = speedPack.dec.Equals(0) ? 100 : Axis.DEC;
+                speedPack.speed = speedPack.speed.Equals(0) ? 20 : Axis.VEL;
+                //command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
+                command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, PitchLen);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
                 else Axis.Motor.DoSCurveMove((double)PitchLen, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
             }
         }
@@ -92,52 +95,52 @@ namespace SFE.TRACK.ViewModel.Jog
         {
             if (IsVelocity[0] || IsVelocity[1])
             {
-                Axis.Motor.StopMove();
+                command = string.Format("Motor:{0}", Axis.AxisID);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+                else Axis.Motor.StopMove();
             }
         }
 
         private void MouseDownMinusCommand()
         {
-            MotorInfo motorInfo = (MotorInfo)Axis.Motor.MyNameInfo;
-
             if (IsVelocity[0])
             {
                 speedPack.acc = 100;
                 speedPack.dec = 100;
                 speedPack.speed = -10;
-                command = string.Format("Motor:");
-                if (motorInfo.TrdParty == "SFE_CAN") Global.MachineWorker.SendCommand(55, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.LOW);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
                 else Axis.Motor.DoVelocityMove(speedPack);
             }
             else if (IsVelocity[1])
             {
                 speedPack.acc = 100;
                 speedPack.dec = 100;
-                speedPack.speed = -50;
-                command = string.Format("");
-                if (motorInfo.TrdParty == "SFE_CAN") Global.MachineWorker.SendCommand(55, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                speedPack.speed = -20;
+                command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.HIGH);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
                 Axis.Motor.DoVelocityMove(speedPack);
             }
             else if (IsVelocity[2])
             {
-                speedPack.acc = Axis.ACC;
-                speedPack.dec = Axis.DEC;
-                speedPack.speed = Axis.VEL;
-                command = string.Format("Motor:{0},-{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
-                
-                if (motorInfo.TrdParty == "SFE_CAN") Global.MachineWorker.SendCommand(55, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___RelativeMove, command);
+                speedPack.acc = speedPack.acc.Equals(0) ? 100 : Axis.ACC;
+                speedPack.dec = speedPack.dec.Equals(0) ? 100 : Axis.DEC;
+                speedPack.speed = speedPack.speed.Equals(0) ? -20 : Axis.VEL;
+                //command = string.Format("Motor:{0},-{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
+                command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, PitchLen);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
                 else Axis.Motor.DoSCurveMove((-1) * (double)PitchLen, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
             }
-            Console.WriteLine("CCCCC");
         }
 
         private void MouseUpMinusCommand()
         {
             if (IsVelocity[0] || IsVelocity[1])
             {
-                Axis.Motor.StopMove();
+                command = string.Format("Motor:{0}", Axis.AxisID);
+                if (Axis.Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+                else Axis.Motor.StopMove();
             }
-            Console.WriteLine("DDDDD");
         }
 
         private void OKCommand(Window window)

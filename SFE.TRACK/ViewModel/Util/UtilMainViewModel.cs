@@ -10,9 +10,9 @@ namespace SFE.TRACK.ViewModel.Util
 {
     public class UtilMainViewModel : ViewModelBase
     {
-        bool isMachineConfig = true;
+        bool isMachineConfig = false;
         bool isDispenseConfig = false;
-        bool isRobotConfig = false;
+        bool isRobotConfig = true;
         bool isCassetteConfig = false;
 
         public bool IsMachineConfig

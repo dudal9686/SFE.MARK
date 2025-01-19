@@ -111,10 +111,10 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Value" CanUserSort="True" Foreground="Black" Width="340" Binding="{Binding TeachingName}" FontSize="17"/>
                                     <DataGridTextColumn Header="Unit" CanUserSort="True" Foreground="Black"  Width="200" Binding="{Binding Motor.MyNameInfo.Name}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Acc" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Acc,StringFormat={}{0:F2}}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Dec" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Dec,StringFormat={}{0:F2}}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Vel" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Vel,StringFormat={}{0:F2}}" FontSize="17"/>
-                                    <DataGridTextColumn Header="Position" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Pos,StringFormat={}{0:F2}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Acc" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Acc,StringFormat={}{0:F3}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Dec" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Dec,StringFormat={}{0:F3}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Vel" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Vel,StringFormat={}{0:F3}}" FontSize="17"/>
+                                    <DataGridTextColumn Header="Position" CanUserSort="False" Foreground="Black" Width="200" Binding="{Binding Pos,StringFormat={}{0:F3}}" FontSize="17"/>
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>

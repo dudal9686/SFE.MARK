@@ -143,9 +143,9 @@
                             <DataTemplate DataType="{x:Type Model:IODataCls}">
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Foreground="DarkSlateGray" Width="100" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" FontWeight="Bold" Content="{Binding IONum}" Margin="-20"/>
-                                        <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="50 0 0 0"/>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="40 0 0 0">
+                                        <TextBlock Foreground="DarkSlateGray" Width="100" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}X{0:D3}}" Margin="20 10 0 0"/>
+                                        <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="0 0 0 0"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="30 0 0 0">
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>
@@ -191,9 +191,9 @@
                             <DataTemplate DataType="{x:Type Model:IODataCls}">
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Foreground="DarkSlateGray" Width="100" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" FontWeight="Bold" Content="{Binding IONum}" Margin="-20"/>
-                                        <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="50 0 0 0"/>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="40 0 0 0" Command="{Binding IORelayCommand}">
+                                        <TextBlock Foreground="DarkSlateGray" Width="100" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}Y{0:D3}}" Margin="20 10 0 0"/>
+                                        <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="0 0 0 0"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="30 0 0 0" Command="{Binding IORelayCommand}">
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>

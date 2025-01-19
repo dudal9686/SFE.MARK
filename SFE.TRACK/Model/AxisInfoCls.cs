@@ -10,6 +10,7 @@ using System.Windows.Media;
 using CoreCSRunSim;
 using MachineDefine;
 using SFE.TRACK.ViewModel;
+using MachineDefine;
 
 namespace SFE.TRACK.Model
 {
@@ -36,14 +37,16 @@ namespace SFE.TRACK.Model
         bool inMotion = false;
         bool inPosition = false;
         bool isHome = false;
+        bool isStop = true;
         public bool IsRepeatMode = false;
         enHomeState homeSituation = enHomeState.HOME_NONE;
 
-        int acc = 0;
-        int dec = 0;
-        int vel = 0;
+        int acc = 1000;
+        int dec = 1000;
+        int vel = 150;
 
         bool isOwn = false;
+        string command = string.Empty;
 
         public UnitMotor Motor { get; set; }
 
@@ -59,10 +62,11 @@ namespace SFE.TRACK.Model
 
         public RelayCommand HomeRelayCommand { get; set; }
         public RelayCommand ServoRelayCommand { get; set; }
+        public RelayCommand ServoOffRelayCommand { get; set; }
         public RelayCommand EncoderClearRelayCommand { get; set; }
         public RelayCommand StopRelayCommand { get; set; }
         public RelayCommand AlarmResetRelayCommand { get; set; }
-
+        public string Company { get; set; }
         public AxisInfoCls()
         {
             servoState = Brushes.GreenYellow;
@@ -77,6 +81,7 @@ namespace SFE.TRACK.Model
 
             HomeRelayCommand = new RelayCommand(HomeCommand);
             ServoRelayCommand = new RelayCommand(ServoCommand);
+            ServoOffRelayCommand = new RelayCommand(ServoOffCommand);
             EncoderClearRelayCommand = new RelayCommand(EncoderClearCommand);
             StopRelayCommand = new RelayCommand(StopCommand);
             AlarmResetRelayCommand = new RelayCommand(AlarmResetCommand);
@@ -110,6 +115,12 @@ namespace SFE.TRACK.Model
                 else ServoState = Brushes.Red;
                 RaisePropertyChanged("Servo");
             }
+        }
+
+        public bool IsStop
+        {
+            get { return isStop; }
+            set { isStop = value; RaisePropertyChanged("IsStop"); }
         }
 
         public bool IsHome
@@ -340,31 +351,45 @@ namespace SFE.TRACK.Model
         }
         private void HomeCommand()
         {
-            Motor.DoHomming();
-            Console.WriteLine("HomeCommand");
+            command = string.Format("Motor:{0}", AxisID);
+            if (Company == "SFE_CAN") 
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, command);
+            else Motor.DoHomming();
+            HomeSituation = enHomeState.HOMMING;
         }
 
         private void ServoCommand()
         {
-            Motor.DoServoOn(!Servo);
-            Console.WriteLine("ServoCommand");
+            command = string.Format("Motor:{0},{1}", AxisID, 1);
+            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
+            else Motor.DoServoOn(!Servo);
         }
-
+        private void ServoOffCommand()
+        {
+            command = string.Format("Motor:{0},{1}", AxisID, 0);
+            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
+            else Motor.DoServoOn(!Servo);
+        }
         private void EncoderClearCommand()
         {
-            Motor.SetZeroPosition();
+            command = string.Format("Motor:{0}", AxisID);
+            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___EncoderClear, command);
+            else Motor.SetZeroPosition();
         }
         private void StopCommand()
         {
-            Motor.StopMove();
-            Console.WriteLine("StopCommand");
+            command = string.Format("Motor:{0}", AxisID);
+            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+            else Motor.StopMove();
             if (IsRepeatMode) IsRepeatMode = false;
         }
         private void AlarmResetCommand()
         {
-            Motor.ClerAlarm();
-            //HomeSituation = enHomeState.HOME_NONE;
+            command = string.Format("Motor:{0}", AxisID);
+            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoAlarmClear, command);
+            else Motor.ClerAlarm();
             Console.WriteLine("AlarmResetCommand");
+            System.Threading.Thread.Sleep(300);
         }
     }
 }

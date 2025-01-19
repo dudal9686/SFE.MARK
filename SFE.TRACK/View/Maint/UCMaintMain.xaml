@@ -21,6 +21,9 @@
         <DataTemplate x:Key="MaintChamber" DataType="{x:Type local:MaintChamer}">
             <local:MaintChamer/>
         </DataTemplate>
+        <DataTemplate x:Key="EditMonitoringData" DataType="{x:Type local:EditMonitoringData}">
+            <local:EditMonitoringData/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid>
@@ -61,6 +64,14 @@
                                 </StackPanel>
                             </TreeViewItem.Header>
                         </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsEditMonitoring}" x:Name="lvEditMonitoring">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Monitor" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Edit MonitoringData" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
                         <TreeViewItem IsSelected="{Binding IsRegist}" x:Name="lvRegist">
                             <TreeViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
@@ -88,6 +99,9 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvChamber}" Value="True">
                                     <Setter Property="ContentTemplate" Value="{StaticResource MaintChamber}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvEditMonitoring}" Value="True">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource EditMonitoringData}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

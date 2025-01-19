@@ -106,6 +106,12 @@ namespace SFE.TRACK
         MAINTMODE_USE,
     }
 
+    public enum enDirection
+    {
+        CW = 1,
+        CCW = -1
+    };
+
     public enum enMachineUintNo
     {
         COATER_L = 1,
@@ -336,6 +342,14 @@ namespace SFE.TRACK
         AI,
         AO,
     }
+
+    public enum enWorkingNeedStep 
+    { 
+        IsNot, 
+        IsNeed, 
+        IsDoing, 
+        IsDone,
+    };
 
     public class DefineCls
     {
@@ -2189,6 +2203,95 @@ namespace SFE.TRACK
         {
             get { return loginDisplay; }
             set { loginDisplay = value; RaisePropertyChanged("LoginDisplay"); }
+        }
+    }
+
+    public class MonitoringDataCls : ViewModelBase
+    {
+        int blockNo = 0;
+        int moduleNo = 0;
+        float initTemp = 0;
+        float overTemp = 0;
+        int settlingDetermTime = 0;
+        int settlingTimeOut = 0;
+        float rangeMin = 0;
+        float rangeMax = 0;
+        float pv = 0;
+        float sv = 0;
+        string moduleName = string.Empty;
+        string measDataName = string.Empty;
+        string controllerName = string.Empty;
+        bool isUse = false;        
+
+        public int BlockNo
+        {
+            get { return blockNo; }
+            set { blockNo = value; RaisePropertyChanged("BlockNo"); }
+        }
+        public int ModuleNo
+        {
+            get { return moduleNo; }
+            set { moduleNo = value; RaisePropertyChanged("ModuleNo"); }
+        }
+        public string ModuleName
+        {
+            get { return moduleName; }
+            set { moduleName = value; RaisePropertyChanged("ModuleName"); }
+        }
+        public string MeasDataName
+        {
+            get { return measDataName; }
+            set { measDataName = value; RaisePropertyChanged("MeasDataName"); }
+        }
+        public string ControllerName
+        {
+            get { return controllerName; }
+            set { controllerName = value; RaisePropertyChanged("ControllerName"); }
+        }
+        public bool IsUse
+        {
+            get { return isUse; }
+            set { isUse = value; RaisePropertyChanged("IsUse"); }
+        }
+        public float PV
+        {
+            get { return pv; }
+            set { pv = value; RaisePropertyChanged("PV"); }
+        }
+        public float SV
+        {
+            get { return sv; }
+            set { sv = value; RaisePropertyChanged("SV"); }
+        }
+        public float InitTemp
+        {
+            get { return initTemp; }
+            set { initTemp = value; RaisePropertyChanged("InitTemp"); }
+        }
+        public float OverTemp
+        {
+            get { return overTemp; }
+            set { overTemp = value; RaisePropertyChanged("OverTemp"); }
+        }
+        public int SettlingDetermTime
+        {
+            get { return settlingDetermTime; }
+            set { settlingDetermTime = value; RaisePropertyChanged("SettlingDetermTime"); }
+        }
+        public int SettlingTimeOut
+        {
+            get { return settlingTimeOut; }
+            set { settlingTimeOut = value; RaisePropertyChanged("SettlingTimeOut"); }
+        }
+        public float RangeMax
+        {
+            get { return rangeMax; }
+            set { rangeMax = value; RaisePropertyChanged("RangeMax"); }
+        }
+        public float RangeMin
+        {
+            get { return rangeMin; }
+            set { rangeMin = value; RaisePropertyChanged("RangeMin"); }
         }
     }
 

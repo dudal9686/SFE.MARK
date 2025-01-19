@@ -37,6 +37,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Wafer.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
@@ -170,6 +173,7 @@
     <Compile Include="ViewModel\Auto\AutoMainViewModel.cs" />
     <Compile Include="ViewModel\Auto\CassetteLayOutViewModel.cs" />
     <Compile Include="ViewModel\Auto\CassetteSlotViewModel.cs" />
+    <Compile Include="ViewModel\Auto\DataMonitoringViewModel.cs" />
     <Compile Include="ViewModel\Auto\JobStartViewModel.cs" />
     <Compile Include="ViewModel\Auto\LotStartViewModel.cs" />
     <Compile Include="ViewModel\Auto\MachineLayOutViewModel.cs" />
@@ -182,6 +186,7 @@
     <Compile Include="ViewModel\Jog\JogControlViewModel.cs" />
     <Compile Include="ViewModel\Language\LanguageViewModel.cs" />
     <Compile Include="ViewModel\Log\LogMainViewModel.cs" />
+    <Compile Include="ViewModel\Maint\EditMonitoringDataViewModel.cs" />
     <Compile Include="ViewModel\Maint\MaintChamberViewModel.cs" />
     <Compile Include="ViewModel\Maint\MaintenanceModeViewModel.cs" />
     <Compile Include="ViewModel\Maint\MaintMainViewModel.cs" />
@@ -244,6 +249,9 @@
     <Compile Include="View\Auto\CassetteSlot.xaml.cs">
       <DependentUpon>CassetteSlot.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Auto\DataMonitoring.xaml.cs">
+      <DependentUpon>DataMonitoring.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Auto\JobStart.xaml.cs">
       <DependentUpon>JobStart.xaml</DependentUpon>
     </Compile>
@@ -276,6 +284,9 @@
     </Compile>
     <Compile Include="View\Log\UCLogMain.xaml.cs">
       <DependentUpon>UCLogMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Maint\EditMonitoringData.xaml.cs">
+      <DependentUpon>EditMonitoringData.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Maint\MaintChamer.xaml.cs">
       <DependentUpon>MaintChamer.xaml</DependentUpon>
@@ -445,6 +456,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Auto\DataMonitoring.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Auto\JobStart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -490,6 +505,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Log\UCLogMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Maint\EditMonitoringData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -714,7 +733,9 @@
   <ItemGroup>
     <Resource Include="Resources\Logo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Wafer.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Logo_Eng.png" />
   </ItemGroup>

@@ -2255,6 +2255,112 @@ namespace SFE.TRACK
             return isDone;
         }
 
+        public bool ReadMonitoringData()
+        {
+            bool isDone = true;
+            DataTable dt = new DataTable();
+            if (Global.STAccessDB.GetMonitoringData(ref dt))
+            {
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    MonitoringDataCls data = new MonitoringDataCls();
+                    data.BlockNo = Convert.ToInt32(dt.Rows[i]["BlockNo"]);
+                    data.ModuleNo = Convert.ToInt32(dt.Rows[i]["ModuleNo"]);
+                    data.ModuleName = Global.GetModule(data.BlockNo, data.ModuleNo).MachineTitle;
+                    data.MeasDataName = dt.Rows[i]["MeasDataName"].ToString();
+                    data.ControllerName = dt.Rows[i]["ControllerName"].ToString();
+                    data.IsUse = Convert.ToInt32(dt.Rows[i]["Use"]).Equals(1) ? true : false;
+                    data.InitTemp = Convert.ToSingle(dt.Rows[i]["InitTemp"]);
+                    data.OverTemp = Convert.ToSingle(dt.Rows[i]["OverTemp"]);
+                    data.SettlingDetermTime = Convert.ToInt32(dt.Rows[i]["SettlingDetermTime"]);
+                    data.SettlingTimeOut = Convert.ToInt32(dt.Rows[i]["SettlingTimeOut"]);
+                    data.RangeMax = Convert.ToSingle(dt.Rows[i]["RangeMax"]);
+                    data.RangeMin = Convert.ToSingle(dt.Rows[i]["RangeMin"]);
+                    Global.STMonitoringList.Add(data);
+                }
+            }
+            else isDone = false;
+            dt.Clear();
+            dt.Dispose();
+            return isDone;
+        }
+
+        public bool ReadMonitoringData(string filename)
+        {
+            bool isDone = false;
+
+            FileInfo fileInfo = new FileInfo(filename);
+            if (!fileInfo.Exists) return false;
+
+            bool isRead = false;
+            string line = string.Empty;
+            StreamReader sr = null;
+            try
+            {
+                sr = new StreamReader(filename);
+                while (!sr.EndOfStream)
+                {
+                    line = sr.ReadLine();
+                    string[] arr = line.Split(',');
+
+                    if (!isRead)
+                    {
+                        if (arr[0].Trim() == "Block No")
+                        {
+                            isRead = true;
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        MonitoringDataCls data = new MonitoringDataCls();
+                        data.BlockNo = Convert.ToInt32(arr[0]);
+                        data.ModuleNo = Convert.ToInt32(arr[1]);
+                        data.ModuleName = Global.GetModule(data.BlockNo, data.ModuleNo).MachineName;
+                        data.MeasDataName = arr[3];
+                        data.ControllerName = arr[4];
+                        data.IsUse = Convert.ToInt32(arr[5]).Equals(1) ? true : false;
+                        data.InitTemp = Convert.ToSingle(arr[6]);
+                        data.OverTemp = Convert.ToSingle(arr[7]);
+                        data.SettlingDetermTime = Convert.ToInt32(arr[8]);
+                        data.SettlingTimeOut = Convert.ToInt32(arr[9]);
+                        data.RangeMin = Convert.ToSingle(arr[10]);
+                        data.RangeMax = Convert.ToSingle(arr[11]);
+                        Global.STMonitoringList.Add(data);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                isDone = false;
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                if (sr != null)
+                {
+                    sr.Close();
+                    sr.Dispose();
+                }
+            }
+            Global.STAccessDB.SetImportMonitoringData();
+            return isDone;
+        }
+
+        public bool SaveMonitoringData()
+        {
+            bool isDone = true;
+            foreach(MonitoringDataCls data in Global.STMonitoringList)
+            {
+                if(!Global.STAccessDB.SetMonitoringData(data))
+                {
+                    isDone = false;
+                    break;
+                }
+            }
+            return isDone;
+        }
+
         public bool ReadJobInfoData(string filename)
         {
             bool isDone = true;

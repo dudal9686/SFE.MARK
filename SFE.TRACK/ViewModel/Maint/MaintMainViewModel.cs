@@ -14,7 +14,7 @@ namespace SFE.TRACK.ViewModel.Maint
         bool IsChamber_ = false;
         bool IsMaint_ = false;
         bool IsRegist_ = false;
-
+        bool IsEditMonitoring_ = false;
         public bool IsSupport
         {
             get { return IsSupport_; }
@@ -37,6 +37,12 @@ namespace SFE.TRACK.ViewModel.Maint
         {
             get { return IsRegist_; }
             set { IsRegist_ = value; RaisePropertyChanged("IsRegist"); }
+        }
+
+        public bool IsEditMonitoring
+        {
+            get { return IsEditMonitoring_; }
+            set { IsEditMonitoring_ = value; RaisePropertyChanged("IsEditMonitoring"); }
         }
     }
 }

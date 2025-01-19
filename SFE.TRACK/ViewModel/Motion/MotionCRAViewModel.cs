@@ -27,8 +27,8 @@ namespace SFE.TRACK.ViewModel.Motion
             PickMotionRelayCommand = new RelayCommand(PickMotionCommand);
             PlaceMotionRelayCommand = new RelayCommand(PlaceMotionCommand);
             RobotChangeMotionRelayCommand = new RelayCommand(RobotChangeMotionCommand);
-            DIList = Global.STDIList.FindAll(x => x.BlockNo == 1);
-            DOList = Global.STDOList.FindAll(x => x.BlockNo == 1);
+            DIList = Global.STDIList.FindAll(x => x.BlockNo == 1).OrderBy(x => x.IONum).ToList();
+            DOList = Global.STDOList.FindAll(x => x.BlockNo == 1).OrderBy(x => x.IONum).ToList();
         }
         public bool[] IsCheck
         {

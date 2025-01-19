@@ -8,6 +8,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using CoreCSRunSim;
+using MachineDefine;
+using CoreCSBase;
 
 namespace SFE.TRACK.Model
 {
@@ -18,12 +20,17 @@ namespace SFE.TRACK.Model
         int blockNo = 0;
         int moduleNo = 0;
         int ioNum = 0;
+        int channelNo = 0;
+        string boardType = string.Empty;
+        int boardNo = 0;
         bool state = false;
         bool enable = false;
         string name = string.Empty;
         string alias = string.Empty;
         SolidColorBrush stateColor = new SolidColorBrush();
+
         public RelayCommand IORelayCommand { get; set; }
+        public String Company { get; set; }
 
         public IODataCls()
         {
@@ -42,10 +49,27 @@ namespace SFE.TRACK.Model
             get { return ioType; }
             set { ioType = value; RaisePropertyChanged("IOType"); }
         }
-
+        public string BoardType
+        {
+            get { return boardType; }
+            set { boardType = value; RaisePropertyChanged("BoardType"); }
+        }
+        public int BoardNo
+        {
+            get { return boardNo; }
+            set { boardNo = value; RaisePropertyChanged("BoardNo"); }
+        }
+        public int ChannelNo
+        {
+            get { return channelNo; }
+            set { channelNo = value; RaisePropertyChanged("ChannelNo"); }
+        }
         public int IONum
         {
-            get { return ioNum; }
+            get {
+                if (Company != "SFE_CAN") return 32 * boardNo + channelNo;
+                return ioNum; 
+            }
             set { ioNum = value; RaisePropertyChanged("IONum"); }
         }
 
@@ -96,7 +120,8 @@ namespace SFE.TRACK.Model
         private void IOCommand()
         {
             Console.WriteLine("IO({0}) = {1} ({2})", IOType.ToString(), Name, IONum);
-            IO.WriteIO(!IO.ReadIO(), null);
+            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.IO___ManualToggle, string.Format("IO:{0}", Name));
+            else IO.WriteIO(!IO.ReadIO(), null);
         }
     }
 

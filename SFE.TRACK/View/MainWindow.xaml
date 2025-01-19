@@ -142,7 +142,7 @@
                             </Button>
 
                             <TextBlock Foreground="White" Text="{Binding Source={StaticResource Clock}, Path=DateTime, ConverterCulture=zh-CN}" TextWrapping="NoWrap" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Margin="50 0 0 0 "/>
-                            <Button Command="{Binding ShutDownRelayCommand}" Style="{StaticResource MaterialDesignFloatingActionButton}" Background="#FF2A2A" ToolTip="Shut Down" Width="60" Height="60" BorderBrush="White" Foreground="White" Margin="30 0 0 0">
+                            <Button Command="{Binding ShutDownRelayCommand}" Style="{StaticResource MaterialDesignFloatingActionButton}" Background="#FF2A2A" ToolTip="Shut Down" Width="60" Height="60" BorderBrush="White" Foreground="White" Margin="100 0 0 0">
                                 <materialDesign:PackIcon Kind="Power" Height="50" Width="50" />
                             </Button>
                         </StackPanel>
@@ -163,7 +163,7 @@
                                 <Setter Property="ContentTemplate" Value="{StaticResource RecipeMain}"/>
                             </DataTrigger>
                             
-                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvMotor}" Value="True">
+                            <DataTrigger Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=Default, ElementName=lvMotor}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource MotorMain}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvMotionMove}" Value="True">
@@ -176,6 +176,7 @@
                                 <Setter Property="ContentTemplate" Value="{StaticResource MaintMain}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvUtil}" Value="True">
+                                
                                 <Setter Property="ContentTemplate" Value="{StaticResource UtilMain}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvGem}" Value="True">
@@ -195,8 +196,6 @@
 
         <Grid Grid.Row="2">
             <Border BorderBrush="Black" BorderThickness="3" CornerRadius="5" Background="{Binding TitleColor}">
-
-
                 <ListView ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" Background="{Binding TitleColor}" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" IsSynchronizedWithCurrentItem="True">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -205,7 +204,7 @@
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[0]}" x:Name="lvAuto" ToolTip="Auto" IsEnabled="{Binding IsEnabledMenu[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Black" BorderThickness="1">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[0], Mode=TwoWay, UpdateSourceTrigger=Default}" x:Name="lvAuto" ToolTip="Auto" IsEnabled="{Binding IsEnabledMenu[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Black" BorderThickness="1">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Monitor" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -216,7 +215,7 @@
                     </ListViewItem>
 
                     <!-- IsEnabled="{Binding CanControlMenu}" Opacity="{Binding ControlOpacity}"-->
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[1]}" Visibility="Visible" IsEnabled="{Binding IsEnabledMenu[1], Mode=TwoWay,UpdateSourceTrigger=Default}" x:Name="lvRecipe" BorderBrush="Black" ToolTip="Recipe" BorderThickness="1">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[1], Mode=TwoWay, UpdateSourceTrigger=Default}" Visibility="Visible" IsEnabled="{Binding IsEnabledMenu[1], Mode=TwoWay,UpdateSourceTrigger=Default}" x:Name="lvRecipe" BorderBrush="Black" ToolTip="Recipe" BorderThickness="1">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="File" Width="50" Height="50" Foreground="#565656" Margin="0,5,0,0"/>
@@ -225,7 +224,7 @@
                         </Border>
                     </ListViewItem>
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[2]}" IsEnabled="{Binding IsEnabledMenu[2]}" Visibility="Visible" Background="{Binding BackColor}" x:Name="lvMotor" ToolTip="Motion I/O" BorderBrush="Black" BorderThickness="1">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[2], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[2]}" Visibility="Visible" Background="{Binding BackColor}" x:Name="lvMotor" ToolTip="Motion I/O" BorderBrush="Black" BorderThickness="1">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ReportSankey" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -234,7 +233,7 @@
                         </Border>
                     </ListViewItem>
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[3]}" IsEnabled="{Binding IsEnabledMenu[3]}" Visibility="Visible" x:Name="lvParam" Background="{Binding BackColor}" ToolTip="Parameter" BorderBrush="Black" BorderThickness="1">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[3], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[3]}" Visibility="Visible" x:Name="lvParam" Background="{Binding BackColor}" ToolTip="Parameter" BorderBrush="Black" BorderThickness="1">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Folder" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -243,7 +242,7 @@
                         </Border>
                     </ListViewItem>
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[4]}" IsEnabled="{Binding IsEnabledMenu[4]}" Visibility="Visible" x:Name="lvMotionMove" Background="{Binding BackColor}" ToolTip="Motion" BorderBrush="Black" BorderThickness="1">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[4], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[4]}" Visibility="Visible" x:Name="lvMotionMove" Background="{Binding BackColor}" ToolTip="Motion" BorderBrush="Black" BorderThickness="1">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Motion" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -253,7 +252,7 @@
                     </ListViewItem>
 
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[5]}" IsEnabled="{Binding IsEnabledMenu[5]}" Visibility="Visible" x:Name="lvMaint" BorderBrush="Black" BorderThickness="1" ToolTip="Maintenance">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[5], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[5]}" Visibility="Visible" x:Name="lvMaint" BorderBrush="Black" BorderThickness="1" ToolTip="Maintenance">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ScheduledMaintenance" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -262,7 +261,7 @@
                         </Border>
                     </ListViewItem>
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[6]}" IsEnabled="{Binding IsEnabledMenu[6]}" Visibility="Visible" x:Name="lvUtil" BorderBrush="Black" BorderThickness="1" ToolTip="Utility">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[6], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[6]}" Visibility="Visible" x:Name="lvUtil" BorderBrush="Black" BorderThickness="1" ToolTip="Utility">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Settings" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -271,7 +270,7 @@
                         </Border>
                     </ListViewItem>
 
-                    <!--<ListViewItem IsSelected="{Binding IsSelectedMenu[7]}" IsEnabled="{Binding IsEnabledMenu[7]}" Visibility="Visible" x:Name="lvGem" BorderBrush="Black" BorderThickness="1" ToolTip="Gem">
+                    <!--<ListViewItem IsSelected="{Binding IsSelectedMenu[7], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[7]}" Visibility="Visible" x:Name="lvGem" BorderBrush="Black" BorderThickness="1" ToolTip="Gem">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Database" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -280,7 +279,7 @@
                         </Border>
                     </ListViewItem>-->
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[8]}" IsEnabled="{Binding IsEnabledMenu[8]}" Visibility="Visible" x:Name="lvLog" BorderBrush="Black" BorderThickness="1" ToolTip="Log">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[8], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[8]}" Visibility="Visible" x:Name="lvLog" BorderBrush="Black" BorderThickness="1" ToolTip="Log">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="History" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>
@@ -289,7 +288,7 @@
                         </Border>
                     </ListViewItem>
 
-                    <ListViewItem IsSelected="{Binding IsSelectedMenu[9]}" IsEnabled="{Binding IsEnabledMenu[9]}" Visibility="Visible" x:Name="lvAlarm" BorderBrush="Black" BorderThickness="1" ToolTip="Alarm">
+                    <ListViewItem IsSelected="{Binding IsSelectedMenu[9], Mode=TwoWay, UpdateSourceTrigger=Default}" IsEnabled="{Binding IsEnabledMenu[9]}" Visibility="Visible" x:Name="lvAlarm" BorderBrush="Black" BorderThickness="1" ToolTip="Alarm">
                         <Border Background="#8494AB" CornerRadius="10" Width="200" Height="90">
                             <StackPanel>
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Alarm" Width="50" Height="50" Foreground="#565656" Margin="0 5 0 0"/>

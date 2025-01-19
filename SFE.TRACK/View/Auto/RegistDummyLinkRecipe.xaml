@@ -21,7 +21,7 @@
                 <Button Width="150" Margin="20 0 0 0" Command="{Binding RecipeSeletedRelayCommand}" Height="50" BorderThickness="2" Background="LightGray" Content="Recipe" FontSize="18"></Button>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1" Background="Gray">
+        <Grid Grid.Row="1" Background="LightGray">
             <Canvas HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Canvas.Top="7">
                     <Button Width="150" Height="50" FontSize="18" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=RegistDummyLinkRecipeView}" Margin="-250 0 0 0" >OK</Button>

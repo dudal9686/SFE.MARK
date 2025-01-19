@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MachineDefine;
 using SFE.TRACK.Model;
+using System.Windows.Threading;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -20,17 +21,22 @@ namespace SFE.TRACK.ViewModel.Auto
         public RelayCommand StopRelayCommand { get; set; }
         public RelayCommand DummyRecipeRelayCommand { get; set; }
         public RelayCommand RecipeTransferRelayCommand { get; set; }
-
+        public RelayCommand MonitoringRelayCommand { get; set; }
+        public RelayCommand HomeRelayCommand { get; set; }
+        DispatcherTimer timer = new DispatcherTimer();
         public AutoMainViewModel()
         {
             LotStartRelayCommand = new RelayCommand(LotStartCommand);
             JobStartRelayCommand = new RelayCommand(JobStartCommand);
             InitialRelayCommand = new RelayCommand(InitialCommand);
+            HomeRelayCommand = new RelayCommand(HomeCommand);
             StopRelayCommand = new RelayCommand(StopCommand);
             DummyRecipeRelayCommand = new RelayCommand(DummyRecipeCommand);
             RecipeTransferRelayCommand = new RelayCommand(RecipeTransferCommand);
+            MonitoringRelayCommand = new RelayCommand(MonitoringCommand);
+            timer.Tick += Timer_Tick;
+            timer.Interval = TimeSpan.FromMilliseconds(500);
         }
-
         ~AutoMainViewModel()
         { }
 
@@ -81,6 +87,36 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void InitialCommand()
         {
+            if(Global.MessageOpen(enMessageType.OKCANCEL, "Would you like to initialize your equipment?"))
+            {
+                Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
+
+                foreach (ModuleBaseCls moduleBase in Global.STModuleList)
+                {
+
+                    if (!moduleBase.Use || moduleBase.ModuleType == enModuleType.FOUP)
+                    {
+                        moduleBase.HomeSituation = enHomeState.HOME_NONE;
+                        continue; 
+                    }
+                    moduleBase.HomeSituation = enHomeState.HOMMING;
+                    moduleBase.ModuleState = enModuleState.NOTINITIAL;
+                    moduleBase.IsHomeChecked = true;
+                }
+
+                foreach(AxisInfoCls axis in Global.STAxis)
+                {
+                    
+                    axis.HomeSituation = enHomeState.HOMMING; 
+                }
+
+                timer.Start();
+            }
+        }
+        private void HomeCommand()
+        {
+            foreach (ModuleBaseCls moduleBase in Global.STModuleList) moduleBase.IsHomeChecked = false;
             View.Auto.MotorInitail initMotor = new View.Auto.MotorInitail();
             initMotor.Owner = Application.Current.MainWindow;
             initMotor.ShowDialog();
@@ -102,13 +138,17 @@ namespace SFE.TRACK.ViewModel.Auto
             trans.Owner = Application.Current.MainWindow;
             trans.ShowDialog();
         }
+        private void MonitoringCommand()
+        {
+            View.Auto.DataMonitoring dataMonit = new View.Auto.DataMonitoring();
+            dataMonit.ShowDialog();
+        }
         private void DummyRecipeCommand()
         {
             View.Auto.RegistDummyLinkRecipe link = new View.Auto.RegistDummyLinkRecipe();
             link.Owner = Application.Current.MainWindow;
             link.ShowDialog();
         }
-
         private void SendJobData()
         {
             Dictionary<int, string> waferDictionary = new Dictionary<int, string>();
@@ -154,11 +194,49 @@ namespace SFE.TRACK.ViewModel.Auto
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
                 item.SetValue(jobList);
 
-                //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.UnitStatus___SendStart, "", true, 5000);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.UnitStatus___SendStart, "", true, 5000);
             }
 
             jobList.Clear();
             waferDictionary.Clear();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            bool isDone = true;
+            bool isError = false;
+            foreach (ModuleBaseCls moduleBase in Global.STModuleList)
+            {
+                if (moduleBase.ModuleType == enModuleType.FOUP) continue;
+                if(moduleBase.IsHomeChecked && moduleBase.Use)
+                {
+                    foreach(AxisInfoCls axis in Global.STAxis)
+                    {
+                        if(moduleBase.BlockNo == axis.BlockNo && moduleBase.ModuleNo == axis.ModuleNo)
+                        {
+                            Console.WriteLine(axis.ModuleName + "///" + axis.Motor.MyNameInfo.Name);
+                            if (axis.HomeSituation == enHomeState.HOME_ERROR) 
+                                isError = true;
+                            else if(axis.HomeSituation == enHomeState.HOMMING) 
+                                isDone = false;
+                        }
+
+                        if (!isDone) break;
+                    }
+                }
+
+                if (!isDone) break;
+            }
+            if (isDone && !isError)
+            {
+                timer.Stop();
+                MessageBox.Show("Home Success");
+            }
+            else if(isDone && isError)
+            {
+                timer.Stop();
+                MessageBox.Show("Home Error");
+            }
         }
     }
 }

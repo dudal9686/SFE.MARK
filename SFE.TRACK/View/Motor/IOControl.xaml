@@ -8,7 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              DataContext="{Binding IOControlViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
-             d:DesignHeight="880" d:DesignWidth="1574">
+             d:DesignHeight="880" d:DesignWidth="1574" IsVisibleChanged="UserControl_IsVisibleChanged">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.6*"></RowDefinition>
@@ -24,8 +24,8 @@
                 <StackPanel Orientation="Vertical" Margin="0 0 0 0">
                     <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="#8F98AC" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="InfoCircle" Width="30" Height="30" Foreground="PapayaWhip"/>
-                            <TextBlock Text="{Binding IOInfo}" Foreground="White" FontSize="18" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                            <materialDesign:PackIcon Kind="InfoCircle" Width="30" Height="30" Foreground="Navy"/>
+                            <TextBlock Text="{Binding IOInfo}" Foreground="White" FontSize="30" FontWeight="Bold" VerticalAlignment="Center" Margin="10 0 0 0"/>
                         </StackPanel>
                     </materialDesign:ColorZone>
                 </StackPanel>

@@ -32,6 +32,7 @@ namespace SFE.TRACK
         public static List<AIODataCls> STAIOList = new List<AIODataCls>();
 
         public static List<TeachingDataCls> STTeachingData = new List<TeachingDataCls>();
+        public static List<MonitoringDataCls> STMonitoringList = new List<MonitoringDataCls>();
 
         public static ObservableCollection<AlarmLogCls> STAlarmList { get; set; } = new ObservableCollection<AlarmLogCls>();
         public static ObservableCollection<AlarmLogCls> STWarningList { get; set; } = new ObservableCollection<AlarmLogCls>();

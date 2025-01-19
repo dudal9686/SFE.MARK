@@ -55,6 +55,7 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Auto.StopControlViewModel>();
             SimpleIoc.Default.Register<Auto.RecipeTransferViewModel>();
             SimpleIoc.Default.Register<Auto.RegistDummyLinkRecipeViewModel>();
+            SimpleIoc.Default.Register<Auto.DataMonitoringViewModel>();
             SimpleIoc.Default.Register<Gem.GemMainViewModel>();
             SimpleIoc.Default.Register<Log.LogMainViewModel>();
             SimpleIoc.Default.Register<Maint.MaintMainViewModel>();
@@ -63,6 +64,7 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Maint.MaintSupportViewModel>();
             SimpleIoc.Default.Register<Maint.MaintChamberViewModel>();
             SimpleIoc.Default.Register<Maint.SelSupportDateViewModel>();
+            SimpleIoc.Default.Register<Maint.EditMonitoringDataViewModel>();
             SimpleIoc.Default.Register<Motor.MotorMainViewModel>();
             SimpleIoc.Default.Register<Motor.IOControlViewModel>();
             SimpleIoc.Default.Register<Motor.MotorControlViewModel>();
@@ -176,6 +178,10 @@ namespace SFE.TRACK.ViewModel
         public Auto.RegistDummyLinkRecipeViewModel RegistDummyLinkRecipeViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Auto.RegistDummyLinkRecipeViewModel>(); }
+        }
+        public Auto.DataMonitoringViewModel DataMonitoringViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Auto.DataMonitoringViewModel>(); }
         }
         #endregion
 
@@ -320,6 +326,10 @@ namespace SFE.TRACK.ViewModel
         public Maint.SelSupportDateViewModel SelSupportDateViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Maint.SelSupportDateViewModel>(); }
+        }
+        public Maint.EditMonitoringDataViewModel EditMonitoringDataViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Maint.EditMonitoringDataViewModel>(); }
         }
         #endregion
 

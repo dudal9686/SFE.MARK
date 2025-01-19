@@ -77,7 +77,7 @@ namespace SFE.TRACK.Model
             set
             {
                 homeSituation = value;
-                if (homeSituation == enHomeState.HOME_NONE) { HomeState = System.Windows.Media.Brushes.DarkGray; }
+                if (homeSituation == enHomeState.HOME_NONE) { HomeState = System.Windows.Media.Brushes.LightGray; }
                 else if (homeSituation == enHomeState.HOME_OK) { HomeState = System.Windows.Media.Brushes.GreenYellow; }
                 else if (homeSituation == enHomeState.HOMMING) { HomeState = System.Windows.Media.Brushes.Yellow; }
                 else if (homeSituation == enHomeState.HOME_ERROR) { HomeState = System.Windows.Media.Brushes.Red; }

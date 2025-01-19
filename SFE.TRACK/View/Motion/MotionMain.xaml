@@ -8,7 +8,7 @@
              xmlns:ViewModel="clr-namespace:SFE.TRACK.ViewModel.Motion"
              DataContext="{Binding MotionMainViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
-             d:DesignHeight="880" d:DesignWidth="1920">
+             d:DesignHeight="880" d:DesignWidth="1920" IsVisibleChanged="UserControl_IsVisibleChanged">
     <UserControl.Resources>
         <DataTemplate x:Key="CRAMotion" DataType="{x:Type local:MotionCRA}">
             <local:MotionCRA/>

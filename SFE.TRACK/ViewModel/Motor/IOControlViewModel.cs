@@ -47,15 +47,15 @@ namespace SFE.TRACK.ViewModel.Motor
             IOInfo = Global.STMotorIODataMessage.Title;
             if (IOInfo == "ALL")
             {
-                DIList = Global.STDIList;
-                DOList = Global.STDOList;
+                DIList = Global.STDIList.OrderBy(x => x.IONum).ToList();
+                DOList = Global.STDOList.OrderBy(x => x.IONum).ToList();
                 AIList = Global.STAIOList;
             }
             else
             {
-                DIList = Global.STDIList.FindAll(x=>x.Alias == IOInfo);
-                DOList = Global.STDOList.FindAll(x => x.Alias == IOInfo);
-                AIList = Global.STAIOList.FindAll(x => x.Alias == IOInfo);
+                DIList = Global.STDIList.FindAll(x=>x.Alias == IOInfo).OrderBy(x => x.IONum).ToList();
+                DOList = Global.STDOList.FindAll(x => x.Alias == IOInfo).OrderBy(x => x.IONum).ToList();
+                AIList = Global.STAIOList.FindAll(x => x.Alias == IOInfo).ToList();
             }
         }
     }
