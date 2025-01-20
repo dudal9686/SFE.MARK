@@ -52,6 +52,10 @@ namespace SFE.TRACK
         D2_X1 = 36,
         D2_X2 = 37,
 
+        C1_SPIN = 38,
+        D1_SPIN = 39,
+        D2_SPIN = 40,
+
         CB01_Pin = 100,
         CB02_Pin = 101,
         CB03_Pin = 102,

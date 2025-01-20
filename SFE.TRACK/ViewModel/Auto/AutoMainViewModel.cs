@@ -87,39 +87,49 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void InitialCommand()
         {
+            timer.Stop();
             if(Global.MessageOpen(enMessageType.OKCANCEL, "Would you like to initialize your equipment?"))
             {
-                Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
-
                 foreach (ModuleBaseCls moduleBase in Global.STModuleList)
                 {
-
-                    if (!moduleBase.Use || moduleBase.ModuleType == enModuleType.FOUP)
+                    if (!moduleBase.Use || moduleBase.ModuleType == enModuleType.FOUP || moduleBase.MaintMode == enMaintenanceMode.MAINTMODE || moduleBase.MaintMode == enMaintenanceMode.MAINTMODE_USE)
                     {
                         moduleBase.HomeSituation = enHomeState.HOME_NONE;
+                        foreach (AxisInfoCls axis in Global.STAxis)
+                        {
+                            if (moduleBase.BlockNo == axis.BlockNo && moduleBase.ModuleNo == axis.ModuleNo)
+                                axis.HomeSituation = enHomeState.HOME_NONE;
+                        }
                         continue; 
                     }
                     moduleBase.HomeSituation = enHomeState.HOMMING;
                     moduleBase.ModuleState = enModuleState.NOTINITIAL;
                     moduleBase.IsHomeChecked = true;
+
+                    foreach (AxisInfoCls axis in Global.STAxis)
+                    {
+                        if (moduleBase.BlockNo == axis.BlockNo && moduleBase.ModuleNo == axis.ModuleNo)
+                            axis.HomeSituation = enHomeState.HOMMING;
+                    }
                 }
 
-                foreach(AxisInfoCls axis in Global.STAxis)
-                {
-                    
-                    axis.HomeSituation = enHomeState.HOMMING; 
-                }
+                Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
 
                 timer.Start();
             }
         }
         private void HomeCommand()
         {
+            timer.Stop();
             foreach (ModuleBaseCls moduleBase in Global.STModuleList) moduleBase.IsHomeChecked = false;
             View.Auto.MotorInitail initMotor = new View.Auto.MotorInitail();
             initMotor.Owner = Application.Current.MainWindow;
             initMotor.ShowDialog();
+            if (initMotor.DialogResult.HasValue && initMotor.DialogResult.Value)
+            {
+                timer.Start();
+            }
         }
 
         private void StopCommand()
@@ -208,22 +218,34 @@ namespace SFE.TRACK.ViewModel.Auto
             foreach (ModuleBaseCls moduleBase in Global.STModuleList)
             {
                 if (moduleBase.ModuleType == enModuleType.FOUP) continue;
-                if(moduleBase.IsHomeChecked && moduleBase.Use)
+                if (moduleBase.IsHomeChecked && moduleBase.Use)
                 {
-                    foreach(AxisInfoCls axis in Global.STAxis)
+                    if (moduleBase.HomeSituation == enHomeState.HOME_OK) isDone = true;
+                    else if (moduleBase.HomeSituation == enHomeState.HOMMING) isDone = false;
+                    else
                     {
-                        if(moduleBase.BlockNo == axis.BlockNo && moduleBase.ModuleNo == axis.ModuleNo)
-                        {
-                            Console.WriteLine(axis.ModuleName + "///" + axis.Motor.MyNameInfo.Name);
-                            if (axis.HomeSituation == enHomeState.HOME_ERROR) 
-                                isError = true;
-                            else if(axis.HomeSituation == enHomeState.HOMMING) 
-                                isDone = false;
-                        }
-
-                        if (!isDone) break;
+                        isDone = false;
+                        break;
                     }
+
+                    //if (moduleBase.HomeSituation == enHomeState.HOMMING) isDone = false;
+
+                    //foreach (AxisInfoCls axis in Global.STAxis)
+                    //{
+                    //    if (moduleBase.BlockNo == axis.BlockNo && moduleBase.ModuleNo == axis.ModuleNo)
+                    //    {
+
+                    //        Console.WriteLine(axis.ModuleName + "///" + axis.Motor.MyNameInfo.Name);
+                    //        if (axis.HomeSituation == enHomeState.HOME_ERROR)
+                    //            isError = true;
+                    //        else if (axis.HomeSituation == enHomeState.HOMMING)
+                    //            isDone = false;
+                    //    }
+
+                    //    if (!isDone) break;
+                    //}
                 }
+                
 
                 if (!isDone) break;
             }

@@ -131,6 +131,7 @@
     <Compile Include="DB\AccessDBCls.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="IDialog.cs" />
+    <Compile Include="JobDataCheckCls.cs" />
     <Compile Include="Language\LanguageView.xaml.cs">
       <DependentUpon>LanguageView.xaml</DependentUpon>
     </Compile>

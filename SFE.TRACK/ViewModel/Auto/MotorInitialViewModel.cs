@@ -35,7 +35,7 @@ namespace SFE.TRACK.ViewModel.Auto
             AllCheckRelayCommand = new RelayCommand(AllCheckCommand);
 
             ModuleList = Global.STModuleList.FindAll(x => (x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER || x.ModuleType == enModuleType.CRA || x.ModuleType == enModuleType.PRA) && x.Use == true);
-            foreach (ModuleBaseCls module in ModuleList) module.HomeSituation = enHomeState.HOME_NONE;
+            //foreach (ModuleBaseCls module in ModuleList) module.HomeSituation = enHomeState.HOME_NONE;
         }
 
         public int SelectedIndex
@@ -52,11 +52,12 @@ namespace SFE.TRACK.ViewModel.Auto
             {
                 if (!module.IsHomeChecked) continue;
                 message = string.Format("Module:{0},{1},{2}", module.MachineName, module.BlockNo, module.ModuleNo);
-
-                if (module.ModuleNo > 1)
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
-                else
+                module.HomeSituation = enHomeState.HOMMING;
+                module.ModuleState = enModuleState.NOTINITIAL;
+                if (module.ModuleNo == 0)
                     Global.MachineWorker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
+                else
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
             
                 foreach(AxisInfoCls axis in Global.STAxis)
                 {
