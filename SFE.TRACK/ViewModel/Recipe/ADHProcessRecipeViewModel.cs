@@ -177,6 +177,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void AddDetailCommand()
         {
             ADHStepCls stepData = new ADHStepCls();
+            stepData.PinDesc = "Down";
             if (RecipeDetailSelectedIndex < 0) AdhData.StepList.Add(stepData);
             else AdhData.StepList.Insert(RecipeDetailSelectedIndex + 1, stepData);
 
@@ -190,7 +191,9 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            if(Global.STDataAccess.SaveProcessADHRecipe(RecipeFileInfo.FileFullName, AdhData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.ADHProcessCheckCls(AdhData)) return;
+            if (Global.STDataAccess.SaveProcessADHRecipe(RecipeFileInfo.FileFullName, AdhData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()

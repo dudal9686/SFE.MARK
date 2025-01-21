@@ -162,6 +162,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void AddDetailCommand()
         {
             ChamberStepCls stepData = new ChamberStepCls();
+            stepData.PinDesc = "Down";
             if (RecipeDetailSelectedIndex < 0) TcpData.StepList.Add(stepData);
             else TcpData.StepList.Insert(RecipeDetailSelectedIndex + 1, stepData);
 
@@ -175,7 +176,9 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            if(Global.STDataAccess.SaveProcessTCPRecipe(RecipeFileInfo.FileFullName, TcpData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.ChamberProcessCheckCls(TcpData)) return;
+            if (Global.STDataAccess.SaveProcessTCPRecipe(RecipeFileInfo.FileFullName, TcpData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()

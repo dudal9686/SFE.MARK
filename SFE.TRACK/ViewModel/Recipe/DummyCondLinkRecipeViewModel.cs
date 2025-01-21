@@ -171,7 +171,9 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            if(Global.STDataAccess.SaveDummyCondLinkRecipe(RecipeFileInfo.FileFullName, RecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.DmyCondLinkRecipeCheckCls(RecipeData)) return;
+            if (Global.STDataAccess.SaveDummyCondLinkRecipe(RecipeFileInfo.FileFullName, RecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
@@ -206,6 +208,16 @@ namespace SFE.TRACK.ViewModel.Recipe
                 case 1:
                     if(Global.GetModuleOpen("DUMMY", RecipeStep.BlockNo, RecipeStep.ModuleNo))
                     {
+                        for (int i=0; i< RecipeData.StepList.Count; i++)
+                        {
+                            if (RecipeData.StepList[i].BlockNo == Global.STModulePopUp.BlockNo &&
+                                RecipeData.StepList[i].ModuleNo == Global.STModulePopUp.ModuleNo
+                                )
+                            {
+                                Global.MessageOpen(enMessageType.OK, string.Format("No[{0}] : In case of module is duplicated, cannot save.", RecipeStep.Index));
+                                return;
+                            }
+                        }
                         RecipeStep.BlockNo = Global.STModulePopUp.BlockNo;
                         RecipeStep.ModuleNo = Global.STModulePopUp.ModuleNo;
                     }

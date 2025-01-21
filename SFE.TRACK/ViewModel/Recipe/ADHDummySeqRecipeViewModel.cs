@@ -190,7 +190,11 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            if(Global.STDataAccess.SaveDummySeqADHRecipe(RecipeFileInfo.FileFullName, AdhData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.ADHDmySeqRecipeCheckCls(AdhData)) return;
+
+            if (Global.STDataAccess.SaveDummySeqADHRecipe(RecipeFileInfo.FileFullName, AdhData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()

@@ -173,6 +173,8 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.SystemRecipeCheckCls(SystemRecipeData)) return;
             if (Global.STDataAccess.SaveSystemRecipe(RecipeFileInfo.FileFullName, SystemRecipeData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
@@ -223,7 +225,26 @@ namespace SFE.TRACK.ViewModel.Recipe
 
                     if(Global.SystemControlTargetOpen("SYSTEMCONTROL", SystemRecipeStep.ControlTarget, SystemRecipeStep.ModuleNo))
                     {
+                        for (int i = 0; i < SystemRecipeData.StepList.Count; i++)
+                        {
+                            if (SystemRecipeData.StepList[i].ModuleDisplay == SystemRecipeStep.ModuleDisplay &&
+                                SystemRecipeData.StepList[i].ControlTarget == Global.STModulePopUp.ControlTarget
+                                )
+                            {
+                                Global.MessageOpen(enMessageType.OK, string.Format("No[{0}] : In case of controltarget is duplicated, cannot save.", SystemRecipeStep.Index));
+                                return;
+                            }
+                        }
                         SystemRecipeStep.ControlTarget = Global.STModulePopUp.ControlTarget;
+
+                        if (SystemRecipeStep.ControlTarget.IndexOf("Resist") != -1 ||
+                            SystemRecipeStep.ControlTarget.IndexOf("Cup temp") != -1 ||
+                            SystemRecipeStep.ControlTarget.IndexOf("Developer") != -1
+                            )
+                        {
+                            SystemRecipeStep.SetValue = 23.0f;
+                        }
+                        else if (SystemRecipeStep.ControlTarget.IndexOf("humidity") != -1) SystemRecipeStep.SetValue = 45.0f;
                     }
                     break;
                 case 3:

@@ -182,6 +182,9 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void AddDetailCommand()
         {
             DummyConditionStepCls stepData = new DummyConditionStepCls();
+            stepData.Lotspec = 0;
+            stepData.IsCond = false;
+            stepData.Timing = 0;
             if (RecipeDetailSelectedIndex < 0) Recipe.StepList.Add(stepData);
             else Recipe.StepList.Insert(RecipeDetailSelectedIndex + 1, stepData);
 
@@ -195,7 +198,10 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            if(Global.STDataAccess.SaveDummyCondRecipe(RecipeFileInfo.FileFullName, Recipe)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.DmyCondRecipeCheckCls(Recipe)) return;
+
+            if (Global.STDataAccess.SaveDummyCondRecipe(RecipeFileInfo.FileFullName, Recipe)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
@@ -229,6 +235,14 @@ namespace SFE.TRACK.ViewModel.Recipe
                 case 1:
                     if (Global.DispenseInfoOpen(enDispenseModule.DEV, StepRecipe.DispenseNo, "DUMMYUSE", false))
                     {
+                        for (int i = 0; i < Recipe.StepList.Count; i++)
+                        {
+                            if (Recipe.StepList[i].DispenseNo == Global.STDispensePopUp.SelectDispenseValue)
+                            {
+                                Global.MessageOpen(enMessageType.OK, string.Format("No[{0}] : In case of module is duplicated, cannot save.", StepRecipe.Index));
+                                return;
+                            }
+                        }
                         StepRecipe.DispenseNo = Global.STDispensePopUp.SelectDispenseValue;
                         SetRecipeDispense();
                     }

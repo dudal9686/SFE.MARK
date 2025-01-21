@@ -185,6 +185,9 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.WaferFlowCheckCls(Waferdata)) return;
+
             if(Global.STDataAccess.SavePrcessWaferRecipe(RecipeFileInfo.FileFullName, Waferdata))
             {
                 Global.MessageOpen(enMessageType.OK, "It has been saved.");

@@ -169,6 +169,11 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void AddDetailCommand()
         {
             SpinChamberStepCls stepData = new SpinChamberStepCls();
+            stepData.Arm1Pos = "HOME";
+            stepData.Arm2Pos = "HOME";
+            stepData.Arm1Speed = 100;
+            stepData.Arm2Speed = 100;
+
             if (RecipeDetailSelectedIndex < 0) DevData.StepList.Add(stepData);
             else DevData.StepList.Insert(RecipeDetailSelectedIndex + 1, stepData);
 
@@ -182,7 +187,11 @@ namespace SFE.TRACK.ViewModel.Recipe
         private void SaveDetailCommand()
         {
             if (RecipeFileInfo == null) return;
-            if(Global.STDataAccess.SaveProcessDevRecipe(RecipeFileInfo.FileFullName, DevData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
+
+            JobDataCheckCls jobCheck = new JobDataCheckCls();
+            if (!jobCheck.DEVProcessCheckCls(DevData)) return;
+
+            if (Global.STDataAccess.SaveProcessDevRecipe(RecipeFileInfo.FileFullName, DevData)) Global.MessageOpen(enMessageType.OK, "It has been saved.");
         }
 
         private void DeleteDetailCommand()
