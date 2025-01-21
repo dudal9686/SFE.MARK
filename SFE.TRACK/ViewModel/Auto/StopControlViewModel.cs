@@ -26,12 +26,12 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void StopCommand(Window o)
         {
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, "Stop");
+            Global.MachineWorker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Stop");
             o.DialogResult = true;
         }
         private void RecoveryCommand(Window o)
         {
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, "Recovery");
+            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, "RecoveryStop");
             o.DialogResult = true;
         }
         private void CancelCommand(Window o)

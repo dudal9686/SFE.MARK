@@ -198,6 +198,7 @@ namespace SFE.TRACK
     {
         OKCANCEL,
         OK,
+        NONE,
     }
 
     public enum enArmTpe
@@ -353,6 +354,7 @@ namespace SFE.TRACK
         IsNeed, 
         IsDoing, 
         IsDone,
+        IsDoneFail,
     };
 
     public class DefineCls

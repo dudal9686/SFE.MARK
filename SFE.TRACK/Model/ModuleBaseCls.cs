@@ -33,6 +33,7 @@ namespace SFE.TRACK.Model
 
         int blockNo = 0;
         int moduleNo = 0;
+        int unitNo = 0;
 
         bool use = true;
         bool isUseCRA = false; //챔버마다 사용할 암
@@ -94,7 +95,13 @@ namespace SFE.TRACK.Model
         {
             get { return moduleNo; }
             set { moduleNo = value; RaisePropertyChanged("ModuleNo"); }
-        }        
+        }
+        
+        public int UnitNo
+        {
+            get { return unitNo; }
+            set { unitNo = value; }
+        }
 
         public bool Use
         {
