@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using MachineDefine;
 using SFE.TRACK.Model;
 using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -24,6 +25,7 @@ namespace SFE.TRACK.ViewModel.Auto
         public RelayCommand MonitoringRelayCommand { get; set; }
         public RelayCommand HomeRelayCommand { get; set; }
         DispatcherTimer timer = new DispatcherTimer();
+        Stopwatch stopWatch = new Stopwatch();
         public AutoMainViewModel()
         {
             LotStartRelayCommand = new RelayCommand(LotStartCommand);
@@ -115,8 +117,12 @@ namespace SFE.TRACK.ViewModel.Auto
 
                 Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
                 Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
-
+                
+                stopWatch.Stop();
+                stopWatch.Start();
                 timer.Start();
+
+                //Global.MessageOpen(enMessageType.NONE, "Homming...");
             }
         }
         private void HomeCommand()
@@ -128,6 +134,8 @@ namespace SFE.TRACK.ViewModel.Auto
             initMotor.ShowDialog();
             if (initMotor.DialogResult.HasValue && initMotor.DialogResult.Value)
             {
+                stopWatch.Stop();
+                stopWatch.Start();
                 timer.Start();
             }
         }
@@ -204,7 +212,8 @@ namespace SFE.TRACK.ViewModel.Auto
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
                 item.SetValue(jobList);
 
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.UnitStatus___SendStart, "", true, 5000);
+                Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
             }
 
             jobList.Clear();
@@ -218,46 +227,38 @@ namespace SFE.TRACK.ViewModel.Auto
             foreach (ModuleBaseCls moduleBase in Global.STModuleList)
             {
                 if (moduleBase.ModuleType == enModuleType.FOUP) continue;
+
+                if (stopWatch.ElapsedMilliseconds > Global.HOME_TIMEOUT)
+                {
+                    isDone = true;
+                    isError = true;
+                    break;
+                }
+
                 if (moduleBase.IsHomeChecked && moduleBase.Use)
                 {
                     if (moduleBase.HomeSituation == enHomeState.HOME_OK) isDone = true;
                     else if (moduleBase.HomeSituation == enHomeState.HOMMING) isDone = false;
-                    else
-                    {
-                        isDone = false;
-                        break;
-                    }
+                    else if (moduleBase.HomeSituation == enHomeState.HOME_ERROR) isError = true;
 
-                    //if (moduleBase.HomeSituation == enHomeState.HOMMING) isDone = false;
-
-                    //foreach (AxisInfoCls axis in Global.STAxis)
-                    //{
-                    //    if (moduleBase.BlockNo == axis.BlockNo && moduleBase.ModuleNo == axis.ModuleNo)
-                    //    {
-
-                    //        Console.WriteLine(axis.ModuleName + "///" + axis.Motor.MyNameInfo.Name);
-                    //        if (axis.HomeSituation == enHomeState.HOME_ERROR)
-                    //            isError = true;
-                    //        else if (axis.HomeSituation == enHomeState.HOMMING)
-                    //            isDone = false;
-                    //    }
-
-                    //    if (!isDone) break;
-                    //}
+                    if (!isDone) break;
                 }
-                
-
                 if (!isDone) break;
+                
             }
             if (isDone && !isError)
             {
+                stopWatch.Stop();
+                stopWatch.Reset();
                 timer.Stop();
-                MessageBox.Show("Home Success");
+                Global.MessageOpen(enMessageType.OK, "Initialize Success");
             }
             else if(isDone && isError)
             {
+                stopWatch.Stop();
+                stopWatch.Reset();
                 timer.Stop();
-                MessageBox.Show("Home Error");
+                Global.MessageOpen(enMessageType.OK, "Initialize Error");
             }
         }
     }

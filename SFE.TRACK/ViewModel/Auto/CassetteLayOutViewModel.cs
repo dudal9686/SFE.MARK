@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using SFE.TRACK.Model;
+using MachineDefine;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -34,6 +35,8 @@ namespace SFE.TRACK.ViewModel.Auto
 
         public void CassetteScanCommand(string cst)
         {
+            string message = string.Format("Cassette:{0}", cst);
+            Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette___Scan, message);
             Console.WriteLine(cst);
         }
     }

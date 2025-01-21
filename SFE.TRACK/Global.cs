@@ -44,9 +44,12 @@ namespace SFE.TRACK
         public static int MCS_ID = 1;
         public static int CHAMBER_ID = 55;
         public static int MMI_ID = 1000;
+        public static int HOME_TIMEOUT = 90000;
         public static bool IsShutDown = false;
         //Maint Suppot List
         public static List<MaintSupportCls> STMaintSupportList = new List<MaintSupportCls>();
+        //AlarmMessage
+        private static Alarm.AlarmMessage STAlarmMessage = null;
 
         #region Recipe 폴더 리스트 (여러곳에서 사용하기 때문에 한군데 에서만 가져온다.
         public static ObservableCollection<DirFileListCls> WaferFlowRecipeFileList = new ObservableCollection<DirFileListCls>();
@@ -107,24 +110,30 @@ namespace SFE.TRACK
             }
 
             return returnValue;
-        }        
+        }
 
+        
         public static bool MessageOpen(enMessageType msgType, string message)
         {
             bool isReturn = false;
-            Alarm.AlarmMessage alarmMessage = null; ;
+            //Alarm.AlarmMessage alarmMessage = null; ;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                alarmMessage = new Alarm.AlarmMessage();
-                alarmMessage.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+                STAlarmMessage = new Alarm.AlarmMessage();
+                STAlarmMessage.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
                 STMessagePopUp.MessageType = msgType;
                 STMessagePopUp.Message = message;
                 Messenger.Default.Send(STMessagePopUp);
-                alarmMessage.ShowDialog();
-                if (alarmMessage.DialogResult.HasValue && alarmMessage.DialogResult.Value) isReturn = true;
+                STAlarmMessage.ShowDialog();
+                if (STAlarmMessage.DialogResult.HasValue && STAlarmMessage.DialogResult.Value) isReturn = true;
             });
-
+            
             return isReturn;
+        }
+
+        public static void MessageClose()
+        {
+            if (STAlarmMessage != null) CommonServiceLocator.ServiceLocator.Current.GetInstance<AlarmMessageViewModel>().OKCommand((Window)STAlarmMessage);
         }
 
         public static bool KeyBoard(ref string value)

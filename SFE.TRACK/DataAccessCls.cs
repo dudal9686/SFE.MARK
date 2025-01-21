@@ -23,17 +23,15 @@ namespace SFE.TRACK
                 {
                     enModuleType type = (enModuleType)Convert.ToInt32(dt.Rows[i]["MachineType"]);
                     string name = dt.Rows[i]["Name"].ToString();
-                    if (type == enModuleType.CHAMBER)
-                    {
-                        if (name.IndexOf("COT") != -1 || name.IndexOf("DEV") != -1) moduleBase = new SpinChamberCls();
-                        else moduleBase = new ChamberCls();
-                    }
+                    if (type == enModuleType.CHAMBER) moduleBase = new ChamberCls();
+                    else if (type == enModuleType.SPINCHAMBER) moduleBase = new SpinChamberCls();
                     else if (type == enModuleType.FOUP) moduleBase = new FoupCls();
                     else if (type == enModuleType.PRA) moduleBase = new PRARobotCls();
                     else moduleBase = new CRARobotCls();
 
                     moduleBase.BlockNo = Convert.ToInt32(dt.Rows[i]["BlockNo"]);
                     moduleBase.ModuleNo = Convert.ToInt32(dt.Rows[i]["ModuleNo"]);
+                    moduleBase.UnitNo = Convert.ToInt32(dt.Rows[i]["UnitNo"]);
                     moduleBase.ScreenX = Convert.ToInt32(dt.Rows[i]["ScreenX"]);
                     moduleBase.ScreenY = Convert.ToInt32(dt.Rows[i]["ScreenY"]);
                     moduleBase.SizeX = Convert.ToInt32(dt.Rows[i]["SizeX"]);
@@ -117,7 +115,7 @@ namespace SFE.TRACK
                     wafer.Diplay = string.Format("{0}-{1}", wafer.ModuleNo, wafer.Index);
                     wafer.WaferState = enWaferState.WAFER_EMPTY;
 
-                    if(i == 0 || i == 1) wafer.WaferState = enWaferState.WAFER_EXIST;
+                    //if(i == 0 || i == 1) wafer.WaferState = enWaferState.WAFER_EXIST;
                     Global.STWaferList.Add(wafer);
                 }
             }

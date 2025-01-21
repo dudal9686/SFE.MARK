@@ -352,6 +352,7 @@ namespace SFE.TRACK.Model
         private void HomeCommand()
         {
             command = string.Format("Motor:{0}", AxisID);
+            HomeSituation = enHomeState.HOME_NONE;
             if (Company == "SFE_CAN") 
                 Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, command);
             else Motor.DoHomming();
@@ -362,13 +363,14 @@ namespace SFE.TRACK.Model
         {
             command = string.Format("Motor:{0},{1}", AxisID, 1);
             if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
-            else Motor.DoServoOn(!Servo);
+            else Motor.DoServoOn(true);
         }
         private void ServoOffCommand()
         {
+            Servo = false;
             command = string.Format("Motor:{0},{1}", AxisID, 0);
             if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
-            else Motor.DoServoOn(!Servo);
+            else Motor.DoServoOn(false);
         }
         private void EncoderClearCommand()
         {

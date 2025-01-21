@@ -43,7 +43,7 @@ namespace SFE.TRACK.ViewModel
             set { Message_ = value; RaisePropertyChanged("Message"); }
         }
 
-        private void OKCommand(Window window)
+        public void OKCommand(Window window)
         {
             window.DialogResult = true;
         }
@@ -56,7 +56,8 @@ namespace SFE.TRACK.ViewModel
         private void OnReceiveMessageAction(PopUpMessageCls o)
         {
             if (o.MessageType == enMessageType.OK) { OKCANCELVisible = Visibility.Hidden; OKVisible = Visibility.Visible; }
-            else { OKCANCELVisible = Visibility.Visible; OKVisible = Visibility.Hidden; }
+            else if(o.MessageType == enMessageType.OKCANCEL){ OKCANCELVisible = Visibility.Visible; OKVisible = Visibility.Hidden; }
+            else if(o.MessageType == enMessageType.NONE) { OKCANCELVisible = Visibility.Hidden; OKVisible = Visibility.Hidden; }
             Message = o.Message;
         }
     }

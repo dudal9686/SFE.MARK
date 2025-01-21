@@ -67,8 +67,6 @@ namespace SFE.TRACK.ViewModel
                 return;
             }
 
-            //int a = 1;
-
             //for(int i = 0; i < 4; i++)
             //{
             //    int aa = (a << i) & (byte)8;
@@ -85,19 +83,19 @@ namespace SFE.TRACK.ViewModel
             InitJobProcess();
             InitIO();
             
-            FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
-            foup_.IsDetect = true;
-            foup_.IsScan = true;
+            //FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
+            //foup_.IsDetect = true;
+            //foup_.IsScan = true;
 
-            foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
-            foup_.IsDetect = true;
-            foup_.IsScan = true;
+            //foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
+            //foup_.IsDetect = true;
+            //foup_.IsScan = true;
 
-            SpinChamberCls spinUnit = Global.STModuleList.Find(x => x.MachineName == "COT") as SpinChamberCls;
-            spinUnit.ModuleState = enModuleState.PREPROCESS;
-            spinUnit.Wafer = foup_.FoupWaferList[0].Clone();
-            spinUnit.Wafer.WaferState = enWaferState.WAFER_PROCESS;
-            foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
+            //SpinChamberCls spinUnit = Global.STModuleList.Find(x => x.MachineName == "COT") as SpinChamberCls;
+            //spinUnit.ModuleState = enModuleState.PREPROCESS;
+            //spinUnit.Wafer = foup_.FoupWaferList[0].Clone();
+            //spinUnit.Wafer.WaferState = enWaferState.WAFER_PROCESS;
+            //foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
         }
 
         #region MainMenu
@@ -146,7 +144,7 @@ namespace SFE.TRACK.ViewModel
             SetTeachingData();
             Global.STDataAccess.ReadMonitoringData();
             Global.STDataAccess.ReadUserInfo();
-            Global.STDataAccess.ReadMaintSupportData();            
+            Global.STDataAccess.ReadMaintSupportData();
             return true;
         }
         private void SetAxisData()
@@ -503,6 +501,7 @@ namespace SFE.TRACK.ViewModel
             IPCNetClient.DataType dataType = e.DataType;
             string[] arr = null;
             string[] arrParam = null;
+            string packet = string.Empty;
 
             string message = e.LaunchedMessage.GetString();
 
@@ -620,7 +619,7 @@ namespace SFE.TRACK.ViewModel
                         module = Global.GetModule(2, 0);
                         if (arr[2] == enWorkingNeedStep.IsDone.ToString()) eState = enHomeState.HOME_OK;
                         else if (arr[2] == enWorkingNeedStep.IsDoing.ToString()) eState = enHomeState.HOMMING;
-                        else if (arr[2] == enWorkingNeedStep.IsNot.ToString()) eState = enHomeState.HOME_ERROR;
+                        else if (arr[2] == enWorkingNeedStep.IsDoneFail.ToString()) eState = enHomeState.HOME_ERROR;
                         module.HomeSituation = eState;
                         if (eState == enHomeState.HOME_OK) module.ModuleState = enModuleState.STANDBY;
                         else if (eState == enHomeState.HOME_ERROR) module.ModuleState = enModuleState.PROBLEM;
@@ -634,7 +633,7 @@ namespace SFE.TRACK.ViewModel
                         module = Global.GetModule(1, 0);
                         if (arr[2] == enWorkingNeedStep.IsDone.ToString()) eState = enHomeState.HOME_OK;
                         else if (arr[2] == enWorkingNeedStep.IsDoing.ToString()) eState = enHomeState.HOMMING;
-                        else if (arr[2] == enWorkingNeedStep.IsNot.ToString()) eState = enHomeState.HOME_ERROR;
+                        else if (arr[2] == enWorkingNeedStep.IsDoneFail.ToString()) eState = enHomeState.HOME_ERROR;
                         module.HomeSituation = eState;
                         if (eState == enHomeState.HOME_OK) module.ModuleState = enModuleState.STANDBY;
                         else if (eState == enHomeState.HOME_ERROR) module.ModuleState = enModuleState.PROBLEM;
@@ -656,9 +655,9 @@ namespace SFE.TRACK.ViewModel
                 {
                     arr = message.Split(':');
                     enHomeState eState = enHomeState.HOMMING;
-                    if (arr[4] == "IsDone") eState = enHomeState.HOME_OK;
-                    else if (arr[4] == "IsNot") eState = enHomeState.HOME_ERROR;
-                    else if (arr[4] == "IsDoing") eState = enHomeState.HOMMING;
+                    if (arr[4] == enWorkingNeedStep.IsDone.ToString()) eState = enHomeState.HOME_OK;
+                    else if (arr[4] == enWorkingNeedStep.IsDoneFail.ToString()) eState = enHomeState.HOME_ERROR;
+                    else if (arr[4] == enWorkingNeedStep.IsDoing.ToString()) eState = enHomeState.HOMMING;
 
                     if (arr[1] == "Chamber")
                     {
@@ -678,6 +677,42 @@ namespace SFE.TRACK.ViewModel
                                 }
                             }
                         }
+                    }
+                }
+                else if(eValue == EnumCommand_Status.Chamber___OriginMove)
+                {
+                    arr = message.Split(':');
+
+                    foreach(AxisInfoCls axis in Global.STAxis)
+                    {
+                        if(axis.AxisID == arr[1])
+                        {
+                            if (arr[2] == enWorkingNeedStep.IsDone.ToString()) axis.HomeSituation = enHomeState.HOME_OK;
+                            else if (arr[2] == enWorkingNeedStep.IsDoing.ToString()) axis.HomeSituation = enHomeState.HOMMING;
+                            else if (arr[2] == enWorkingNeedStep.IsDoneFail.ToString()) axis.HomeSituation = enHomeState.HOME_ERROR;
+                            break;
+                        }
+                    }
+                }
+                else if(eValue == EnumCommand_Status.Cassette___Scan)
+                {
+                    arr = message.Split(':');
+                    if (arr[2] == enWorkingNeedStep.IsDone.ToString())
+                    {
+                        packet = string.Format("Foup:{0}", arr[1]);
+                        _worker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette___MapData, packet);
+                    }
+                }
+                else if(eValue == EnumCommand_Status.Cassette___MapData)
+                {
+                    arr = message.Split(':');
+                    FoupCls foupCls = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == Convert.ToInt32(arr[1])) as FoupCls;
+                    foupCls.IsDetect = true;
+                    foupCls.IsScan = true;
+                    for(int i = 0; i < arr[2].Length; i++)
+                    {
+                        if (arr[2][i] == '1') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EXIST;
+                        else if (arr[2][i] == '0') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EMPTY;
                     }
                 }
             }
