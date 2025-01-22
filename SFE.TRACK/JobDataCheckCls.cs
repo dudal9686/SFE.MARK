@@ -93,7 +93,8 @@ namespace SFE.TRACK
                     }
                 }
 
-                if (step.Name == "")
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
@@ -159,7 +160,8 @@ namespace SFE.TRACK
                     }
                 }
 
-                if (step.Name == "")
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
@@ -191,7 +193,8 @@ namespace SFE.TRACK
         {
             foreach (ChamberStepCls step in ChamberData.StepList)
             {
-                if (step.Name == "")
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
@@ -230,7 +233,9 @@ namespace SFE.TRACK
                         return false;
                     }
                 }
-                if (step.Name == "")
+
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
@@ -323,6 +328,8 @@ namespace SFE.TRACK
                 }
             }
 
+            nCnt = 0;
+
             foreach (SpinChamberStepCls step in cotData.StepList)
             {
 
@@ -347,7 +354,8 @@ namespace SFE.TRACK
                     */
                 }
 
-                if (step.Name == "")
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
@@ -370,6 +378,14 @@ namespace SFE.TRACK
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of arm2 speed is invalid, cannot save.", step.Index));
                     return false;
                 }
+
+                if (step.Loop != 0) nCnt++;
+            }
+
+            if (nCnt % 2 != 0)
+            {
+                Global.MessageOpen(enMessageType.OK, string.Format("In case of no end to the loop, cannot save."));
+                return false;
             }
 
             return true;
@@ -390,6 +406,8 @@ namespace SFE.TRACK
                     nCnt++;
                 }
             }
+
+            nCnt = 0;
 
             foreach (SpinChamberStepCls step in devData.StepList)
             {
@@ -414,7 +432,8 @@ namespace SFE.TRACK
                     */
                 }
 
-                if (step.Name == "")
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
@@ -437,6 +456,14 @@ namespace SFE.TRACK
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of arm2 speed is invalid, cannot save.", step.Index));
                     return false;
                 }
+
+                if (step.Loop != 0) nCnt++;
+            }
+
+            if (nCnt % 2 != 0)
+            {
+                Global.MessageOpen(enMessageType.OK, string.Format("In case of no end to the loop, cannot save."));
+                return false;
             }
 
             return true;
@@ -467,7 +494,8 @@ namespace SFE.TRACK
                         return false;
                     }
                 }
-                if (step.Name == "")
+                string removeEmpty = step.Name.Replace(" ", string.Empty);
+                if (removeEmpty == "")
                 {
                     Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of name is empty, cannot save.", step.Index));
                     return false;
