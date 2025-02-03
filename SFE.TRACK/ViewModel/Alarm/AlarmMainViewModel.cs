@@ -54,7 +54,7 @@ namespace SFE.TRACK.ViewModel.Alarm
 
         private void BuzzerOffCommand()
         {
-            Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___BuzzerOff, "OFF");
+            Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___BuzzerOff, "OFF");
         }
     }
 }

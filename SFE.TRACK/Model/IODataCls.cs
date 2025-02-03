@@ -120,7 +120,7 @@ namespace SFE.TRACK.Model
         private void IOCommand()
         {
             Console.WriteLine("IO({0}) = {1} ({2})", IOType.ToString(), Name, IONum);
-            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.IO___ManualToggle, string.Format("IO:{0}", Name));
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.IO___ManualToggle, string.Format("IO:{0}", Name));
             else IO.WriteIO(!IO.ReadIO(), null);
         }
     }

@@ -115,7 +115,7 @@ namespace SFE.TRACK
                     wafer.Diplay = string.Format("{0}-{1}", wafer.ModuleNo, wafer.Index);
                     wafer.WaferState = enWaferState.WAFER_EMPTY;
 
-                    //if(i == 0 || i == 1) wafer.WaferState = enWaferState.WAFER_EXIST;
+                    //if(i == 0) wafer.WaferState = enWaferState.WAFER_EXIST;
                     Global.STWaferList.Add(wafer);
                 }
             }

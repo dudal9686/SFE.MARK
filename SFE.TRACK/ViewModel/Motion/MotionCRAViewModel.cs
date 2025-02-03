@@ -52,17 +52,17 @@ namespace SFE.TRACK.ViewModel.Motion
         {
             int cstNo = GetCstNo();
             string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
-            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
+            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
         }
         private void PlaceMotionCommand()
         {
             int cstNo = GetCstNo();
             string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
-            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PlaceManualMove, msg);
+            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PlaceManualMove, msg);
         }
         private void RobotChangeMotionCommand()
         {
-            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___RobotInterFacePosition, "");
+            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___RobotInterFacePosition, "");
         }
         private int GetCstNo()
         {

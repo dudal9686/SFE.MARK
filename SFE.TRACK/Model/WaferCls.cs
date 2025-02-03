@@ -8,7 +8,10 @@ using GalaSoft.MvvmLight.Command;
 using System.Windows;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Messaging;
-
+using DefaultBase;
+using CoreCSBase;
+using CoreCSMac;
+using CoreCSRunSim;
 
 namespace SFE.TRACK.Model
 {
@@ -30,8 +33,17 @@ namespace SFE.TRACK.Model
         int bufferIndex = 0;
         Visibility isWafer = Visibility.Visible;
         System.Windows.Media.SolidColorBrush waferColor = new System.Windows.Media.SolidColorBrush();
-        bool use = true;
 
+        public RecipeInfo[] _RecipeInfos = new RecipeInfo[30];
+        public string _flowRecipeName;
+        public WorkStep _WorkStep = WorkStep.IsNot;
+
+        bool use = true;
+        //public WaferDataArray WaferWorkData { get; set; } = new WaferDataArray(1);
+        public WaferCls()
+        {
+            for (int i = 0; i < 30; i++) _RecipeInfos[i] = new RecipeInfo();
+        }
         public int Index
         {
             get { return index; }
@@ -212,6 +224,31 @@ namespace SFE.TRACK.Model
             wafer_.waferColor = this.WaferColor;
             wafer_.Use = this.Use;
             return wafer_;
+        }
+        
+        public void SetCstWaferState()
+        {
+            bool isProcessEnd = true;
+
+            enWaferState state = enWaferState.WAFER_EMPTY;
+
+            if (IsWafer == Visibility.Visible)
+            {
+                foreach (RecipeInfo recipeInfo in _RecipeInfos)
+                {
+                    if (recipeInfo._Name == string.Empty) continue;
+
+                    if (recipeInfo._WorkStep != WorkStep.IsDoneGood)
+                    {
+                        isProcessEnd = false;
+                        break;
+                    }
+                }
+
+                state = isProcessEnd.Equals(true) ? enWaferState.WAFER_EXIST_PROCESS_END : enWaferState.WAFER_EXIST;
+            }
+
+            WaferState = state;
         }
     }
 }

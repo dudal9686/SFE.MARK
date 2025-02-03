@@ -13,6 +13,7 @@ using System.IO;
 using SFE.TRACK.ViewModel;
 using GalaSoft.MvvmLight.Messaging;
 using CoreCSRunSim;
+using MachineDefine;
 
 namespace SFE.TRACK
 {
@@ -26,7 +27,7 @@ namespace SFE.TRACK
         public static Log.LogCls STLog = new Log.LogCls();
         public static List<AxisInfoCls> STAxis = new List<AxisInfoCls>();
         public static JobInfoCls STJobInfo = new JobInfoCls();
-        
+
         public static List<IODataCls> STDIList = new List<IODataCls>();
         public static List<IODataCls> STDOList = new List<IODataCls>();
         public static List<AIODataCls> STAIOList = new List<AIODataCls>();
@@ -40,8 +41,8 @@ namespace SFE.TRACK
         //RegisterViewMain 에서 단독으로 하려 했으나 ViewModel에서 메모리를 가지고 있기 떄문에 글로벌에서 가지고 있는다.
         public static List<LoginInfoCls> STUserList = new List<LoginInfoCls>();
         public static LoginInfoCls STLoginInfo = new LoginInfoCls(); //로그인 후 권한 설정
-        
-        public static int MCS_ID = 1;
+
+        public static int MCS_ID = 20;
         public static int CHAMBER_ID = 55;
         public static int MMI_ID = 1000;
         public static int HOME_TIMEOUT = 90000;
@@ -82,10 +83,10 @@ namespace SFE.TRACK
             (uint)enDispenseNo.DISPENSE_16, (uint)enDispenseNo.DISPENSE_17, (uint)enDispenseNo.DISPENSE_18, (uint)enDispenseNo.DISPENSE_19, (uint)enDispenseNo.DISPENSE_20,
             (uint)enDispenseNo.DISPENSE_21, (uint)enDispenseNo.DISPENSE_22, (uint)enDispenseNo.DISPENSE_23, (uint)enDispenseNo.DISPENSE_24, (uint)enDispenseNo.DISPENSE_25,
             (uint)enDispenseNo.DISPENSE_26, (uint)enDispenseNo.DISPENSE_27, (uint)enDispenseNo.DISPENSE_28, (uint)enDispenseNo.DISPENSE_29, (uint)enDispenseNo.DISPENSE_30,
-            (uint)enDispenseNo.DISPENSE_31, (uint)enDispenseNo.DISPENSE_32,                                                                  
+            (uint)enDispenseNo.DISPENSE_31, (uint)enDispenseNo.DISPENSE_32,
         };
 
-        
+
 
         #region ViewModelMessage
         public static PopUpModuleTypeCls STModulePopUp = new PopUpModuleTypeCls();
@@ -112,11 +113,11 @@ namespace SFE.TRACK
             return returnValue;
         }
 
-        
+
         public static bool MessageOpen(enMessageType msgType, string message)
         {
             bool isReturn = false;
-            //Alarm.AlarmMessage alarmMessage = null; ;
+            //Alarm.AlarmMessage alarmMessage = null;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 STAlarmMessage = new Alarm.AlarmMessage();
@@ -127,7 +128,7 @@ namespace SFE.TRACK
                 STAlarmMessage.ShowDialog();
                 if (STAlarmMessage.DialogResult.HasValue && STAlarmMessage.DialogResult.Value) isReturn = true;
             });
-            
+
             return isReturn;
         }
 
@@ -230,7 +231,7 @@ namespace SFE.TRACK
             STRecipePopUp.SelectRecipeName = string.Empty;
             View.Recipe.SelectRecipe selRecipe = new View.Recipe.SelectRecipe();
             selRecipe.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
-            Messenger.Default.Send(Global.STRecipePopUp);            
+            Messenger.Default.Send(Global.STRecipePopUp);
             selRecipe.ShowDialog();
             if (selRecipe.DialogResult.HasValue && selRecipe.DialogResult.Value) return true;
             return false;
@@ -274,13 +275,13 @@ namespace SFE.TRACK
             return reValue;
         }
 
-        public static void GetDirectoryFile(string dirPath, ref ObservableCollection<DirFileListCls> list,string extension = ".csv")
+        public static void GetDirectoryFile(string dirPath, ref ObservableCollection<DirFileListCls> list, string extension = ".csv")
         {
             list.Clear();
             DirectoryInfo di = new DirectoryInfo(dirPath);
             if (!di.Exists) di.Create();
             int index = 1;
-            foreach(FileInfo file in di.GetFiles())
+            foreach (FileInfo file in di.GetFiles())
             {
                 if (file.Extension.ToLower().CompareTo(extension.ToLower()) == 0)
                 {
@@ -292,7 +293,7 @@ namespace SFE.TRACK
                     dirfile.FilePath = file.DirectoryName + @"\";
                     list.Add(dirfile);
                 }
-                    
+
             }
         }
 
@@ -301,9 +302,9 @@ namespace SFE.TRACK
         {
             string returnName = string.Empty;
 
-            foreach(ModuleBaseCls module in Global.STModuleList)
+            foreach (ModuleBaseCls module in Global.STModuleList)
             {
-                if(module.MachineFullName == fullName)
+                if (module.MachineFullName == fullName)
                 {
                     returnName = module.MachineName;
                     break;
@@ -327,6 +328,18 @@ namespace SFE.TRACK
             }
 
             return module;
+        }
+
+        public static void SendCommand<TEnumGroup, TEnumItem>(int id, CoreCSBase.IPC.IPCNetClient.DataType dataType, TEnumGroup cmdGroup, TEnumItem cmdItem, string msg, bool isAnswer = false, int timeOut = 5000) where TEnumGroup : struct, Enum where TEnumItem : struct, Enum
+        {
+            MachineWorker.SendCommand(id, dataType, cmdGroup, cmdItem, msg, isAnswer, timeOut);
+            Global.STLog.AddSocketLog(id, "SEND", dataType.ToString(), cmdGroup, cmdItem.ToString(), msg);
+        }
+
+        public static void SendCommand<TEnumGroup, TEnumItem>(CoreCSBase.IPC.IPCNetClient.DataType dataType, TEnumGroup cmdGroup, TEnumItem cmdItem, string msg) where TEnumGroup : struct, Enum where TEnumItem : struct, Enum
+        {
+            MachineWorker.SendCommand(dataType, cmdGroup, cmdItem, msg);
+            Global.STLog.AddSocketLog(-1, "SEND", dataType.ToString(), cmdGroup, cmdItem.ToString(), msg);
         }
     }
 }

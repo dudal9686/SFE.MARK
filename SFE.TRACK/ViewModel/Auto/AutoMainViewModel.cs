@@ -115,8 +115,8 @@ namespace SFE.TRACK.ViewModel.Auto
                     }
                 }
 
-                Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
                 
                 stopWatch.Stop();
                 stopWatch.Start();
@@ -212,8 +212,8 @@ namespace SFE.TRACK.ViewModel.Auto
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
                 item.SetValue(jobList);
 
-                Global.MachineWorker.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                //Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
             }
 
             jobList.Clear();

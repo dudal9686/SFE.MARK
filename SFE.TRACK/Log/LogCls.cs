@@ -6,23 +6,31 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
 using System.Globalization;
+using CoreCSBase;
 
 namespace SFE.TRACK.Log
 {
     public class LogCls
     {
         private object LockObject = new object();
+        private object SocketLockObject = new object();
+        Logger logger = new Logger();
+        public LogCls()
+        {
+            logger = new Logger();
+            logger.SetLogInformation(@"D:\MARK_LOG\UI\SOCKET_LOG\", 1, "UISocket", "", "log");
+        }
         private void SetDirectory(ref string dir)
         {
             DateTime dt = DateTime.Now;
-            dir = @"D:\TRACK_LOG\" + dt.ToString("yyyy") + @"\" + dt.ToString("MM") + @"\" + dt.ToString("dd") + @"\";
+            dir = dir + dt.ToString("yyyy") + @"\" + dt.ToString("MM") + @"\" + dt.ToString("dd") + @"\";
             DirectoryInfo logDir = new DirectoryInfo(dir);
             if (!logDir.Exists) logDir.Create();
         }
 
         public void AddLog(string msg)
         {
-            string directoryPath = string.Empty;
+            string directoryPath = @"D:\MARK_LOG\UI\LOG\";
             string filePath = string.Empty;
             StreamWriter sw = null;
 
@@ -42,7 +50,7 @@ namespace SFE.TRACK.Log
             }
             catch(Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.StackTrace);
+                Console.WriteLine(ex.StackTrace);
             }
             finally
             {
@@ -51,6 +59,16 @@ namespace SFE.TRACK.Log
                 sw.Dispose();
                 Monitor.Exit(LockObject);
             }
+            Thread.Sleep(1);
+        }
+
+        public void AddSocketLog<TEnumGroup>(int id, string type, string msgType, TEnumGroup cmdGroup, string cmdItem, string msg) where TEnumGroup : struct, Enum
+        {
+            Monitor.Enter(SocketLockObject);
+            string strPacket = string.Format("{0}({1}),{2},{3},{4},{5}", type, id, msgType, cmdGroup, cmdItem, msg);
+            logger.WriteLine(strPacket);
+            Monitor.Exit(SocketLockObject);
+            Thread.Sleep(1);
         }
     }
 }

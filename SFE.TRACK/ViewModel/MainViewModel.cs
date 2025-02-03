@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
+using DefaultBase;
 
 namespace SFE.TRACK.ViewModel
 {
@@ -67,11 +68,6 @@ namespace SFE.TRACK.ViewModel
                 return;
             }
 
-            //for(int i = 0; i < 4; i++)
-            //{
-            //    int aa = (a << i) & (byte)8;
-            //}
-
             _worker.EvtCommandLaunched += _worker_EvtCommandLaunched;
             _worker.EvtCommandStatusChanged += _worker_EvtCommandStatusChanged;
             _worker.EvtCommandResultComes += _worker_EvtCommandResultComes;
@@ -82,10 +78,13 @@ namespace SFE.TRACK.ViewModel
             InitData();
             InitJobProcess();
             InitIO();
-            
-            //FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
-            //foup_.IsDetect = true;
-            //foup_.IsScan = true;
+
+            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorDoRequest, string.Format("Motro:FALSE"));
+            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___IODoRequest, string.Format("IO:FALSE"));
+
+            FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
+            foup_.IsDetect = true;
+            foup_.IsScan = true;
 
             //foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
             //foup_.IsDetect = true;
@@ -507,6 +506,8 @@ namespace SFE.TRACK.ViewModel
 
             EnumCommand command = item.GetGroup<EnumCommand>();
 
+            Global.STLog.AddSocketLog(e.FromID, "RECV", dataType.ToString(), command, item.GetEnumName()/* item.MainCmdName + "___" + item.SubCmdName*/, message);
+
             if (command == EnumCommand.Action)
             {
                 EnumCommand_Action eValue = item.GetCommand<EnumCommand_Action>();
@@ -715,6 +716,25 @@ namespace SFE.TRACK.ViewModel
                         else if (arr[2][i] == '0') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EMPTY;
                     }
                 }
+                else if (eValue == EnumCommand_Status.UnitStatus___ChamberState)
+                {
+                    arr = message.Split(':');
+                    ModuleBaseCls module = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+                    if (module == null) return;
+                    module.ModuleState = (enModuleState)Convert.ToInt32(arr[3]);
+                }
+                else if (eValue == EnumCommand_Status.MCS___SerialData)
+                {
+                    List<string> list;
+                    list = Tokenizer.SplitString(message, false, false, "\r\n");
+                    if (AnalyseOwner(list[0], out var typeName, out var name, out var unitID, out var title) == false) return;
+                    if (AnalyseSerialDataType(list[1], out var isAll, out var ownID, out var itemID) == false) return;
+                    if (title.IndexOf("WaferData") == 0)
+                    {
+                        list.RemoveRange(0, 2);
+                        TreatSerialWaferData(typeName, name, unitID, title, ownID, list);
+                    }
+                }
             }
 
             e.SetResult(CommandResult.Success, "done");
@@ -916,6 +936,168 @@ namespace SFE.TRACK.ViewModel
         private void _worker_EvtInfoReloaded(object sender, EventArgs e)
         {
 
+        }
+
+        private bool AnalyseSerialDataType(string message, out bool isAll, out int ownID, out int itemID)
+        {
+            int index = 0;
+            isAll = false;
+            ownID = -1;
+            itemID = -1;
+
+            List<string> list = Tokenizer.SplitString(message, false, false, ":");
+            if (list.Count < 2) return false;
+            if (list[index++] == "ALL") isAll = true;
+            ownID = Convert.ToInt32(list[index++]);
+            if (list.Count > index) itemID = Convert.ToInt32(list[index++]);
+            return true;
+        }
+
+        private void TreatSerialWaferData(NameBase.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList)
+        {
+            List<string> list = Tokenizer.SplitString(title, "_");
+            string middleName = list[1];
+            ModuleBaseCls moduleBase = null;
+            if (typeName == NameBase.TYPE_NAME.ASSY)
+            {
+                if (name == "CRA")
+                {
+                    if (middleName == "Cassette")
+                    {
+                        moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.BlockNo == 1 && x.ModuleNo == (arrayID + 1));
+                    }
+                    else if (middleName == "Robot")
+                    {
+                        moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.CRA);
+                    }
+                }
+                else if (name == "PRA")
+                {
+                    moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.PRA);
+                }
+                else if (name == "IRA")
+                {
+                    return;
+                }
+                else if (name == "Developer")
+                {
+                    moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.SPINCHAMBER && x.ModuleNo == (arrayID + 2));
+                }
+                else if (name == "Coater")
+                {
+                    if (arrayID == 1) return;
+                    moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.SPINCHAMBER && x.ModuleNo == (arrayID + 1));
+                }
+                else if (name == "Chamber")
+                {
+                    if (middleName == "Process")
+                    {
+                        moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.CHAMBER && x.ModuleNo == (arrayID + 5));
+                    }
+                }
+                else if (name == "Interface")
+                {
+                    return;
+                }
+
+                if (moduleBase == null) return;
+
+                foreach (string str in datList)
+                {
+                    SetDataInWaferDataArray(name, middleName, moduleBase, str);
+                }
+            }            
+        }
+
+        private void SetDataInWaferDataArray(string moduleName, string middleName, ModuleBaseCls moduleBase, string strValue)
+        {
+            WaferCls wafer = moduleBase.Wafer;
+            List<string> list = Tokenizer.SplitString(strValue, ",");
+
+            int id = Convert.ToInt32(list[0]);
+            bool exist = false; if (Convert.ToInt32(list[1]) == 1) exist = true;
+            string name = list[6];
+            list.RemoveRange(0, 7);
+
+            if(middleName == "Cassette")
+            {
+                FoupCls foup = (FoupCls)moduleBase;
+                wafer = foup.FoupWaferList[id];
+            }
+
+            if(moduleName == "Chamber")
+            {
+                moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.CHAMBER && x.ModuleNo == (id + 5));
+                wafer = moduleBase.Wafer;
+            }
+
+            wafer.Recipe.Name = name;
+            wafer.IsWafer = exist.Equals(true) ? Visibility.Visible : Visibility.Hidden;
+            
+            for (int i = 0; i < wafer._RecipeInfos.Length; i++) wafer._RecipeInfos[i].Init();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (AnalyseWaferData(list[i], out var recipeID, out var recipeName, out var recipeType, out var recipeStep, out var blockNo, out var moduleNoList) == false) continue;
+                wafer._RecipeInfos[recipeID].SetInfo(recipeName, recipeType, recipeStep, blockNo, moduleNoList);
+            }
+
+            if (middleName == "Cassette")
+            {
+                wafer.SetCstWaferState();
+            }
+            else
+            {
+                if (wafer.IsWafer == Visibility.Visible) moduleBase.SetWaferState();
+                else wafer.WaferState = enWaferState.WAFER_NONE;
+            }
+        }
+
+        private bool AnalyseWaferData(string message, out int recipeID, out string recipeName, out EnumRecipeDetailType recipeType, out WorkStep step, out int blockNo, out List<int> moduleNo)
+        {
+            int index = 0;
+            recipeID = -1;
+            recipeName = "";
+            recipeType = EnumRecipeDetailType.Not;
+            step = WorkStep.IsNot;
+            blockNo = -1;
+            moduleNo = new List<int>();
+            List<string> list = Tokenizer.SplitString(message, false, false, ":");
+            if (list.Count < 6) return false;
+
+            recipeID = Convert.ToInt32(list[index++]);
+            recipeName = list[index++];
+            recipeType = (EnumRecipeDetailType)Convert.ToInt32(list[index++]);
+            step = (WorkStep)Convert.ToInt32(list[index++]);
+            blockNo = Convert.ToInt32(list[index++]);
+
+            list.RemoveRange(0, index);
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                moduleNo.Add(Convert.ToInt32(list[i]));
+            }
+
+
+            return true;
+        }
+
+        protected bool AnalyseOwner(string message, out NameBase.TYPE_NAME typeName, out string name, out int unitID, out string remain)
+        {
+            int index = 0;
+            typeName = NameBase.TYPE_NAME.MACHINE;
+            name = "";
+            unitID = -1;
+            remain = "";
+            List<string> list = Tokenizer.SplitString(message, false, false, ":");
+            if (list.Count < 2) return false;
+            typeName = MachineReader.Instance.GetTypeName(list[index++]);
+            name = list[index++];
+
+            if (list.Count > 2) unitID = Convert.ToInt32(list[index++]);
+            if (list.Count > 3) remain = list[index++];
+
+            return true;
         }
 
         private void SetTeachingData(string group, string name, PrgCfgItem item)

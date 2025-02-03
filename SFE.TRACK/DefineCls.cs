@@ -113,7 +113,7 @@ namespace SFE.TRACK
     public enum enDirection
     {
         CW = 1,
-        CCW = -1
+        CCW = 0,
     };
 
     public enum enMachineUintNo

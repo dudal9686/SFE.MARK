@@ -22,7 +22,7 @@
             </materialDesign:ColorZone>
             <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightGray" Margin="0 50 0 0">
                 <TreeView FontSize="18" FontFamily = "Consolar" Background="White">
-                    <TreeViewItem IsSelected="{Binding IsSupport}" x:Name="lvSupport">
+                    <TreeViewItem IsSelected="{Binding IsChamber}" x:Name="lvSupport">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Heater" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
@@ -30,7 +30,7 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    <TreeViewItem IsSelected="{Binding IsChamber}" x:Name="lvChamber">
+                    <TreeViewItem IsSelected="{Binding IsPRA}" x:Name="lvChamber">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Video3dVariant" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
@@ -38,7 +38,7 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    <TreeViewItem IsSelected="{Binding IsMaint}" x:Name="lvMaint">
+                    <TreeViewItem IsSelected="{Binding IsCRA}" x:Name="lvMaint">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Camera" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>

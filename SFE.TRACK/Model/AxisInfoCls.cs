@@ -11,6 +11,7 @@ using CoreCSRunSim;
 using MachineDefine;
 using SFE.TRACK.ViewModel;
 using MachineDefine;
+using System.Threading;
 
 namespace SFE.TRACK.Model
 {
@@ -85,6 +86,11 @@ namespace SFE.TRACK.Model
             EncoderClearRelayCommand = new RelayCommand(EncoderClearCommand);
             StopRelayCommand = new RelayCommand(StopCommand);
             AlarmResetRelayCommand = new RelayCommand(AlarmResetCommand);
+        }
+
+        ~AxisInfoCls()
+        {
+
         }
 
         public bool IsOwn
@@ -353,8 +359,8 @@ namespace SFE.TRACK.Model
         {
             command = string.Format("Motor:{0}", AxisID);
             HomeSituation = enHomeState.HOME_NONE;
-            if (Company == "SFE_CAN") 
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, command);
+            if (Company == "SFE_CAN")
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, command);
             else Motor.DoHomming();
             HomeSituation = enHomeState.HOMMING;
         }
@@ -362,33 +368,34 @@ namespace SFE.TRACK.Model
         private void ServoCommand()
         {
             command = string.Format("Motor:{0},{1}", AxisID, 1);
-            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
+            if (Company == "SFE_CAN")
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
             else Motor.DoServoOn(true);
         }
         private void ServoOffCommand()
         {
             Servo = false;
             command = string.Format("Motor:{0},{1}", AxisID, 0);
-            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
             else Motor.DoServoOn(false);
         }
         private void EncoderClearCommand()
         {
             command = string.Format("Motor:{0}", AxisID);
-            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___EncoderClear, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___EncoderClear, command);
             else Motor.SetZeroPosition();
         }
         private void StopCommand()
         {
             command = string.Format("Motor:{0}", AxisID);
-            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
             else Motor.StopMove();
             if (IsRepeatMode) IsRepeatMode = false;
         }
         private void AlarmResetCommand()
         {
             command = string.Format("Motor:{0}", AxisID);
-            if (Company == "SFE_CAN") Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoAlarmClear, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoAlarmClear, command);
             else Motor.ClerAlarm();
             Console.WriteLine("AlarmResetCommand");
             System.Threading.Thread.Sleep(300);

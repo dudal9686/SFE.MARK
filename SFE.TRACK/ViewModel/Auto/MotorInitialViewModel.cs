@@ -47,7 +47,7 @@ namespace SFE.TRACK.ViewModel.Auto
         private void OKCommand(Window window)
         {
             string message = string.Empty;
-            //Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, moduleName);
+            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, moduleName);
             foreach (Model.ModuleBaseCls module in ModuleList)
             {
                 if (!module.IsHomeChecked) continue;
@@ -55,9 +55,9 @@ namespace SFE.TRACK.ViewModel.Auto
                 module.HomeSituation = enHomeState.HOMMING;
                 module.ModuleState = enModuleState.NOTINITIAL;
                 if (module.ModuleNo == 0)
-                    Global.MachineWorker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
+                    Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
                 else
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
+                    Global.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
             
                 foreach(AxisInfoCls axis in Global.STAxis)
                 {

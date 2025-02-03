@@ -125,6 +125,7 @@
     <Compile Include="Alarm\AlarmMessage.xaml.cs">
       <DependentUpon>AlarmMessage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assy\WaferData.cs" />
     <Compile Include="DefineCls.cs" />
     <Compile Include="ClockCls.cs" />
     <Compile Include="DataAccessCls.cs" />

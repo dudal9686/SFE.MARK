@@ -10,6 +10,9 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Media;
+using CoreCSRunSim;
+using CoreCSMac;
+using DefaultBase;
 
 namespace SFE.TRACK.Model
 {    
@@ -47,7 +50,6 @@ namespace SFE.TRACK.Model
         WaferCls wafer { get; set; }
 
         public RelayCommand ModuleClickRelayCommand { get; set; }
-
         //public ObservableCollection<DispenseInfoCls> DispenseList { get; set; } = new ObservableCollection<DispenseInfoCls>();
 
         public ModuleBaseCls() 
@@ -268,6 +270,35 @@ namespace SFE.TRACK.Model
             Global.STSelectModuleMessage.BlockNo = BlockNo;
             Global.STSelectModuleMessage.ModuleNo = ModuleNo;
             Messenger.Default.Send(Global.STSelectModuleMessage);
+        }
+
+        public void SetWaferState()
+        {
+            bool isFind = false;
+            RecipeInfo recipeInfo = null;
+            WorkStep workStep = WorkStep.IsNeed;
+
+            for (int i = 0; i < Wafer._RecipeInfos.Length; i++)
+            {
+                recipeInfo = Wafer._RecipeInfos[i];
+                if (isFind)
+                {
+                    if (recipeInfo._Name == string.Empty || recipeInfo._WorkStep == WorkStep.IsNeed) break;
+                }
+                foreach (int modNo in recipeInfo._moudleNoList)
+                {
+                    if (recipeInfo._BlockNo == BlockNo && modNo == ModuleNo)
+                    {
+                        workStep = recipeInfo._WorkStep;
+                        isFind = true;
+                        break;
+                    }
+                }
+            }
+
+            if (workStep == WorkStep.IsNeed) { Wafer.WaferState = enWaferState.WAFER_PROCESS_NORMAL; ModuleState = enModuleState.STANDBY; }
+            else if (workStep == WorkStep.IsDoing) { Wafer.WaferState = enWaferState.WAFER_PROCESS; ModuleState = enModuleState.PREPROCESS; }
+            else if (workStep == WorkStep.IsDoneGood) { Wafer.WaferState = enWaferState.WAFER_PROCESS_END; ModuleState = enModuleState.STANDBY; }
         }
     }
 }
