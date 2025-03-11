@@ -68,6 +68,7 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Motor.MotorMainViewModel>();
             SimpleIoc.Default.Register<Motor.IOControlViewModel>();
             SimpleIoc.Default.Register<Motor.MotorControlViewModel>();
+            SimpleIoc.Default.Register<Motor.ChamberControlViewModel>();
             SimpleIoc.Default.Register<Param.ParamMainViewModel>();
             SimpleIoc.Default.Register<Util.UtilMainViewModel>();
             SimpleIoc.Default.Register<Util.DispenseConfigViewModel>();
@@ -345,6 +346,11 @@ namespace SFE.TRACK.ViewModel
         public Motor.MotorControlViewModel MotorControlViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Motor.MotorControlViewModel>(); }
+        }
+
+        public Motor.ChamberControlViewModel ChamberControlViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Motor.ChamberControlViewModel>(); }
         }
         #endregion
 

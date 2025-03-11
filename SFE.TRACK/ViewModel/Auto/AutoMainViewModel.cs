@@ -44,6 +44,7 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void LotStartCommand()
         {
+            if (Global.STMachineStatus == enMachineStatus.RUN || Global.STMachineStatus == enMachineStatus.STOPING) return;
             bool isStart = false;
             View.Auto.LotStart lotStart = new View.Auto.LotStart();
             lotStart.Owner = Application.Current.MainWindow;
@@ -74,6 +75,8 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void JobStartCommand()
         {
+            if (Global.STMachineStatus == enMachineStatus.RUN || Global.STMachineStatus == enMachineStatus.STOPING) return;
+
             Global.STJobInfo.Clear();
             foreach (WaferCls wafer in Global.STWaferList) wafer.Recipe.Name = string.Empty;
             
@@ -105,7 +108,7 @@ namespace SFE.TRACK.ViewModel.Auto
                         continue; 
                     }
                     moduleBase.HomeSituation = enHomeState.HOMMING;
-                    moduleBase.ModuleState = enModuleState.NOTINITIAL;
+                    moduleBase.ModuleState = enModuleState.HOMMING;
                     moduleBase.IsHomeChecked = true;
 
                     foreach (AxisInfoCls axis in Global.STAxis)
@@ -114,7 +117,7 @@ namespace SFE.TRACK.ViewModel.Auto
                             axis.HomeSituation = enHomeState.HOMMING;
                     }
                 }
-
+                Global.STMachineStatus = enMachineStatus.HOME;
                 Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
                 
@@ -125,6 +128,8 @@ namespace SFE.TRACK.ViewModel.Auto
                 //Global.MessageOpen(enMessageType.NONE, "Homming...");
             }
         }
+        
+        //View.Auto.MotorInitail initMotor = null;
         private void HomeCommand()
         {
             timer.Stop();
@@ -142,6 +147,8 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void StopCommand()
         {
+            if (Global.STMachineStatus == enMachineStatus.STOPING || Global.STMachineStatus == enMachineStatus.STOP) return;
+
             View.Auto.StopControl stopView = new View.Auto.StopControl();
             stopView.Owner = Application.Current.MainWindow;
             stopView.ShowDialog();
@@ -212,8 +219,9 @@ namespace SFE.TRACK.ViewModel.Auto
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
                 item.SetValue(jobList);
 
-                //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
-                //Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                Global.STMachineStatus = enMachineStatus.RUN;
             }
 
             jobList.Clear();
@@ -252,6 +260,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 stopWatch.Reset();
                 timer.Stop();
                 Global.MessageOpen(enMessageType.OK, "Initialize Success");
+                Global.STMachineStatus = enMachineStatus.STOP;
             }
             else if(isDone && isError)
             {
@@ -259,6 +268,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 stopWatch.Reset();
                 timer.Stop();
                 Global.MessageOpen(enMessageType.OK, "Initialize Error");
+                Global.STMachineStatus = enMachineStatus.STOP;
             }
         }
     }

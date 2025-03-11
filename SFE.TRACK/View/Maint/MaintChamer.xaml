@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              DataContext="{Binding MaintChamberViewModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
-             d:DesignHeight="880" d:DesignWidth="1574">
+             d:DesignHeight="880" d:DesignWidth="1574" IsVisibleChanged="UserControl_IsVisibleChanged">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3.5*"/>
@@ -146,7 +146,7 @@
                                 <TextBlock Text="PV" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                             <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="23" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding ModuleInfo.ProcessValue}" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                         </StackPanel>
                     </Border>
@@ -159,7 +159,7 @@
                                 <TextBlock Text="SV" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                             <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="27.5" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding ModuleInfo.SetValue}" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center">
                                     <TextBlock.InputBindings>
                                         <MouseBinding Command="{Binding TempRelayCommand}" MouseAction="LeftClick" />
                                     </TextBlock.InputBindings>
@@ -167,7 +167,7 @@
                             </materialDesign:ColorZone>
                         </StackPanel>
                     </Border>
-                    <Border BorderBrush="DimGray" BorderThickness="0.1">
+                    <!--<Border BorderBrush="DimGray" BorderThickness="0.1">
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
                             <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
                                 <TextBlock Text="3" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
@@ -179,33 +179,21 @@
                                 <TextBlock Text="RUN" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                         </StackPanel>
-                    </Border>
+                    </Border>-->
                     <Border BorderBrush="DimGray" BorderThickness="0.1" >
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
                             <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="4" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
+                                <TextBlock Text="3" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                             <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
                                 <TextBlock Text="Pin Position" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                             <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="24.3" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding AxisInfo.ActualPosition}" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
                             </materialDesign:ColorZone>
                         </StackPanel>
                     </Border>
-                    <Border BorderBrush="DimGray" BorderThickness="0.1" >
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
-                            <materialDesign:ColorZone Width="100" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="5" FontSize="16" HorizontalAlignment="Center" Foreground="Blue"  VerticalAlignment="Center"/>
-                            </materialDesign:ColorZone>
-                            <materialDesign:ColorZone Width="300" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="Pin State" FontSize="16" HorizontalAlignment="Center" FontWeight="Regular" Foreground="Black"  VerticalAlignment="Center"/>
-                            </materialDesign:ColorZone>
-                            <materialDesign:ColorZone Width="500" Mode="Custom" Padding="7" CornerRadius="1"  Margin="1">
-                                <TextBlock Text="Up" FontSize="16" HorizontalAlignment="Center" Foreground="Black" VerticalAlignment="Center"/>
-                            </materialDesign:ColorZone>
-                        </StackPanel>
-                    </Border>
+                    
                 </StackPanel>
             </GroupBox>
         </Grid>

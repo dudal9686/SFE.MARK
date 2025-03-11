@@ -15,6 +15,9 @@
         <DataTemplate x:Key="MotorControl" DataType="{x:Type local:MotorControl}">
             <local:MotorControl/>
         </DataTemplate>
+        <DataTemplate x:Key="ChamberControl" DataType="{x:Type local:ChamberControl}">
+            <local:ChamberControl/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -58,12 +61,30 @@
             <ContentControl Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource MotorControl}"/>
-                            <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsScreenChange}" Value="False">
+                        <!--<Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvMaint}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource MaintenanceMode}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvRegist}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource UserRegist}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvSupport}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource MaintSupport}"/>
+                            </DataTrigger>
+                        </Style.Triggers>-->
+                        
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsIO}" Value="True">
                                     <Setter Property="ContentTemplate" Value="{StaticResource IOControl}"/>
                             </DataTrigger>
-                            </Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChamber}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ChamberControl}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsMotor}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource MotorControl}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        
                     </Style>
                 </ContentControl.Style>
             </ContentControl>

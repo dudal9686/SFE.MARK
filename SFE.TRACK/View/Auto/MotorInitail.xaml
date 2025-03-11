@@ -26,7 +26,7 @@
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Info" Foreground="Navy" Width="20" Height="40" VerticalAlignment="Center"/>
                         <TextBlock Text="Home" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
-                        <Button Command="{Binding AllCheckRelayCommand}" ToolTip="New" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="400 0 0 0">
+                        <Button Command="{Binding AllCheckRelayCommand}" ToolTip="New" Visibility="{Binding IsVisible}" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="400 0 0 0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="CheckAll" Foreground="DarkBlue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
@@ -101,13 +101,13 @@
         </Grid>
         <Grid Grid.Row="1" Background="LightGray">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Width="200" Height="55" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=MotorInitalView}">
+                <Button Width="200" Height="55" Command="{Binding OKRelayCommand}" CommandParameter="{Binding ElementName=MotorInitalView}" Visibility="{Binding IsVisible}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="SucessOutline" Foreground="DarkBlue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <TextBlock Text="OK" FontSize="25" Margin="10 5 0 0"/>
                     </StackPanel>
                 </Button>
-                <Button Width="200" Height="55" Margin="20 0 0 0" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=MotorInitalView}">
+                <Button Width="200" Height="55" Margin="20 0 0 0" Command="{Binding CancelRelayCommand}" CommandParameter="{Binding ElementName=MotorInitalView}" Visibility="{Binding IsVisible}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Cancel"  Foreground="Red" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <TextBlock Text="Cancel" FontSize="25" Margin="10 5 0 0"/>

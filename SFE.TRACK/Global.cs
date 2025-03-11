@@ -47,10 +47,11 @@ namespace SFE.TRACK
         public static int MMI_ID = 1000;
         public static int HOME_TIMEOUT = 90000;
         public static bool IsShutDown = false;
+        public static enMachineStatus STMachineStatus = enMachineStatus.STOP;
         //Maint Suppot List
         public static List<MaintSupportCls> STMaintSupportList = new List<MaintSupportCls>();
         //AlarmMessage
-        private static Alarm.AlarmMessage STAlarmMessage = null;
+        //private static Alarm.AlarmMessage STAlarmMessage = null;
 
         #region Recipe 폴더 리스트 (여러곳에서 사용하기 때문에 한군데 에서만 가져온다.
         public static ObservableCollection<DirFileListCls> WaferFlowRecipeFileList = new ObservableCollection<DirFileListCls>();
@@ -117,24 +118,41 @@ namespace SFE.TRACK
         public static bool MessageOpen(enMessageType msgType, string message)
         {
             bool isReturn = false;
-            //Alarm.AlarmMessage alarmMessage = null;
+            Alarm.AlarmMessage alarmMessage = null;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                STAlarmMessage = new Alarm.AlarmMessage();
-                STAlarmMessage.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+                alarmMessage = new Alarm.AlarmMessage();
+                alarmMessage.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
                 STMessagePopUp.MessageType = msgType;
                 STMessagePopUp.Message = message;
                 Messenger.Default.Send(STMessagePopUp);
-                STAlarmMessage.ShowDialog();
-                if (STAlarmMessage.DialogResult.HasValue && STAlarmMessage.DialogResult.Value) isReturn = true;
+                alarmMessage.ShowDialog();
+                if (alarmMessage.DialogResult.HasValue && alarmMessage.DialogResult.Value) isReturn = true;
             });
 
             return isReturn;
         }
 
-        public static void MessageClose()
+        static Alarm.ManualMessage manualView;
+        public static void ManualMessageOpen()
         {
-            if (STAlarmMessage != null) CommonServiceLocator.ServiceLocator.Current.GetInstance<AlarmMessageViewModel>().OKCommand((Window)STAlarmMessage);
+            if (manualView != null) return;
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                manualView = new Alarm.ManualMessage();
+                manualView.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+                manualView.ShowDialog();
+            });
+        }
+
+        public static void ManualMessageClose()
+        {
+            if (manualView == null) return;
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                manualView.CloseDialog();
+                manualView = null;
+            });
         }
 
         public static bool KeyBoard(ref string value)
@@ -260,10 +278,10 @@ namespace SFE.TRACK
             return false;
         }
 
-        public static float KeyPad(float value = 0)
+        public static float KeyPad(float value = 0, float maxVal = 100000, float minVal = -100000)
         {
             float reValue = value;
-            Pad.KeyPad keyPad = new Pad.KeyPad(value);
+            Pad.KeyPad keyPad = new Pad.KeyPad(value, maxVal, minVal);
             keyPad.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
             keyPad.ShowDialog();
 

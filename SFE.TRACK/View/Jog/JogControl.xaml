@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         x:Name="JogTeach"
         WindowStyle="None"
-        Title="PRA-X1" Height="450" Width="600">
+        Title="PRA-X1" Height="450" Width="600" IsVisibleChanged="JogTeach_IsVisibleChanged">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -25,7 +25,7 @@
                     <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="MidnightBlue" Foreground="White" Padding="7" CornerRadius="1"  ClipToBounds="False">
                         <StackPanel Orientation="Horizontal" Margin="180 0 0 0">
                             <TextBlock Text="Current Position : " FontWeight="Bold"  VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18"></TextBlock>
-                            <TextBlock Text="{Binding Axis.ActualPosition, StringFormat={}{0:F2}}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold"></TextBlock>
+                            <TextBox Text="{Binding Axis.ActualPosition, Mode=TwoWay, UpdateSourceTrigger=Default, StringFormat={}{0:F3}}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold" IsReadOnly="True"></TextBox>
                         </StackPanel>
                     </materialDesign:ColorZone>
                 </StackPanel>

@@ -14,11 +14,22 @@ namespace SFE.TRACK.Log
     {
         private object LockObject = new object();
         private object SocketLockObject = new object();
-        Logger logger = new Logger();
+        private object AlarmLockObject = new object();
+        Logger socketLogger = new Logger();
+        Logger alarmLogger = new Logger();
         public LogCls()
         {
-            logger = new Logger();
-            logger.SetLogInformation(@"D:\MARK_LOG\UI\SOCKET_LOG\", 1, "UISocket", "", "log");
+            socketLogger = new Logger();
+            DirectoryInfo directoryInfo = new DirectoryInfo(@"D:\MARK_LOG\UI\SOCKET_LOG\");
+            if (!directoryInfo.Exists) directoryInfo.Create();
+            socketLogger.Initialize(@"D:\MARK_LOG\UI\SOCKET_LOG\", "log", 1, "UISocket", "");
+            socketLogger.SetAutoDelete(30);
+
+            alarmLogger = new Logger();
+            directoryInfo = new DirectoryInfo(@"D:\MARK_LOG\UI\ALARM_LOG\");
+            if (!directoryInfo.Exists) directoryInfo.Create();
+            alarmLogger.Initialize(@"D:\MARK_LOG\UI\ALARM_LOG\", "log", 1, "Alarm", "");
+            alarmLogger.SetAutoDelete(30);
         }
         private void SetDirectory(ref string dir)
         {
@@ -66,9 +77,16 @@ namespace SFE.TRACK.Log
         {
             Monitor.Enter(SocketLockObject);
             string strPacket = string.Format("{0}({1}),{2},{3},{4},{5}", type, id, msgType, cmdGroup, cmdItem, msg);
-            logger.WriteLine(strPacket);
+            socketLogger.WriteLine(strPacket);
             Monitor.Exit(SocketLockObject);
             Thread.Sleep(1);
+        }
+
+        public void AddAlarmLog(string packet)
+        {
+            Monitor.Enter(AlarmLockObject);
+            alarmLogger.WriteLine(packet);
+            Monitor.Exit(AlarmLockObject);
         }
     }
 }

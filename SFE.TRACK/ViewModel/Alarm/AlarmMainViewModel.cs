@@ -42,14 +42,28 @@ namespace SFE.TRACK.ViewModel.Alarm
 
         private void ClearAlarmCommand()
         {
-            Global.STAlarmList.Clear();
-            CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
+            if(AlarmSelectedItem != null)
+            {
+                Global.MachineWorker.SendCommand(AlarmSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Alarm, EnumCommand_Alarm.Request___AlarmClear, AlarmSelectedItem.Code);
+                Global.STAlarmList.Remove(AlarmSelectedItem);
+                if (Global.STAlarmList.Count == 0)
+                    CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
+
+                if (Global.STAlarmList.Count > 0) AlarmSelectedIndex = 0;
+            }
         }
 
         private void ClearWarningCommand()
         {
-            if (WarningSelectedItem == null) return;
-            Global.STAlarmList.Clear();
+            if (WarningSelectedItem != null)
+            {
+                Global.MachineWorker.SendCommand(WarningSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Warning, EnumCommand_Warning.Send___Clear, WarningSelectedItem.Message);
+                Global.STWarningList.Remove(WarningSelectedItem);
+                if (Global.STWarningList.Count == 0)
+                    CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearWarning();
+
+                if (Global.STWaferList.Count > 0) WarningSelectedIndex = 0;
+            }
         }
 
         private void BuzzerOffCommand()

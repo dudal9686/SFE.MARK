@@ -22,27 +22,78 @@
             </materialDesign:ColorZone>
             <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightGray" Margin="0 50 0 0">
                 <TreeView FontSize="18" FontFamily = "Consolar" Background="White">
-                    <TreeViewItem IsSelected="{Binding IsChamber}" x:Name="lvSupport">
+                    <TreeViewItem IsSelected="{Binding IsChamberSocket}" x:Name="lvChamber">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Heater" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="AirConditioning" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="Chamber" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsChamberSocket}" x:Name="lvChamberSocket">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Socket" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsChamberProcess}" x:Name="lvChamberProcess">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Process" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem IsSelected="{Binding IsPRA}" x:Name="lvChamber">
+
+                    <TreeViewItem IsSelected="{Binding IsRobotSocket}" x:Name="lvRobot">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Video3dVariant" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
-                                <Label Content="PRA" Margin="0 10"></Label>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ChartDonutVariant" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Robot" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsRobotSocket}" x:Name="lvRobotSocket">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Socket" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem IsSelected="{Binding IsRobotProcess}" x:Name="lvRobotProcess">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Process" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem IsSelected="{Binding IsCRA}" x:Name="lvMaint">
+
+                    <TreeViewItem IsSelected="{Binding IsUISocket}" x:Name="lvUI">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Camera" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
-                                <Label Content="CRA" Margin="0 10"></Label>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ChartTree" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="UI" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem IsSelected="{Binding IsUISocket}" x:Name="lvUISocket">
+                            <TreeViewItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                    <Label Content="Socket" Margin="0 10"></Label>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        
+                    </TreeViewItem>
+                    <TreeViewItem IsSelected="{Binding IsUIAlarm}" x:Name="lvUIAlarm">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="AlarmCheck" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Alarm" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
@@ -68,7 +119,7 @@
 
                     <Border BorderBrush="LightGray" BorderThickness="1" Height="810">
                         <StackPanel Orientation="Vertical" Margin="0 5 0 0">
-                            <DataGrid  x:Name="DataGridAlarm" Height="800" SelectedIndex="{Binding SelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False">
+                            <DataGrid  x:Name="DataGrid" ItemsSource="{Binding LogList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="800" SelectedIndex="{Binding SelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"  AutoGenerateColumns="False">
                                 <DataGrid.Resources>
 
                                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -79,8 +130,8 @@
                                     </Style>
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Date" Foreground="Black" Width="250" Binding="{Binding}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Display" Foreground="Black" Width="700" Binding="{Binding}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Date" Foreground="Black" Width="300" Binding="{Binding Time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Display" Foreground="Black" Width="1245" Binding="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>

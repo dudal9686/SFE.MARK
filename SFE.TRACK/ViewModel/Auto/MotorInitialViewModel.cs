@@ -25,6 +25,7 @@ namespace SFE.TRACK.ViewModel.Auto
         public List<ModuleBaseCls> ModuleList { get; set; }
         int selectedIndex = 0;
         bool check = false;
+        Visibility isVisible = Visibility.Visible;
 
         public MotorInitialViewModel()
         {
@@ -53,7 +54,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 if (!module.IsHomeChecked) continue;
                 message = string.Format("Module:{0},{1},{2}", module.MachineName, module.BlockNo, module.ModuleNo);
                 module.HomeSituation = enHomeState.HOMMING;
-                module.ModuleState = enModuleState.NOTINITIAL;
+                module.ModuleState = enModuleState.HOMMING;
                 if (module.ModuleNo == 0)
                     Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, message, true);
                 else
@@ -64,8 +65,19 @@ namespace SFE.TRACK.ViewModel.Auto
                     if (module.BlockNo == axis.BlockNo && module.ModuleNo == axis.ModuleNo) axis.HomeSituation = enHomeState.HOME_NONE;
                 }
             }
-
+            Global.STMachineStatus = enMachineStatus.HOME;
             window.DialogResult = true;
+        }
+
+        public Visibility IsVisible
+        {
+            get { return isVisible; }
+            set { isVisible = value; RaisePropertyChanged("IsVisible"); }
+        }
+
+        public void Close(Window window)
+        {
+            window.DialogResult = false;
         }
 
         private void CancelCommand(Window window)

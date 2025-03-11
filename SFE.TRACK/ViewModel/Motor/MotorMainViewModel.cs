@@ -16,7 +16,9 @@ namespace SFE.TRACK.ViewModel.Motor
         MotorIODisplayCls mainData;
         MotorIODisplayDetailCls subData;
         List<string> titlelist = new List<string>();
-        bool isScreenChange = true;
+        bool isMotor = true;
+        bool isIO = false;
+        bool isChamber = false;
         public MotorMainViewModel()
         {
             Messenger.Default.Register<MotorIOMessageCls>(this, OnReceiveMessageAction);
@@ -26,6 +28,7 @@ namespace SFE.TRACK.ViewModel.Motor
 
             foreach(AxisInfoCls axis in Global.STAxis)
             {
+                if (axis.AxisID.IndexOf("_Pin") != -1) continue;
                 subData = new MotorIODisplayDetailCls();
                 subData.SubTitle = axis.AxisID.Replace("_", "-");
                 subData.AxisType = (enAxisType)axis.AxisNo;
@@ -38,10 +41,10 @@ namespace SFE.TRACK.ViewModel.Motor
             mainData = new MotorIODisplayCls();
             mainData.MainTitle = "IO";
 
-            subData = new MotorIODisplayDetailCls();
-            subData.SubTitle = "ALL";
-            subData.AxisType = enAxisType.NONE;
-            mainData.MenuList.Add(subData);
+            //subData = new MotorIODisplayDetailCls();
+            //subData.SubTitle = "ALL";
+            //subData.AxisType = enAxisType.NONE;
+            //mainData.MenuList.Add(subData);
 
             foreach (IODataCls io in Global.STDIList)
             {
@@ -57,13 +60,26 @@ namespace SFE.TRACK.ViewModel.Motor
 
             titlelist.Clear();
             MainList.Add(mainData);
+            //----------------------------------------------------------------
+            mainData = new MotorIODisplayCls();
+            mainData.MainTitle = "Chamber";
+            foreach (AxisInfoCls axis in Global.STAxis)
+            {
+                if (axis.AxisID.IndexOf("_Pin") == -1) continue;
+                subData = new MotorIODisplayDetailCls();
+                subData.SubTitle = axis.AxisID.Replace("_", "-");
+                subData.AxisType = enAxisType.CHAMBER;
+                mainData.MenuList.Add(subData);
+            }
+
+            MainList.Add(mainData);
             #endregion
 
         }
 
         ~MotorMainViewModel()
         {
-            Messenger.Default.Register<MotorIOMessageCls>(this, OnReceiveMessageAction);
+            Messenger.Default.Unregister<MotorIOMessageCls>(this, OnReceiveMessageAction);
         }
 
         public List<MotorIODisplayCls> MainList
@@ -89,22 +105,43 @@ namespace SFE.TRACK.ViewModel.Motor
 
         private void OnReceiveMessageAction(MotorIOMessageCls o)
         {
-            if (o.AxisType != enAxisType.NONE)
+            if (o.AxisType == enAxisType.CHAMBER)
+            {   
+                IsIO = false;
+                IsMotor = false;
+                IsChamber = true;
+                CommonServiceLocator.ServiceLocator.Current.GetInstance<Motor.ChamberControlViewModel>().SetDisplay();
+            }
+            else if (o.AxisType == enAxisType.NONE)
             {
-                IsScreenChange = true;
-                CommonServiceLocator.ServiceLocator.Current.GetInstance<Motor.MotorControlViewModel>().SetDisplay();
+                IsChamber = false;                
+                IsMotor = false;
+                IsIO = true;
+                CommonServiceLocator.ServiceLocator.Current.GetInstance<Motor.IOControlViewModel>().SetDisplay();
             }
             else
             {
-                IsScreenChange = false;
-                CommonServiceLocator.ServiceLocator.Current.GetInstance<Motor.IOControlViewModel>().SetDisplay();
+                IsChamber = false;
+                IsIO = false;
+                IsMotor = true;
+                CommonServiceLocator.ServiceLocator.Current.GetInstance<Motor.MotorControlViewModel>().SetDisplay();
             }
         }
 
-        public bool IsScreenChange
+        public bool IsMotor
         {
-            get { return isScreenChange; }
-            set { isScreenChange = value; RaisePropertyChanged("IsScreenChange"); }
+            get { return isMotor; }
+            set { isMotor = value; RaisePropertyChanged("IsMotor"); }
+        }
+        public bool IsChamber
+        {
+            get { return isChamber; }
+            set { isChamber = value; RaisePropertyChanged("IsChamber"); }
+        }
+        public bool IsIO
+        {
+            get { return isIO; }
+            set { isIO = value; RaisePropertyChanged("IsIO"); }
         }
     }
 

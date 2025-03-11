@@ -46,11 +46,11 @@
                                 <materialDesign:ColorZone Width="100" Height="20" Mode="Custom" Background="Gray" Padding="6" CornerRadius="3"  Margin="10 2 0 10"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="2">
-                                <TextBlock Width="140" Text="OPERATING" HorizontalAlignment="Center" Foreground="Black" FontWeight="Bold" FontSize="15" VerticalAlignment="Top"/>
+                                <TextBlock Width="140" Text="HOMMING" HorizontalAlignment="Center" Foreground="Black" FontWeight="Bold" FontSize="15" VerticalAlignment="Top"/>
                                 <materialDesign:ColorZone Width="100" Height="20" Mode="Custom" Background="AntiqueWhite" BorderThickness="1" Padding="6" CornerRadius="3"  Margin="10 2 0 10"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="2">
-                                <TextBlock Width="140" Text="PREPROCESS" HorizontalAlignment="Center" Foreground="Black" FontWeight="Bold" FontSize="15" VerticalAlignment="Top"/>
+                                <TextBlock Width="140" Text="PROCESS" HorizontalAlignment="Center" Foreground="Black" FontWeight="Bold" FontSize="15" VerticalAlignment="Top"/>
                                 <materialDesign:ColorZone Width="100" Height="20" Mode="Custom" Background="Green" Padding="6" CornerRadius="3"  Margin="10 2 0 10"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="2">

@@ -32,7 +32,7 @@ namespace SFE.TRACK.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public RelayCommand ShutDownRelayCommand  { get; set; }
+        public RelayCommand ShutDownRelayCommand { get; set; }
         public RelayCommand LoginRelayCommand { get; set; }
         public RelayCommand LanguageRelayCommand { get; set; }
         ObservableCollection<bool> isEnabledMenu { get; set; }
@@ -46,7 +46,10 @@ namespace SFE.TRACK.ViewModel
         List<UnitCustom> CustomUnitList = null;
 
         System.Windows.Media.SolidColorBrush TitleColor_ = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
+        System.Windows.Media.SolidColorBrush ChamberConnectColor_ = Brushes.Red;
+        System.Windows.Media.SolidColorBrush RobotConnectColor_ = Brushes.Red;
         MachineReaderWorker _worker;
+        DispatcherTimer timer = new DispatcherTimer();
         public bool IsMotorState = false;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -79,12 +82,26 @@ namespace SFE.TRACK.ViewModel
             InitJobProcess();
             InitIO();
 
-            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorDoRequest, string.Format("Motro:FALSE"));
+            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorDoRequest, string.Format("Motor:FALSE"));
             Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___IODoRequest, string.Format("IO:FALSE"));
 
-            FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
-            foup_.IsDetect = true;
-            foup_.IsScan = true;
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.RecipeTransperInfo);
+            prgItem.GetValue(out string recipename);
+            Properties.Settings.Default.RECIPE_TRANSFER = recipename;
+            Properties.Settings.Default.Save();
+
+            prgItem = _worker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.DummyLinkRecipeInfo);
+            prgItem.GetValue(out string dummyLinkRecipeName);
+            Properties.Settings.Default.DUMMY_COND = dummyLinkRecipeName;
+            Properties.Settings.Default.Save();
+
+            timer.Tick += Timer_Tick; ;
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Start();
+
+            //FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
+            //foup_.IsDetect = true;
+            //foup_.IsScan = true;
 
             //foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
             //foup_.IsDetect = true;
@@ -95,6 +112,26 @@ namespace SFE.TRACK.ViewModel
             //spinUnit.Wafer = foup_.FoupWaferList[0].Clone();
             //spinUnit.Wafer.WaferState = enWaferState.WAFER_PROCESS;
             //foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if(Global.STMachineStatus == enMachineStatus.RUN)
+            {
+                IsEnabledMenu[(int)enMainMenu.MAINT] = false;
+                IsEnabledMenu[(int)enMainMenu.MOTOR] = false;
+                IsEnabledMenu[(int)enMainMenu.PARAMETER] = false;
+                IsEnabledMenu[(int)enMainMenu.MOTIONMOVING] = false;
+                IsEnabledMenu[(int)enMainMenu.MAINT] = false;
+            }
+            else if(Global.STMachineStatus == enMachineStatus.STOP)
+            {
+                IsEnabledMenu[(int)enMainMenu.MAINT] = true;
+                IsEnabledMenu[(int)enMainMenu.MOTOR] = true;
+                IsEnabledMenu[(int)enMainMenu.PARAMETER] = true;
+                IsEnabledMenu[(int)enMainMenu.MOTIONMOVING] = true;
+                IsEnabledMenu[(int)enMainMenu.MAINT] = true;
+            }
         }
 
         #region MainMenu
@@ -112,14 +149,14 @@ namespace SFE.TRACK.ViewModel
         {
             get { return TitleColor_; }
             set { TitleColor_ = value; RaisePropertyChanged("TitleColor"); }
-        }        
+        }
         #endregion
 
         private void InitJobProcess()
         {
             Global.STJobInfo.Clear();
 
-            for(int i = 0; i < 10; i++) Global.STJobInfo.LotInfoList.Add(new LotInfoCls());
+            for (int i = 0; i < 10; i++) Global.STJobInfo.LotInfoList.Add(new LotInfoCls());
         }
 
         private bool InitData()
@@ -179,7 +216,7 @@ namespace SFE.TRACK.ViewModel
             foreach (AxisInfoCls axis in Global.STAxis)
             {
                 string parentType = axis.Parent;
-                
+
                 MotorInfo motorInfo = (MotorInfo)axis.Motor.MyNameInfo;
                 List<string> motorTeachingList = motorInfo.Teaching; //어레이가 있는지 아는 리스트 '(' 로 구분
                 //List<Teaching> motorTechingArrayContainList = motor.GetTeachingPositionList();
@@ -192,7 +229,7 @@ namespace SFE.TRACK.ViewModel
                     }
                     else
                     {
-                        TeachingDataCls teachingData = new TeachingDataCls();                        
+                        TeachingDataCls teachingData = new TeachingDataCls();
                         teachingData.IsArray = false;
                         teachingData.TeachingName = motorTeachingList[i];
                         if (parentType == "PRA")
@@ -206,18 +243,18 @@ namespace SFE.TRACK.ViewModel
                         {
                             teachingData.MainTitle = "CRA";
                             teachingData.BlockNo = 1;
-                            if (motorTeachingList[i].IndexOf("CST1") != -1) 
+                            if (motorTeachingList[i].IndexOf("CST1") != -1)
                                 teachingData.ModuleNo = 1;
-                            else if (motorTeachingList[i].IndexOf("CST2") != -1) 
+                            else if (motorTeachingList[i].IndexOf("CST2") != -1)
                                 teachingData.ModuleNo = 2;
-                            else if (motorTeachingList[i].IndexOf("CST3") != -1) 
+                            else if (motorTeachingList[i].IndexOf("CST3") != -1)
                                 teachingData.ModuleNo = 3;
-                            else if (motorTeachingList[i].IndexOf("CST4") != -1) 
+                            else if (motorTeachingList[i].IndexOf("CST4") != -1)
                                 teachingData.ModuleNo = 4;
                             else teachingData.ModuleNo = 0;
 
                             teachingData.IsOwn = true;
-                            
+
                         }
                         else //ADH, Chamber, Coater, Developer
                         {
@@ -229,22 +266,22 @@ namespace SFE.TRACK.ViewModel
                         teachingData.Motor = axis.Motor;
                         Global.STTeachingData.Add(teachingData);
                     }
-                }                
+                }
             }
         }
 
         private void SetTeachingArray(AxisInfoCls axis, string name)
         {
             List<ModuleBaseCls> list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER);
-            
-            foreach(ModuleBaseCls module in list)
+
+            foreach (ModuleBaseCls module in list)
             {
                 TeachingDataCls data = new TeachingDataCls();
                 data.MainTitle = "CHAMBER";
                 data.ModuleNo = module.ModuleNo;
                 data.IsArray = true;
                 data.TeachingName = name.Substring(0, name.IndexOf("("));
-                data.Motor = axis.Motor;            
+                data.Motor = axis.Motor;
                 data.IsOwn = true;
                 Global.STTeachingData.Add(data);
             }
@@ -262,10 +299,11 @@ namespace SFE.TRACK.ViewModel
             string[] arr;
             int moduleNo = 0;
             ModuleBaseCls module;
-            IODataCls data;            
-            foreach(UnitIO io in DIList)
+            string parentType = string.Empty;
+            IODataCls data;
+            foreach (UnitIO io in DIList)
             {
-                data = new IODataCls();                
+                data = new IODataCls();
                 arr = io.MyNameInfo.Information.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 data.IO = io;
                 data.BlockNo = 2;
@@ -274,28 +312,30 @@ namespace SFE.TRACK.ViewModel
                 data.Company = ioInfo.TrdParty;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = false;
-                
-                if (io.MyNameInfo.Alias == "CRA" || io.MyNameInfo.Alias == "PRA")
+                parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
+
+                if (parentType == "CRA" || parentType == "PRA")
                 {
-                    if(io.MyNameInfo.Alias == "CRA") data.BlockNo = 1;
+                    if (io.MyNameInfo.Alias == "CRA") data.BlockNo = 1;
                     data.ModuleNo = 1;
-                    data.BoardNo = Convert.ToInt32(arr[arr.Length - 2]);
-                    data.ChannelNo = Convert.ToInt32(arr[arr.Length - 1]);
-                }
-                else if (io.MyNameInfo.Alias == "PRA")
-                {
-                    data.ModuleNo = 1;
-                    data.BoardNo = Convert.ToInt32(arr[arr.Length - 2]);
-                    data.ChannelNo = Convert.ToInt32(arr[arr.Length - 1]);
+                    data.BoardNo = 0;// Convert.ToInt32(arr[arr.Length - 2]);
+                    data.ChannelNo = Convert.ToInt32(arr[arr.Length - 2]);
+                    data.IONum = data.ChannelNo * 32 + Convert.ToInt32(arr[arr.Length - 1]);
                 }
                 else
                 {
                     moduleNo = Convert.ToInt32(arr[arr.Length - 1]);
                     module = Global.GetModule(data.BlockNo, moduleNo);
+                    data.ModuleNo = moduleNo;
                     data.BoardType = arr[0];
+
                     if (data.BoardType == "SIO") data.IONum = ((Convert.ToInt32(arr[2]) - 128) * 64) + Convert.ToInt32(arr[3]);
                     else data.IONum = ((Convert.ToInt32(arr[2]) - 272) * 64) + Convert.ToInt32(arr[3]);
-                    data.Alias = string.Format("{0}[{1}-{2}]", module.MachineName, data.BlockNo, moduleNo);
+
+                    if (data.BoardType == "MINI") data.IOIndex = Convert.ToInt32(arr[3]);
+
+                    if (parentType == "ChemicalBox") data.Alias = string.Format("{0}", parentType);
+                    else data.Alias = string.Format("{0}[{1}-{2}]", module.MachineName, data.BlockNo, moduleNo);
                 }
 
                 Global.STDIList.Add(data);
@@ -307,6 +347,7 @@ namespace SFE.TRACK.ViewModel
             string[] arr;
             int moduleNo = 0;
             ModuleBaseCls module;
+            string parentType = string.Empty;
             IODataCls data;
             foreach (UnitIO io in DOList)
             {
@@ -314,33 +355,35 @@ namespace SFE.TRACK.ViewModel
                 arr = io.MyNameInfo.Information.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 data.IO = io;
                 data.BlockNo = 2;
-                data.IOType = enIOType.DO;                
+                data.IOType = enIOType.DO;
                 IOInfo ioInfo = (IOInfo)io.MyNameInfo;
                 data.Company = ioInfo.TrdParty;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = true;
+                parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
 
-                if (io.MyNameInfo.Alias == "CRA" || io.MyNameInfo.Alias == "PRA")
+                if (parentType == "CRA" || parentType == "PRA")
                 {
                     if (io.MyNameInfo.Alias == "CRA") data.BlockNo = 1;
                     data.ModuleNo = 1;
-                    data.BoardNo = Convert.ToInt32(arr[arr.Length - 2]);
-                    data.ChannelNo = Convert.ToInt32(arr[arr.Length - 1]);
-                }
-                else if (io.MyNameInfo.Alias == "PRA")
-                {
-                    data.ModuleNo = 1;
-                    data.BoardNo = Convert.ToInt32(arr[arr.Length - 2]);
-                    data.ChannelNo = Convert.ToInt32(arr[arr.Length - 1]);
+                    data.BoardNo = 0;//Convert.ToInt32(arr[arr.Length - 2]);
+                    data.ChannelNo = Convert.ToInt32(arr[arr.Length - 2]);
+                    data.IONum = data.ChannelNo * 32 + Convert.ToInt32(arr[arr.Length - 1]);
                 }
                 else
                 {
                     moduleNo = Convert.ToInt32(arr[arr.Length - 1]);
                     module = Global.GetModule(data.BlockNo, moduleNo);
+                    data.ModuleNo = moduleNo;
                     data.BoardType = arr[0];
-                    if(data.BoardType == "SIO") data.IONum = ((Convert.ToInt32(arr[2]) - 128) * 64) + Convert.ToInt32(arr[3]);
+
+                    if (data.BoardType == "SIO") data.IONum = ((Convert.ToInt32(arr[2]) - 128) * 64) + Convert.ToInt32(arr[3]);
                     else data.IONum = ((Convert.ToInt32(arr[2]) - 272) * 64) + Convert.ToInt32(arr[3]);
-                    data.Alias = string.Format("{0}[{1}-{2}]", module.MachineName, data.BlockNo, moduleNo);
+
+                    if (data.BoardType == "MINI") data.IOIndex = Convert.ToInt32(arr[3]);
+
+                    if (parentType == "ChemicalBox") data.Alias = string.Format("{0}", parentType);
+                    else data.Alias = string.Format("{0}[{1}-{2}]", module.MachineName, data.BlockNo, moduleNo);
                 }
 
                 Global.STDOList.Add(data);
@@ -388,7 +431,7 @@ namespace SFE.TRACK.ViewModel
 
         public void SetAlarm()
         {
-            for(int i = 0; i < IsSelectedMenu.Count; i++)
+            for (int i = 0; i < IsSelectedMenu.Count; i++)
             {
                 if (i == (int)enMainMenu.ALARM) IsSelectedMenu[i] = true;
                 else IsSelectedMenu[i] = false;
@@ -397,10 +440,22 @@ namespace SFE.TRACK.ViewModel
         }
         public void ClearAlarm(string code = "")
         {
-            //_worker.Controller.ClearAlarm(null);
             if (Global.STAlarmList.Count == 0)
             {
                 TitleColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
+                if (Global.STWarningList.Count != 0) TitleColor = System.Windows.Media.Brushes.Khaki;
+            }
+        }
+        public void SetWarning()
+        {
+            if (Global.STAlarmList.Count == 0) TitleColor = System.Windows.Media.Brushes.Khaki;
+        }
+        public void ClearWarning()
+        {
+            if (Global.STWarningList.Count == 0)
+            {
+                TitleColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
+                if (Global.STAlarmList.Count != 0) TitleColor = System.Windows.Media.Brushes.Red;
             }
         }
         private void SetRecipeFileList()
@@ -434,7 +489,7 @@ namespace SFE.TRACK.ViewModel
             //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");
             //IsEnabledMenu[(int)enMainMenu.RECIPE] = false;
             #endregion
-            
+
             if (Global.STLoginInfo.ID != string.Empty)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to log out?"))
@@ -465,9 +520,10 @@ namespace SFE.TRACK.ViewModel
 
         private void Controller_EvtAlarmOccured(object sender, LibEvtArgs e)
         {
+            EvtCommandLaunch launch = (EvtCommandLaunch)sender;  
             if (e.m_Params.Length == 0) // alarm cleared
             {
-                //_worker.Controller.ClearAlarm();
+                //_worker.Controller.   ();
             }
             else // alarm occured
             {
@@ -483,14 +539,16 @@ namespace SFE.TRACK.ViewModel
                 alarm.Owner = owner;
                 alarm.Message = fullMsg;
                 alarm.Help = item.Action;
+                alarm.Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                alarm.SendID = launch.FromID;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     Global.STAlarmList.Add(alarm);
+                    Global.STLog.AddAlarmLog(string.Format("{0}({1}){2}", alarm.Code, alarm.SendID, alarm.Message));
                 });
-                SetAlarm();
 
-                //Global.MessageOpen(enMessageType.OK, "Thread Dialog Suceess");
-            }             
+                SetAlarm();
+            }
         }
 
         private void _worker_EvtCommandLaunched(object sender, EvtCommandLaunch e)
@@ -515,10 +573,23 @@ namespace SFE.TRACK.ViewModel
                 {
 
                 }
-                else if(eValue == EnumCommand_Action.StatusChange___ServoOn)
+                else if (eValue == EnumCommand_Action.StatusChange___ServoOn)
                 {
 
-                }             
+                }
+                else if(eValue == EnumCommand_Action.ChamberManual___DoManual)
+                {
+                    arr = message.Split(':');
+
+                    if(arr[1].ToUpper().Trim() == "TRUE")
+                    {
+                        Global.ManualMessageOpen();
+                    }
+                    else
+                    {
+                        Global.ManualMessageClose();
+                    }
+                }
             }
             else if (command == EnumCommand.Alarm)
             {
@@ -527,6 +598,18 @@ namespace SFE.TRACK.ViewModel
             else if (command == EnumCommand.Warning)
             {
                 EnumCommand_Warning eValue = item.GetCommand<EnumCommand_Warning>();
+                if (eValue == EnumCommand_Warning.Send___Set)
+                {
+                    AlarmLogCls alarm = new AlarmLogCls();
+                    alarm.Message = message;
+                    alarm.Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    alarm.SendID = Global.CHAMBER_ID;
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Global.STWarningList.Add(alarm);
+                    });
+                    SetWarning();
+                }
             }
             else if (command == EnumCommand.Config)
             {
@@ -540,17 +623,17 @@ namespace SFE.TRACK.ViewModel
             {
                 EnumCommand_Status eValue = item.GetCommand<EnumCommand_Status>();
 
-                if(eValue == EnumCommand_Status.UnitStatus___SendStart)
+                if (eValue == EnumCommand_Status.UnitStatus___SendStart)
                 {
 
                 }
-                else if(eValue == EnumCommand_Status.UnitStatus___SendStop)
+                else if (eValue == EnumCommand_Status.UnitStatus___SendStop)
                 {
 
                 }
-                else if(eValue == EnumCommand_Status.MCS___LotStatus)
+                else if (eValue == EnumCommand_Status.MCS___LotStatus)
                 {
-                    
+
                 }
                 else if (eValue == EnumCommand_Status.UnitStatus___MotorState)
                 {
@@ -588,6 +671,7 @@ namespace SFE.TRACK.ViewModel
                     for (int i = 0; i < arInPutIO.Count; i++)
                     {
                         IODataCls ioData = arInPutIO[i];
+                        if (ioData.BoardType == "MINI") continue;
                         value = Convert.ToByte(arr[1][ioData.IONum / 4].ToString(), 16);
                         bit = ioData.IONum % 4;
                         ioData.State = ((value << (bit)) & 0x8) == 0x8;
@@ -605,17 +689,51 @@ namespace SFE.TRACK.ViewModel
                     for (int i = 0; i < arOutPutIO.Count; i++)
                     {
                         IODataCls ioData = arOutPutIO[i];
+                        if (ioData.BoardType == "MINI") continue;
                         value = Convert.ToByte(arr[1][ioData.IONum / 4].ToString(), 16);
                         bit = ioData.IONum % 4;
                         ioData.State = ((value << (bit)) & 0x8) == 0x8;
                     }
                 }
-                else if(eValue == EnumCommand_Status.MCS___InitStep)
+                else if (eValue == EnumCommand_Status.UnitStatus___MiniBoardIOState)
+                {
+                    arr = message.Split(':');
+
+                    //IODataCls ioData = null;
+                    int value = 0;
+                    for (int i = 0; i < arr[0].Length; i++)//DO
+                    {
+                        value = Convert.ToByte(arr[0][i].ToString(), 16);
+                        //for (int j = 0; j < 3; j++)
+                        {
+                            IODataCls data = Global.STDOList.Find(x => x.BoardType == "MINI" && x.IOIndex == 0 && x.ModuleNo == 5 + i);
+                            if (data == null) continue;
+
+                            data.State = ((value >> (0)) & 0x1) == 0x1;
+                        }
+                    }
+
+                    for (int i = 0; i < arr[1].Length; i++)//DI
+                    {
+                        value = Convert.ToByte(arr[1][i].ToString(), 16);
+                        //IODataCls data = Global.STDIList.Find(x => x.BoardType == "MINI" && x.IOIndex == 0 && x.ModuleNo == 5 + i);
+                        //if (data == null) continue;
+                        for (int j = 0; j < 3; j++)
+                        {
+                            IODataCls data = Global.STDIList.Find(x => x.BoardType == "MINI" && x.IOIndex == j && x.ModuleNo == 5 + i);
+                            if (data == null) continue;
+
+                            data.State = ((value >> (j)) & 0x1) == 0x1;
+                        }
+                        //ioData.State = (value & 0x1) == 0x1;
+                    }
+                }
+                else if (eValue == EnumCommand_Status.MCS___InitStep)
                 {
                     arr = message.Split(':');
                     ModuleBaseCls module = null;
                     enHomeState eState = enHomeState.HOME_NONE;
-                    if(arr[1] == "PRB")
+                    if (arr[1] == "PRB")
                     {
                         module = Global.GetModule(2, 0);
                         if (arr[2] == enWorkingNeedStep.IsDone.ToString()) eState = enHomeState.HOME_OK;
@@ -629,7 +747,7 @@ namespace SFE.TRACK.ViewModel
                             if (axis.Parent == "PRA") axis.HomeSituation = eState;
                         }
                     }
-                    else if(arr[1] == "CSB")
+                    else if (arr[1] == "CSB")
                     {
                         module = Global.GetModule(1, 0);
                         if (arr[2] == enWorkingNeedStep.IsDone.ToString()) eState = enHomeState.HOME_OK;
@@ -643,7 +761,7 @@ namespace SFE.TRACK.ViewModel
                             if (axis.Parent == "CRA") axis.HomeSituation = eState;
                         }
                     }
-                    else if(arr[1] == "IFB")
+                    else if (arr[1] == "IFB")
                     {
 
                     }
@@ -664,11 +782,11 @@ namespace SFE.TRACK.ViewModel
                     {
                         int block = Convert.ToInt32(arr[2]);
                         int module = Convert.ToInt32(arr[3]);
-                        ModuleBaseCls modulebase = Global.GetModule(block, module); 
-                        if(modulebase != null)
+                        ModuleBaseCls modulebase = Global.GetModule(block, module);
+                        if (modulebase != null)
                         {
                             if (!modulebase.Use) return;
-                            if(arr[4] == "IsDone")
+                            if (arr[4] == "IsDone")
                             {
                                 modulebase.HomeSituation = eState;
                                 modulebase.ModuleState = enModuleState.STANDBY;
@@ -680,13 +798,13 @@ namespace SFE.TRACK.ViewModel
                         }
                     }
                 }
-                else if(eValue == EnumCommand_Status.Chamber___OriginMove)
+                else if (eValue == EnumCommand_Status.Chamber___OriginMove)
                 {
                     arr = message.Split(':');
 
-                    foreach(AxisInfoCls axis in Global.STAxis)
+                    foreach (AxisInfoCls axis in Global.STAxis)
                     {
-                        if(axis.AxisID == arr[1])
+                        if (axis.AxisID == arr[1])
                         {
                             if (arr[2] == enWorkingNeedStep.IsDone.ToString()) axis.HomeSituation = enHomeState.HOME_OK;
                             else if (arr[2] == enWorkingNeedStep.IsDoing.ToString()) axis.HomeSituation = enHomeState.HOMMING;
@@ -695,7 +813,7 @@ namespace SFE.TRACK.ViewModel
                         }
                     }
                 }
-                else if(eValue == EnumCommand_Status.Cassette___Scan)
+                else if (eValue == EnumCommand_Status.Cassette___Scan)
                 {
                     arr = message.Split(':');
                     if (arr[2] == enWorkingNeedStep.IsDone.ToString())
@@ -704,13 +822,13 @@ namespace SFE.TRACK.ViewModel
                         _worker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette___MapData, packet);
                     }
                 }
-                else if(eValue == EnumCommand_Status.Cassette___MapData)
+                else if (eValue == EnumCommand_Status.Cassette___MapData)
                 {
                     arr = message.Split(':');
                     FoupCls foupCls = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == Convert.ToInt32(arr[1])) as FoupCls;
                     foupCls.IsDetect = true;
                     foupCls.IsScan = true;
-                    for(int i = 0; i < arr[2].Length; i++)
+                    for (int i = 0; i < arr[2].Length; i++)
                     {
                         if (arr[2][i] == '1') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EXIST;
                         else if (arr[2][i] == '0') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EMPTY;
@@ -721,6 +839,7 @@ namespace SFE.TRACK.ViewModel
                     arr = message.Split(':');
                     ModuleBaseCls module = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
                     if (module == null) return;
+                    if (!module.Use) return;
                     module.ModuleState = (enModuleState)Convert.ToInt32(arr[3]);
                 }
                 else if (eValue == EnumCommand_Status.MCS___SerialData)
@@ -735,6 +854,36 @@ namespace SFE.TRACK.ViewModel
                         TreatSerialWaferData(typeName, name, unitID, title, ownID, list);
                     }
                 }
+                else if (eValue == EnumCommand_Status.UnitStatus___MiniBoardState)
+                {
+                    arr = message.Split(':');
+
+                    ChamberCls chamber = (ChamberCls)Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+
+                    AxisInfoCls axis = Global.STAxis.Find(x => x.BlockNo == Convert.ToInt32(arr[1]) && x.ModuleNo == Convert.ToInt32(arr[2]) && x.AxisID.ToUpper().IndexOf("_PIN") != -1);
+
+                    if (chamber == null || axis == null) return;
+
+                    chamber.ProcessValue = Convert.ToSingle(arr[3]);
+                    chamber.SetValue = Convert.ToSingle(arr[4]);
+                    if (Convert.ToInt32(arr[5]) == 1) axis.InMotion = true;
+                    else axis.InMotion = false;
+
+                    if (Convert.ToInt32(arr[6]) == 1) axis.MinusLimit = true;
+                    else axis.MinusLimit = false;
+
+                    if (Convert.ToInt32(arr[7]) == 1) axis.PlusLimit = true;
+                    else axis.PlusLimit = false;
+
+                    if (Convert.ToInt32(arr[8]) == 1) axis.HomeSituation = enHomeState.HOME_OK;
+                    else axis.HomeSituation = enHomeState.HOME_NONE;
+
+                    axis.ActualPosition = Convert.ToInt32(arr[9]);
+                }
+                else if (eValue == EnumCommand_Status.DATA___ChamberMonitoringData)
+                {
+                    //여기에 모니터링 데이터를 넣어준다.
+                }
             }
 
             e.SetResult(CommandResult.Success, "done");
@@ -748,20 +897,20 @@ namespace SFE.TRACK.ViewModel
             CommandResult result = e.Result;
             string resultString = e.ResultString;
 
-            if(item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.Move___EncoderPos.ToString())
+            if (item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.Move___EncoderPos.ToString())
             {
                 groupArr = resultString.Split(':');
                 commandArr = groupArr[1].Split(',');
-                foreach(AxisInfoCls info in Global.STAxis)
+                foreach (AxisInfoCls info in Global.STAxis)
                 {
-                    if(info.AxisID == commandArr[0])
+                    if (info.AxisID == commandArr[0])
                     {
                         info.ActualPosition = Convert.ToDouble(commandArr[1]);
                         break;
                     }
                 }
             }
-            
+
         }
 
         private void _worker_EvtCommandStatusChanged(object sender, EvtCommandStatus e)
@@ -779,7 +928,15 @@ namespace SFE.TRACK.ViewModel
                 if (Enum.TryParse<EnumConfig_Environment>(item.Name, out var enumItem) == false) return;
                 if (enumItem == EnumConfig_Environment.Operation)
                 {
-
+                    Console.WriteLine("");
+                }
+                else if (enumItem == EnumConfig_Environment.DummyLinkRecipeInfo)
+                {
+                    Console.WriteLine("");
+                }
+                else if (enumItem == EnumConfig_Environment.RecipeTransperInfo)
+                {
+                    Console.WriteLine("");
                 }
             }
             else if (enumGroup == EnumConfigGroup.Lot)
@@ -1006,7 +1163,7 @@ namespace SFE.TRACK.ViewModel
                 {
                     SetDataInWaferDataArray(name, middleName, moduleBase, str);
                 }
-            }            
+            }
         }
 
         private void SetDataInWaferDataArray(string moduleName, string middleName, ModuleBaseCls moduleBase, string strValue)
@@ -1019,13 +1176,13 @@ namespace SFE.TRACK.ViewModel
             string name = list[6];
             list.RemoveRange(0, 7);
 
-            if(middleName == "Cassette")
+            if (middleName == "Cassette")
             {
                 FoupCls foup = (FoupCls)moduleBase;
                 wafer = foup.FoupWaferList[id];
             }
 
-            if(moduleName == "Chamber")
+            if (moduleName == "Chamber")
             {
                 moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.CHAMBER && x.ModuleNo == (id + 5));
                 wafer = moduleBase.Wafer;
@@ -1033,7 +1190,7 @@ namespace SFE.TRACK.ViewModel
 
             wafer.Recipe.Name = name;
             wafer.IsWafer = exist.Equals(true) ? Visibility.Visible : Visibility.Hidden;
-            
+
             for (int i = 0; i < wafer._RecipeInfos.Length; i++) wafer._RecipeInfos[i].Init();
 
             for (int i = 0; i < list.Count; i++)
@@ -1106,7 +1263,7 @@ namespace SFE.TRACK.ViewModel
             name = name.Replace("Teaching_", "");
             foreach (TeachingDataCls data in Global.STTeachingData)
             {
-                if(data.Motor.MyNameInfo.Name == group && data.TeachingName == name)
+                if (data.Motor.MyNameInfo.Name == group && data.TeachingName == name)
                 {
                     string[] arr = item.Contents.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                     data.Pos = Convert.ToDouble(arr[0]);

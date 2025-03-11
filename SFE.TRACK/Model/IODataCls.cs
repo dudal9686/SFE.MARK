@@ -21,6 +21,7 @@ namespace SFE.TRACK.Model
         int moduleNo = 0;
         int ioNum = 0;
         int channelNo = 0;
+        int ioIndex = 0;
         string boardType = string.Empty;
         int boardNo = 0;
         bool state = false;
@@ -66,13 +67,14 @@ namespace SFE.TRACK.Model
         }
         public int IONum
         {
-            get {
-                if (Company != "SFE_CAN") return 32 * boardNo + channelNo;
-                return ioNum; 
-            }
+            get { return ioNum; }
             set { ioNum = value; RaisePropertyChanged("IONum"); }
         }
-
+        public int IOIndex
+        {
+            get { return ioIndex; }
+            set { ioIndex = value; }
+        }
         public int BlockNo
         {
             get { return blockNo; }

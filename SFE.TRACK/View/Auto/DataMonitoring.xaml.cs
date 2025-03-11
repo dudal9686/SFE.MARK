@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MachineDefine;
 
 namespace SFE.TRACK.View.Auto
 {
@@ -22,6 +23,14 @@ namespace SFE.TRACK.View.Auto
         public DataMonitoring()
         {
             InitializeComponent();
+        }
+
+        private void MonitoringDataView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue)
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MonitoringDoRequest, string.Format("MONIT:TRUE"));
+            else
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MonitoringDoRequest, string.Format("MONIT:FALSE"));
         }
     }
 }

@@ -49,7 +49,7 @@ namespace SFE.TRACK.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("zh-CN")]
+        [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
         public string LANG_CODE {
             get {
                 return ((string)(this["LANG_CODE"]));

@@ -357,6 +357,10 @@ namespace SFE.TRACK.Model
         }
         private void HomeCommand()
         {
+            if (!GetRepeatMode()) return;
+
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, "Do You Want the <Home Search>?")) return;
+
             command = string.Format("Motor:{0}", AxisID);
             HomeSituation = enHomeState.HOME_NONE;
             if (Company == "SFE_CAN")
@@ -367,6 +371,8 @@ namespace SFE.TRACK.Model
 
         private void ServoCommand()
         {
+            if (!GetRepeatMode()) return;
+
             command = string.Format("Motor:{0},{1}", AxisID, 1);
             if (Company == "SFE_CAN")
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
@@ -374,6 +380,8 @@ namespace SFE.TRACK.Model
         }
         private void ServoOffCommand()
         {
+            if (!GetRepeatMode()) return;
+
             Servo = false;
             command = string.Format("Motor:{0},{1}", AxisID, 0);
             if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
@@ -381,6 +389,9 @@ namespace SFE.TRACK.Model
         }
         private void EncoderClearCommand()
         {
+            if (!GetRepeatMode()) return;
+
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, "Do you want the [Encoder Clear]?")) return;
             command = string.Format("Motor:{0}", AxisID);
             if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___EncoderClear, command);
             else Motor.SetZeroPosition();
@@ -399,6 +410,17 @@ namespace SFE.TRACK.Model
             else Motor.ClerAlarm();
             Console.WriteLine("AlarmResetCommand");
             System.Threading.Thread.Sleep(300);
+        }
+
+        private bool GetRepeatMode()
+        {
+            if(IsRepeatMode)
+            {
+                Global.MessageOpen(enMessageType.OKCANCEL, "Repeat Mode.");
+                return false;
+            }
+
+            return true;
         }
     }
 }

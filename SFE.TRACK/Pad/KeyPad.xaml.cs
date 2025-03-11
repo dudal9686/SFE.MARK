@@ -20,10 +20,14 @@ namespace SFE.TRACK.Pad
     public partial class KeyPad : Window
     {
         public float totalValue = 0;
-        public KeyPad(float value)
+        float minValue = -100;
+        float maxValue = 100;
+        public KeyPad(float value, float maxValue = 100000, float minValue = -100000)
         {
             InitializeComponent();
             txtValue.Text = value.ToString();
+            this.maxValue = maxValue;
+            this.minValue = minValue;
         }       
 
         private void btn01_Click(object sender, RoutedEventArgs e)
@@ -124,6 +128,13 @@ namespace SFE.TRACK.Pad
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             totalValue = Convert.ToSingle(txtValue.Text);
+
+            if(totalValue > maxValue || totalValue < minValue)
+            {
+                Global.MessageOpen(enMessageType.OK, string.Format("Please check the range. [{0} ~ {1}]", maxValue, minValue));
+                return;
+            }
+
             this.DialogResult = true;
         }
 

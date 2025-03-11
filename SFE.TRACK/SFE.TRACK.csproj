@@ -17,6 +17,21 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <PublishUrl>게시\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -125,6 +140,9 @@
     <Compile Include="Alarm\AlarmMessage.xaml.cs">
       <DependentUpon>AlarmMessage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Alarm\ManualMessage.xaml.cs">
+      <DependentUpon>ManualMessage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assy\WaferData.cs" />
     <Compile Include="DefineCls.cs" />
     <Compile Include="ClockCls.cs" />
@@ -200,6 +218,7 @@
     <Compile Include="ViewModel\Motion\MotionIRAViewModel.cs" />
     <Compile Include="ViewModel\Motion\MotionMainViewModel.cs" />
     <Compile Include="ViewModel\Motion\MotionPRAViewModel.cs" />
+    <Compile Include="ViewModel\Motor\ChamberControlViewModel.cs" />
     <Compile Include="ViewModel\Motor\IOControlViewModel.cs" />
     <Compile Include="ViewModel\Motor\MotorControlViewModel.cs" />
     <Compile Include="ViewModel\Motor\MotorMainViewModel.cs" />
@@ -320,6 +339,9 @@
     <Compile Include="View\Motion\MotionPRA.xaml.cs">
       <DependentUpon>MotionPRA.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Motor\ChamberControl.xaml.cs">
+      <DependentUpon>ChamberControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Motor\IOControl.xaml.cs">
       <DependentUpon>IOControl.xaml</DependentUpon>
     </Compile>
@@ -423,6 +445,10 @@
       <DependentUpon>UCUtilMain.xaml</DependentUpon>
     </Compile>
     <Page Include="Alarm\AlarmMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Alarm\ManualMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -566,6 +592,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Motion\MotionPRA.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Motor\ChamberControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -752,6 +782,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="chemical.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8%28x86 및 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />

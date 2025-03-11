@@ -117,17 +117,17 @@
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                         <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="SERVER" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
                                         <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="CHAMBER" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
-                                        <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="CDM" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
+                                        <Label Background="#3D3D3D" Height="30" Width="80" BorderBrush="White" BorderThickness="0.7" Foreground="White" HorizontalContentAlignment="Center" Content="ROBOT" FontFamily="Bahnschrift SemiBold Condensed" FontSize="20"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                         <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80" Height="35">
                                             <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                                         </Border>
                                         <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80">
-                                            <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="{Binding Source={StaticResource Clock}, Path=ChamberConnectColor}" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                                         </Border>
                                         <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80">
-                                            <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="{Binding Source={StaticResource Clock}, Path=RobotConnectColor}" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                                         </Border>
                                     </StackPanel>
                                 </StackPanel>

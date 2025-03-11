@@ -10,32 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MachineDefine;
-namespace SFE.TRACK.View.Jog
+
+namespace SFE.TRACK.View.Motor
 {
     /// <summary>
-    /// JogControl.xaml에 대한 상호 작용 논리
+    /// ChamberControl.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class JogControl : Window
+    public partial class ChamberControl : UserControl
     {
-        public JogControl()
+        public ChamberControl()
         {
             InitializeComponent();
         }
 
-        private void JogTeach_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue)
-            {
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorDoRequest, string.Format("Chamber:TRUE"));
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ChamberDoRequest, string.Format("Chamber:TRUE"));
-            }
             else
-            {
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorDoRequest, string.Format("Chamber:FALSE"));
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ChamberDoRequest, string.Format("Chamber:FALSE"));
-            }
         }
     }
 }

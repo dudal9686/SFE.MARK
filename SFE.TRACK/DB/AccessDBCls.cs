@@ -21,7 +21,7 @@ namespace SFE.TRACK.DB
 
         public AccessDBCls()
         {
-            connectString = string.Format("Provider=Microsoft.Jet.OleDb.4.0; Data Source={0}", System.Windows.Forms.Application.StartupPath + @"\MachineDB.mdb");
+            connectString = string.Format("Provider=Microsoft.Jet.OleDb.4.0; Data Source={0}", /*System.Windows.Forms.Application.StartupPath + */@"D:\MDB\MachineDB.mdb");
         }
 
         private bool Open()

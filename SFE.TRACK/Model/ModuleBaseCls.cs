@@ -134,7 +134,7 @@ namespace SFE.TRACK.Model
             get { return maintMode; }
             set {
                 maintMode = value;
-                if (MaintMode == enMaintenanceMode.NONE) ModuleState = enModuleState.NONE;
+                if (MaintMode == enMaintenanceMode.NONE) ModuleState = enModuleState.NOTINITIAL;
                 else ModuleState = enModuleState.MAINTENANCE;
                 RaisePropertyChanged("MaintMode"); }
         }
@@ -239,10 +239,10 @@ namespace SFE.TRACK.Model
                 case enModuleState.STANDBY:
                     ModuleColor = System.Windows.Media.Brushes.Gray;
                     break;
-                case enModuleState.OPERATING:
+                case enModuleState.HOMMING:
                     ModuleColor = System.Windows.Media.Brushes.AntiqueWhite;
                     break;
-                case enModuleState.PREPROCESS:
+                case enModuleState.PROCESS:
                     ModuleColor = System.Windows.Media.Brushes.Green;
                     break;
                 case enModuleState.IDLE:
@@ -297,7 +297,7 @@ namespace SFE.TRACK.Model
             }
 
             if (workStep == WorkStep.IsNeed) { Wafer.WaferState = enWaferState.WAFER_PROCESS_NORMAL; ModuleState = enModuleState.STANDBY; }
-            else if (workStep == WorkStep.IsDoing) { Wafer.WaferState = enWaferState.WAFER_PROCESS; ModuleState = enModuleState.PREPROCESS; }
+            else if (workStep == WorkStep.IsDoing) { Wafer.WaferState = enWaferState.WAFER_PROCESS; ModuleState = enModuleState.PROCESS; }
             else if (workStep == WorkStep.IsDoneGood) { Wafer.WaferState = enWaferState.WAFER_PROCESS_END; ModuleState = enModuleState.STANDBY; }
         }
     }

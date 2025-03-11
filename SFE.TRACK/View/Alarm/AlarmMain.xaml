@@ -49,7 +49,7 @@
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Code" Foreground="Black" Width="150" Binding="{Binding Path=Code}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Owner" Foreground="Black" Width="200" Binding="{Binding Path=Owner}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Time" Foreground="Black" Width="200" Binding="{Binding Path=Time}" FontSize="15"/>
                                     <DataGridTextColumn Header="Message" Foreground="Black" Width="300" Binding="{Binding Path=Message}" FontSize="15"/>
                                     <DataGridTextColumn Header="Action" Foreground="Black" Width="295" Binding="{Binding Path=Help}" FontSize="15"/>
                                 </DataGrid.Columns>
@@ -87,10 +87,9 @@
                                     </Style>
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Code" Foreground="Black" Width="150" Binding="{Binding Code}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Owner" Foreground="Black" Width="200" Binding="{Binding Owner}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Message" Foreground="Black" Width="300" Binding="{Binding Message}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Action" Foreground="Black" Width="295" Binding="{Binding Help}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Time" Foreground="Black" Width="200" Binding="{Binding Time}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Message" Foreground="Black" Width="743" Binding="{Binding Message}" FontSize="15"/>
+                                    
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>

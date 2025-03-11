@@ -18,9 +18,9 @@
         <DataTemplate x:Key="MaintSupport" DataType="{x:Type local:MaintSupport}">
             <local:MaintSupport/>
         </DataTemplate>
-        <DataTemplate x:Key="MaintChamber" DataType="{x:Type local:MaintChamer}">
+        <!--<DataTemplate x:Key="MaintChamber" DataType="{x:Type local:MaintChamer}">
             <local:MaintChamer/>
-        </DataTemplate>
+        </DataTemplate>-->
         <DataTemplate x:Key="EditMonitoringData" DataType="{x:Type local:EditMonitoringData}">
             <local:EditMonitoringData/>
         </DataTemplate>
@@ -48,14 +48,14 @@
                                 </StackPanel>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                        <TreeViewItem IsSelected="{Binding IsChamber}" x:Name="lvChamber">
+                        <!--<TreeViewItem IsSelected="{Binding IsChamber}" x:Name="lvChamber">
                             <TreeViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon HorizontalAlignment="Center" Kind="CameraMeteringPartial" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                     <Label Content="Chamber" Margin="0 10"></Label>
                                 </StackPanel>
                             </TreeViewItem.Header>
-                        </TreeViewItem>
+                        </TreeViewItem>-->
                         <TreeViewItem IsSelected="{Binding IsMaint}" x:Name="lvMaint">
                             <TreeViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
@@ -97,9 +97,9 @@
                                 <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvSupport}" Value="True">
                                     <Setter Property="ContentTemplate" Value="{StaticResource MaintSupport}"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvChamber}" Value="True">
+                                <!--<DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvChamber}" Value="True">
                                     <Setter Property="ContentTemplate" Value="{StaticResource MaintChamber}"/>
-                                </DataTrigger>
+                                </DataTrigger>-->
                                 <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvEditMonitoring}" Value="True">
                                     <Setter Property="ContentTemplate" Value="{StaticResource EditMonitoringData}"/>
                                 </DataTrigger>

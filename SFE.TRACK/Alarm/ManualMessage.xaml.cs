@@ -10,25 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MachineDefine;
 
-namespace SFE.TRACK.View.Maint
+namespace SFE.TRACK.Alarm
 {
     /// <summary>
-    /// MaintChamer.xaml에 대한 상호 작용 논리
+    /// ManualMessage.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MaintChamer : UserControl
+    public partial class ManualMessage : Window
     {
-        public MaintChamer()
+        public ManualMessage()
         {
             InitializeComponent();
         }
 
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        public void CloseDialog()
         {
-            
+            this.DialogResult = true;
         }
     }
 }

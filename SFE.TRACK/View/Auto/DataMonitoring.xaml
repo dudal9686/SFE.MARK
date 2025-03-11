@@ -10,7 +10,7 @@
         x:Name="MonitoringDataView"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Title="DataMonitoring" Height="700" Width="890">
+        Title="DataMonitoring" Height="700" Width="890" IsVisibleChanged="MonitoringDataView_IsVisibleChanged">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="8.8*"/>

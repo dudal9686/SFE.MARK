@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using MachineDefine;
+using CoreCSMac;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -43,7 +45,10 @@ namespace SFE.TRACK.ViewModel.Auto
         {
             Properties.Settings.Default.RECIPE_TRANSFER = RecipeName;
             Properties.Settings.Default.Save();
+
             //챔버쪽에 알려야 한다.
+            PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.RecipeTransperInfo);
+            item.SetValue(RecipeName);
             window.DialogResult = true;
         }
         private void CancelCommand(Window window)

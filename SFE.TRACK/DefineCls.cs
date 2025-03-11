@@ -10,6 +10,14 @@ using System.Windows.Data;
 
 namespace SFE.TRACK
 {
+    public enum enMachineStatus
+    {
+        STOP,
+        STOPING, //장비가 멈추는 행동을 하고 있다. 취소시.
+        RUN,
+        MANUAL,
+        HOME,
+    };
     public enum enJogMode
     {
         LOW,
@@ -69,6 +77,7 @@ namespace SFE.TRACK
         CB11_Pin = 110,
         CB12_Pin = 111,
 
+        CHAMBER = 200,
         NONE = 1000,
     }    
 
@@ -289,8 +298,8 @@ namespace SFE.TRACK
     {
         NOTINITIAL,
         STANDBY,
-        OPERATING,
-        PREPROCESS,
+        HOMMING,//OPERATING
+        PROCESS,
         IDLE,
         PAUSE,
         MAINTENANCE,
@@ -1773,7 +1782,15 @@ namespace SFE.TRACK
         string help = string.Empty;
         string owner = string.Empty;
         string maker = string.Empty;
+        string time = string.Empty;
+        int sendID = -1;
         enAlarmMessageType messageType = enAlarmMessageType.ALARM; 
+
+        public int SendID
+        {
+            get { return sendID; }
+            set { sendID = value; }
+        }
 
         public string Title
         {
@@ -1809,6 +1826,12 @@ namespace SFE.TRACK
         {
             get { return help; }
             set { help = value; RaisePropertyChanged("Help"); }
+        }
+
+        public string Time
+        {
+            get { return time; }
+            set { time = value; RaisePropertyChanged("Time"); }
         }
 
         public enAlarmMessageType MessageType

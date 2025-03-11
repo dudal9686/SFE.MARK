@@ -39,7 +39,7 @@
                     <TreeViewItem IsSelected="{Binding IsMachineConfig}" x:Name="lvMachine">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Roadmap" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="AirConditioning" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="Machine Config" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
@@ -47,7 +47,7 @@
                     <TreeViewItem IsSelected="{Binding IsCassetteConfig}" x:Name="lvCassette">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="VhsCassette" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="BoxShadow" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="Cassette Config" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
@@ -55,7 +55,7 @@
                     <TreeViewItem IsSelected="{Binding IsDispenseConfig}" x:Name="lvDispense">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Dispensary" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Water" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="Dispense Config" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
@@ -63,7 +63,7 @@
                     <TreeViewItem IsSelected="{Binding IsRobotConfig}" x:Name="lvRobot">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="RobotMower" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ChartDonutVariant" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="Robot Config" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>

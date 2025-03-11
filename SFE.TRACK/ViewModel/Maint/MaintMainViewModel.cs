@@ -11,7 +11,7 @@ namespace SFE.TRACK.ViewModel.Maint
     public class MaintMainViewModel : ViewModelBase
     {
         bool IsSupport_ = true;
-        bool IsChamber_ = false;
+        //bool IsChamber_ = false;
         bool IsMaint_ = false;
         bool IsRegist_ = false;
         bool IsEditMonitoring_ = false;
@@ -21,11 +21,11 @@ namespace SFE.TRACK.ViewModel.Maint
             set { IsSupport_ = value; RaisePropertyChanged("IsSupport"); }
         }
 
-        public bool IsChamber
-        {
-            get { return IsChamber_; }
-            set { IsChamber_ = value; RaisePropertyChanged("IsChamber"); }
-        }
+        //public bool IsChamber
+        //{
+        //    get { return IsChamber_; }
+        //    set { IsChamber_ = value; RaisePropertyChanged("IsChamber"); }
+        //}
 
         public bool IsMaint
         {
