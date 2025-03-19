@@ -44,6 +44,12 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void LotStartCommand()
         {
+            string packet = string.Format("Chamber:2:1:COT_FLOW_TEST");
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber___PutReady, packet);
+            
+            return;
+
+
             if (Global.STMachineStatus == enMachineStatus.RUN || Global.STMachineStatus == enMachineStatus.STOPING) return;
             bool isStart = false;
             View.Auto.LotStart lotStart = new View.Auto.LotStart();
@@ -92,7 +98,9 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void InitialCommand()
         {
+            if (Global.STMachineStatus != enMachineStatus.STOP) return;
             timer.Stop();
+            
             if(Global.MessageOpen(enMessageType.OKCANCEL, "Would you like to initialize your equipment?"))
             {
                 foreach (ModuleBaseCls moduleBase in Global.STModuleList)
@@ -125,6 +133,8 @@ namespace SFE.TRACK.ViewModel.Auto
                 stopWatch.Start();
                 timer.Start();
 
+                Global.ManualMessageOpen();
+
                 //Global.MessageOpen(enMessageType.NONE, "Homming...");
             }
         }
@@ -132,7 +142,9 @@ namespace SFE.TRACK.ViewModel.Auto
         //View.Auto.MotorInitail initMotor = null;
         private void HomeCommand()
         {
+            if (Global.STMachineStatus != enMachineStatus.STOP) return;
             timer.Stop();
+            
             foreach (ModuleBaseCls moduleBase in Global.STModuleList) moduleBase.IsHomeChecked = false;
             View.Auto.MotorInitail initMotor = new View.Auto.MotorInitail();
             initMotor.Owner = Application.Current.MainWindow;
@@ -142,6 +154,8 @@ namespace SFE.TRACK.ViewModel.Auto
                 stopWatch.Stop();
                 stopWatch.Start();
                 timer.Start();
+
+                Global.ManualMessageOpen();
             }
         }
 
@@ -179,7 +193,7 @@ namespace SFE.TRACK.ViewModel.Auto
             Dictionary<int, string> waferDictionary = new Dictionary<int, string>();
             List<string> jobList = new List<string>();
             PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
-            item.SetValue(jobList);
+            item.SetValueAll(jobList);
             List<FoupCls> list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
 
             foreach(FoupCls foup in list)
@@ -217,7 +231,7 @@ namespace SFE.TRACK.ViewModel.Auto
             if(jobList.Count > 0)
             {
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
-                item.SetValue(jobList);
+                item.SetValueAll(jobList);
 
                 Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
@@ -259,16 +273,18 @@ namespace SFE.TRACK.ViewModel.Auto
                 stopWatch.Stop();
                 stopWatch.Reset();
                 timer.Stop();
-                Global.MessageOpen(enMessageType.OK, "Initialize Success");
                 Global.STMachineStatus = enMachineStatus.STOP;
+                Global.ManualMessageClose();
+                Global.MessageOpen(enMessageType.OK, "Initialize Success");
             }
             else if(isDone && isError)
             {
                 stopWatch.Stop();
                 stopWatch.Reset();
                 timer.Stop();
-                Global.MessageOpen(enMessageType.OK, "Initialize Error");
                 Global.STMachineStatus = enMachineStatus.STOP;
+                Global.ManualMessageClose();
+                Global.MessageOpen(enMessageType.OK, "Initialize Error");
             }
         }
     }

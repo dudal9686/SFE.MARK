@@ -73,6 +73,8 @@ namespace SFE.TRACK.ViewModel.Recipe
         #region Command
         private void AddListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
+
             string newFileName = string.Empty;
 
             if(Global.KeyBoard(ref newFileName))
@@ -105,6 +107,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void SystemRecipeCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             string systemRecipe = string.Empty;
             if(Global.RecipeOpen(enRecipeMenu.SYSTEM, Waferdata.SystemRecipeName))
             {
@@ -114,6 +117,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void SaveAsListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeListSelectedIndex != -1)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Process_Wafer] Do you Make This file?"))
@@ -137,6 +141,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void DeleteListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeListSelectedIndex != -1)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Process_Wafer] Do you want to delete the file?"))
@@ -149,7 +154,8 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void ReNameListCommand()
         {
-            if(RecipeListSelectedIndex != -1)
+            if (!Global.GetRecipeEditMode()) return;
+            if (RecipeListSelectedIndex != -1)
             {
                 if(Global.MessageOpen(enMessageType.OKCANCEL, "[Process_Wafer] Change Process Name?"))
                 {
@@ -170,7 +176,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         }
         private void AddDetailCommand()
         {
-            Console.WriteLine(RecipeDetailSelectedIndex);
+            if (!Global.GetRecipeEditMode()) return;
             WaferStepCls waferstep = new WaferStepCls();
             if(RecipeDetailSelectedIndex < 0) Waferdata.WaferStepList.Add(waferstep);
             else Waferdata.WaferStepList.Insert(RecipeDetailSelectedIndex+1, waferstep);
@@ -184,6 +190,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void SaveDetailCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeFileInfo == null) return;
             JobDataCheckCls jobCheck = new JobDataCheckCls();
             if (!jobCheck.WaferFlowCheckCls(Waferdata)) return;
@@ -196,6 +203,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void DeleteDetailCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (WaferStep != null)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
@@ -218,6 +226,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void RecipeDetailDoubleClickCommand(object o)
         {
+            if (!Global.GetRecipeEditMode()) return;
             System.Windows.Controls.DataGrid grid = o as System.Windows.Controls.DataGrid;
             int index = grid.CurrentCell.Column.DisplayIndex;
             string machineDesc = string.Empty;

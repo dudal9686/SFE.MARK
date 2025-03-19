@@ -12,6 +12,7 @@ using MachineDefine;
 using SFE.TRACK.ViewModel;
 using MachineDefine;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace SFE.TRACK.Model
 {
@@ -48,6 +49,7 @@ namespace SFE.TRACK.Model
 
         bool isOwn = false;
         string command = string.Empty;
+        DispatcherTimer timer = new DispatcherTimer();
 
         public UnitMotor Motor { get; set; }
 
@@ -60,6 +62,7 @@ namespace SFE.TRACK.Model
         SolidColorBrush plusHomeLimitState = new SolidColorBrush();
         SolidColorBrush minusHomeLimitState = new SolidColorBrush();
         SolidColorBrush homeState = new SolidColorBrush();
+        SolidColorBrush isHomeState = new SolidColorBrush();
 
         public RelayCommand HomeRelayCommand { get; set; }
         public RelayCommand ServoRelayCommand { get; set; }
@@ -67,7 +70,7 @@ namespace SFE.TRACK.Model
         public RelayCommand EncoderClearRelayCommand { get; set; }
         public RelayCommand StopRelayCommand { get; set; }
         public RelayCommand AlarmResetRelayCommand { get; set; }
-        public string Company { get; set; }
+        string company = string.Empty;
         public AxisInfoCls()
         {
             servoState = Brushes.GreenYellow;
@@ -79,6 +82,7 @@ namespace SFE.TRACK.Model
             inPositionState = Brushes.GreenYellow;
             inMotionState = Brushes.White;
             homeState = Brushes.DarkGray;
+            isHomeState = Brushes.Red;
 
             HomeRelayCommand = new RelayCommand(HomeCommand);
             ServoRelayCommand = new RelayCommand(ServoCommand);
@@ -86,11 +90,38 @@ namespace SFE.TRACK.Model
             EncoderClearRelayCommand = new RelayCommand(EncoderClearCommand);
             StopRelayCommand = new RelayCommand(StopCommand);
             AlarmResetRelayCommand = new RelayCommand(AlarmResetCommand);
+
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            PlusLimit = Motor.IsPositiveLimit;
+            MinusLimit = Motor.IsNegativeLimit;
+            Servo = Motor.IsServoOn;
+            InMotion = Motor.IsMoving;
+            //IsStop = !Motor.IsMoving;
+            Alarm = Motor.IsAlarm;
+            //IsHome = Motor.IsHome;
+            ActualPosition = Motor.GetEncoderPos();
+            CommandPosition = Motor.CommandPosition;
         }
 
         ~AxisInfoCls()
         {
 
+        }
+
+        public string Company
+        {
+            get { return company; }
+            set
+            {
+                company = value;
+                if(company.ToUpper() == "AZINECAT") timer.Start();
+            }
         }
 
         public bool IsOwn
@@ -132,19 +163,31 @@ namespace SFE.TRACK.Model
         public bool IsHome
         {
             get { return isHome; }
-            set { isHome = value; RaisePropertyChanged("IsHome"); }
+            set { isHome = value;
+                if (isHome) IsHomeState = Brushes.GreenYellow;
+                else IsHomeState = Brushes.Red;
+                RaisePropertyChanged("IsHome"); }
         }
 
         public enHomeState HomeSituation
         {
             get { return homeSituation; }
             set { homeSituation = value; 
-                if(homeSituation == enHomeState.HOME_NONE) { IsHome = false; HomeState = Brushes.DarkGray; }
-                else if (homeSituation == enHomeState.HOME_OK) { IsHome = true; HomeState = Brushes.GreenYellow; }
-                else if (homeSituation == enHomeState.HOMMING) { IsHome = false; HomeState = Brushes.Yellow; }
+                if(homeSituation == enHomeState.HOME_NONE) { IsHome = false; HomeState = Brushes.DarkGray; IsHomeState = Brushes.Red; }
+                else if (homeSituation == enHomeState.HOME_OK) { IsHome = true; HomeState = Brushes.GreenYellow; IsHomeState = Brushes.GreenYellow; }
+                else if (homeSituation == enHomeState.HOMMING) { IsHome = false; HomeState = Brushes.Yellow; IsHomeState = Brushes.Red; }
                 else if (homeSituation == enHomeState.HOME_ERROR) { IsHome = false; HomeState = Brushes.Red; }
                 RaisePropertyChanged("HomeSituation"); }
         }
+
+        //홈이 진행 됐다 안 됐다.
+        public SolidColorBrush IsHomeState
+        {
+            get { return isHomeState; }
+            set { isHomeState = value; RaisePropertyChanged("IsHomeState"); }
+        }
+
+        //메인화면에 홈 진행 상태를 보여주기 위한 색
         public SolidColorBrush HomeState
         {
             get { return homeState; }

@@ -42,7 +42,7 @@ namespace SFE.TRACK
         public static List<LoginInfoCls> STUserList = new List<LoginInfoCls>();
         public static LoginInfoCls STLoginInfo = new LoginInfoCls(); //로그인 후 권한 설정
 
-        public static int MCS_ID = 20;
+        public static int MCS_ID = 1;
         public static int CHAMBER_ID = 55;
         public static int MMI_ID = 1000;
         public static int HOME_TIMEOUT = 90000;
@@ -50,6 +50,7 @@ namespace SFE.TRACK
         public static enMachineStatus STMachineStatus = enMachineStatus.STOP;
         //Maint Suppot List
         public static List<MaintSupportCls> STMaintSupportList = new List<MaintSupportCls>();
+        public static List<LampCls> STLampList = new List<LampCls>();
         //AlarmMessage
         //private static Alarm.AlarmMessage STAlarmMessage = null;
 
@@ -358,6 +359,19 @@ namespace SFE.TRACK
         {
             MachineWorker.SendCommand(dataType, cmdGroup, cmdItem, msg);
             Global.STLog.AddSocketLog(-1, "SEND", dataType.ToString(), cmdGroup, cmdItem.ToString(), msg);
+        }
+
+        public static bool GetRecipeEditMode()
+        {
+            if (STMachineStatus == enMachineStatus.RUN || STMachineStatus == enMachineStatus.STOPING) return false;
+            return true;
+        }
+
+        public static bool GetAuthMode()
+        {
+            if (STLoginInfo.AuthLevel == enAuthLevel.GUEST) return false;
+
+            return true;
         }
     }
 }

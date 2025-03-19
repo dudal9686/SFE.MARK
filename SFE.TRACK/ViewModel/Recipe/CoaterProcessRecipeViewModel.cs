@@ -79,6 +79,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         #region Command
         private void AddListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             string newFileName = string.Empty;
 
             if (Global.KeyBoard(ref newFileName))
@@ -111,6 +112,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void SaveAsListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeListSelectedIndex != -1)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater] Do you Make This file?"))
@@ -134,6 +136,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void DeleteListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeListSelectedIndex != -1)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater] Do you want to delete the file?"))
@@ -146,6 +149,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void ReNameListCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeListSelectedIndex != -1)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "[Coater] Change Process Name?"))
@@ -168,6 +172,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void AddDetailCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             SpinChamberStepCls stepData = new SpinChamberStepCls();
             stepData.Arm1Pos = "HOME";
             stepData.Arm2Pos = "HOME";
@@ -185,6 +190,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void SaveDetailCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeFileInfo == null) return;
 
             JobDataCheckCls jobCheck = new JobDataCheckCls();
@@ -195,6 +201,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void DeleteDetailCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (CotStepData != null)
             {
                 if (Global.MessageOpen(enMessageType.OKCANCEL, "Are you sure you want to delete it?"))
@@ -210,10 +217,9 @@ namespace SFE.TRACK.ViewModel.Recipe
         }
 
         private void StopRangeCommand()
-
-
         {
-            if(RecipeListSelectedIndex != -1)
+            if (!Global.GetRecipeEditMode()) return;
+            if (RecipeListSelectedIndex != -1)
             {
                 float value = Global.KeyPad(CotData.StopRange);
                 CotData.StopRange = Convert.ToInt32(value);
@@ -222,6 +228,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void AlarmRangeCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (RecipeListSelectedIndex != -1)
             {
                 float value = Global.KeyPad(CotData.AlarmRange);
@@ -231,6 +238,7 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void PumpRecipeCommand()
         {
+            if (!Global.GetRecipeEditMode()) return;
             if (Global.RecipeOpen(enRecipeMenu.PUMP, CotData.PumpRecipe))
             {
                 CotData.PumpRecipe = Global.STRecipePopUp.SelectRecipeName;
@@ -242,6 +250,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         }
         private void RecipeDetailDoubleClickCommand(object o)
         {
+            if (!Global.GetRecipeEditMode()) return;
             DataGrid grid = o as DataGrid;
             int index = grid.CurrentCell.Column.DisplayIndex;
 

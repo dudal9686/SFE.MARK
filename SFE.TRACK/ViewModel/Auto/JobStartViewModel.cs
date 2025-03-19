@@ -100,7 +100,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 return;
             }
 
-            SetWafer();
+            if (!SetWafer()) return;
             string filename = string.Format(@"C:\MachineSet\SFETrack\Recipe\JobInfo\JOB{0}.sfe", DateTime.Now.ToString("yyyyMMddHHmmss"));
             Global.STDataAccess.SaveJobInfo(filename);
             Global.GetDirectoryFile(@"C:\MachineSet\SFETrack\Recipe\JobInfo\", ref Global.JobInfoFileList, ".sfe");
@@ -108,8 +108,9 @@ namespace SFE.TRACK.ViewModel.Auto
             window.DialogResult = true;
         }
 
-        private void SetWafer()
-        {   
+        private bool SetWafer()
+        {
+            bool isMatch = true;
             foreach(LotInfoCls lot in Global.STJobInfo.LotInfoList)
             {
                 if (lot.LotID == string.Empty || lot.RecipeName == string.Empty) continue;
@@ -117,17 +118,41 @@ namespace SFE.TRACK.ViewModel.Auto
                 for(int i = 0; i < lot.StartModuleList.Count; i++)
                 {
                     FoupCls foup = Global.STModuleList.Find(x => x.ModuleNo == lot.StartModuleList[i] && x.ModuleType == enModuleType.FOUP) as FoupCls;
-                    if (!foup.IsScan || !foup.Use) continue;
+                    if (!foup.IsScan || !foup.Use)
+                    {
+                        Global.MessageOpen(enMessageType.OK, string.Format("The cassette ({0}) is unusable.", foup.MachineName));
+                        isMatch = false;
+                        break;
+                    }
                     foreach(WaferCls wafer in foup.FoupWaferList)
                     {
                         if (!wafer.Use) continue;
                         if(wafer.Recipe.Name == string.Empty && wafer.WaferState == enWaferState.WAFER_EXIST)
-                        {
+                        {   
                             wafer.Recipe.Name = lot.RecipeName;
                         }
+
+                        if(wafer.Recipe.Name != string.Empty && wafer.WaferState == enWaferState.WAFER_EXIST)
+                        {
+                            string[] arWaferList = Global.WaferFlowRecipeFileList.Select(x => x.FileName).ToArray();
+                            if (!arWaferList.Contains(wafer.Recipe.Name))
+                            {
+                                Global.MessageOpen(enMessageType.OK, string.Format("This recipe is unavailable. ({0})", wafer.Recipe.Name));
+                                isMatch = false;
+                                break;
+                            }
+                        }
+
+                        if (!isMatch) break;
                     }
+
+                    if (!isMatch) break;
                 }
+
+                if (!isMatch) break;
             }
+
+            return isMatch;
         }
 
         private void CancelCommand(Window window)

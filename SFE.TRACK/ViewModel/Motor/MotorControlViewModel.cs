@@ -135,14 +135,13 @@ namespace SFE.TRACK.ViewModel.Motor
                 speedPack.speed = -20;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.HIGH);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
-                Axis.Motor.DoVelocityMove(speedPack);
+                else Axis.Motor.DoVelocityMove(speedPack);
             }
             else if (IsVelocity[2])
             {
                 speedPack.acc = Axis.ACC.Equals(0) ? 100 : Axis.ACC;
                 speedPack.dec = Axis.DEC.Equals(0) ? 100 : Axis.DEC;
-                speedPack.speed = Axis.VEL.Equals(0) ? -20 : Axis.VEL;
-                //command = string.Format("Motor:{0},-{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
+                speedPack.speed = Axis.VEL.Equals(0) ? 20 : Axis.VEL;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, Pitch);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
                 else Axis.Motor.DoSCurveMove((-1) * (double)Pitch, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);

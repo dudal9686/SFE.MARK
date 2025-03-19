@@ -163,6 +163,7 @@
     <Compile Include="Model\ChamberCls.cs" />
     <Compile Include="Model\FoupCls.cs" />
     <Compile Include="Model\IODataCls.cs" />
+    <Compile Include="Model\LampCls.cs" />
     <Compile Include="Model\SpinChamberCls.cs" />
     <Compile Include="Model\TeachingDataCls.cs" />
     <Compile Include="Model\WaferCls.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="ViewModel\Recipe\WaferFlowRecipeViewModel.cs" />
     <Compile Include="ViewModel\Util\CassetteConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\DispenseConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\LampConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\MachineConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\RobotConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\UtilMainViewModel.cs" />
@@ -434,6 +436,9 @@
     </Compile>
     <Compile Include="View\Util\DispenseConfig.xaml.cs">
       <DependentUpon>DispenseConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\LampConfig.xaml.cs">
+      <DependentUpon>LampConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Util\MachineConfig.xaml.cs">
       <DependentUpon>MachineConfig.xaml</DependentUpon>
@@ -720,6 +725,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Util\DispenseConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\LampConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

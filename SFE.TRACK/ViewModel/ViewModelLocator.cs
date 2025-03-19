@@ -75,6 +75,7 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Util.RobotConfigViewModel>();
             SimpleIoc.Default.Register<Util.MachineConfigViewModel>();
             SimpleIoc.Default.Register<Util.CassetteConfigViewModel>();
+            SimpleIoc.Default.Register<Util.LampConfigViewModel>();
             SimpleIoc.Default.Register<AlarmMessageViewModel>();
             SimpleIoc.Default.Register<Recipe.RecipeMainViewModel>();
             SimpleIoc.Default.Register<Recipe.WaferFlowRecipeViewModel>();            
@@ -400,6 +401,10 @@ namespace SFE.TRACK.ViewModel
         public Util.CassetteConfigViewModel CassetteConfigViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Util.CassetteConfigViewModel>(); }
+        }
+        public Util.LampConfigViewModel LampConfigViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Util.LampConfigViewModel>(); }
         }
         #endregion
 

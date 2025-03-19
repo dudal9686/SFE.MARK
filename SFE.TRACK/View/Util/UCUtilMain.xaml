@@ -21,6 +21,9 @@
         <DataTemplate x:Key="CassetteConfig" DataType="{x:Type local:CassetteConfig}">
             <local:CassetteConfig/>
         </DataTemplate>
+        <DataTemplate x:Key="LampConfig" DataType="{x:Type local:LampConfig}">
+            <local:LampConfig/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -68,6 +71,14 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
+                    <TreeViewItem IsSelected="{Binding IsLampConfig}" x:Name="lvLamp">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Artboard" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
+                                <Label Content="Lamp Config" Margin="0 10"></Label>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
                 </TreeView>
             </Border>
         </Grid>
@@ -87,6 +98,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvCassette}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CassetteConfig}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, ElementName=lvLamp}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource LampConfig}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

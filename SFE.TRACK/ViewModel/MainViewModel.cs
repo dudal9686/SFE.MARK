@@ -46,11 +46,10 @@ namespace SFE.TRACK.ViewModel
         List<UnitCustom> CustomUnitList = null;
 
         System.Windows.Media.SolidColorBrush TitleColor_ = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
-        System.Windows.Media.SolidColorBrush ChamberConnectColor_ = Brushes.Red;
-        System.Windows.Media.SolidColorBrush RobotConnectColor_ = Brushes.Red;
         MachineReaderWorker _worker;
         DispatcherTimer timer = new DispatcherTimer();
         public bool IsMotorState = false;
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -64,6 +63,12 @@ namespace SFE.TRACK.ViewModel
             isSelectedMenu = new ObservableCollection<bool>();
             for (int i = 0; i < 10; i++) { IsEnabledMenu.Add(true); IsSelectedMenu.Add(true); }
             _worker = new MachineReaderWorker();
+            _worker.EvtCommandLaunched += _worker_EvtCommandLaunched;
+            _worker.EvtCommandStatusChanged += _worker_EvtCommandStatusChanged;
+            _worker.EvtCommandResultComes += _worker_EvtCommandResultComes;
+            _worker.EvtInfoReloaded += _worker_EvtInfoReloaded;
+            _worker.EvtPrgCfgReloaded += _worker_EvtPrgCfgReloaded;
+           
             Global.MachineWorker = _worker;
             if (_worker.StartWorker(Global.MMI_ID, "HMI", @"C:\MachineSet\SFETrack.mm", true) == false)
             {
@@ -71,11 +76,6 @@ namespace SFE.TRACK.ViewModel
                 return;
             }
 
-            _worker.EvtCommandLaunched += _worker_EvtCommandLaunched;
-            _worker.EvtCommandStatusChanged += _worker_EvtCommandStatusChanged;
-            _worker.EvtCommandResultComes += _worker_EvtCommandResultComes;
-            _worker.EvtInfoReloaded += _worker_EvtInfoReloaded;
-            _worker.EvtPrgCfgReloaded += _worker_EvtPrgCfgReloaded;
             _worker.Controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
 
             InitData();
@@ -181,7 +181,59 @@ namespace SFE.TRACK.ViewModel
             Global.STDataAccess.ReadMonitoringData();
             Global.STDataAccess.ReadUserInfo();
             Global.STDataAccess.ReadMaintSupportData();
+            ReadBuzzerData();
             return true;
+        }
+
+        private void ReadBuzzerData()
+        {
+            Global.STDataAccess.ReadLampData();
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.TowerLamp);
+            GetTowerLamp(prgItem);
+        }
+
+        private void GetTowerLamp(PrgCfgItem prgItem)
+        {
+            if (Global.STLampList.Count == 0) return;
+
+            //List<string> list = new List<string>();
+            //prgItem.GetValue(list);
+
+            int buzzerTimeOut = prgItem.GetInt(0);
+            string packet = string.Empty;
+            for(int i = 0; i < Global.STLampList.Count; i++)
+            {
+                packet = prgItem.GetString(i + 1);
+                LampCls lamp = Global.STLampList[i];
+                for(int j = 0; j < packet.Length; j++)
+                {
+                    switch(j)
+                    {
+                        case 0:
+                            if (packet[0] == 'O') lamp.RedString = enLamp.ON.ToString();
+                            else if (packet[0] == 'X') lamp.RedString = enLamp.OFF.ToString();
+                            else if (packet[0] == 'T') lamp.RedString = enLamp.TOGGLE.ToString();
+                            break;
+                        case 1:
+                            if (packet[1] == 'O') lamp.YellowString = enLamp.ON.ToString();
+                            else if (packet[1] == 'X') lamp.YellowString = enLamp.OFF.ToString();
+                            else if (packet[1] == 'T') lamp.YellowString = enLamp.TOGGLE.ToString();
+                            break;
+                        case 2:
+                            if (packet[2] == 'O') lamp.GreenString = enLamp.ON.ToString();
+                            else if (packet[2] == 'X') lamp.GreenString = enLamp.OFF.ToString();
+                            else if (packet[2] == 'T') lamp.GreenString = enLamp.TOGGLE.ToString();
+                            break;
+                        case 3:
+                            if (packet[3] == 'O') lamp.BuzzerString = enBuzzer.ON.ToString();
+                            else if (packet[3] == 'X') lamp.BuzzerString = enBuzzer.OFF.ToString();
+                            break;
+                    }
+
+                    lamp.BuzzerTimeOut = buzzerTimeOut;
+                }
+            }
+
         }
         private void SetAxisData()
         {
@@ -573,12 +625,18 @@ namespace SFE.TRACK.ViewModel
                 {
 
                 }
+                else if(eValue == EnumCommand_Action.TermManual___Do)
+                {
+                    Global.ManualMessageClose();
+                }
                 else if (eValue == EnumCommand_Action.StatusChange___ServoOn)
                 {
 
                 }
                 else if(eValue == EnumCommand_Action.ChamberManual___DoManual)
                 {
+                    if (Global.STMachineStatus == enMachineStatus.HOME) return;
+
                     arr = message.Split(':');
 
                     if(arr[1].ToUpper().Trim() == "TRUE")
@@ -623,12 +681,14 @@ namespace SFE.TRACK.ViewModel
             {
                 EnumCommand_Status eValue = item.GetCommand<EnumCommand_Status>();
 
-                if (eValue == EnumCommand_Status.UnitStatus___SendStart)
+                if (eValue == EnumCommand_Status.RunStatus___Result)
                 {
+                    arr = message.Split(':');
 
-                }
-                else if (eValue == EnumCommand_Status.UnitStatus___SendStop)
-                {
+                    if(arr[0].ToUpper() == "MACHINE" && arr[2].ToUpper() == "AUTO" && arr[3].ToUpper() == "STOP")
+                    {
+                        Global.STMachineStatus = enMachineStatus.STOP;
+                    }
 
                 }
                 else if (eValue == EnumCommand_Status.MCS___LotStatus)
@@ -652,7 +712,7 @@ namespace SFE.TRACK.ViewModel
                             axis.PlusHomeLimit = arrParam[7].Equals("1") ? true : false;
                             axis.MinusLimit = arrParam[8].Equals("1") ? true : false;
                             axis.MinusHomeLimit = arrParam[9].Equals("1") ? true : false;
-                            axis.IsHome = arrParam[10].Equals("1") ? true : false;
+                            //axis.IsHome = arrParam[10].Equals("1") ? true : false;
                             axis.ActualPosition = Convert.ToDouble(arrParam[11]);
                             axis.CommandPosition = Convert.ToDouble(arrParam[12]);
                             break;
@@ -845,7 +905,7 @@ namespace SFE.TRACK.ViewModel
                 else if (eValue == EnumCommand_Status.MCS___SerialData)
                 {
                     List<string> list;
-                    list = Tokenizer.SplitString(message, false, false, "\r\n");
+                    list = Tokenizer.Split(message, false, false, "\r\n");
                     if (AnalyseOwner(list[0], out var typeName, out var name, out var unitID, out var title) == false) return;
                     if (AnalyseSerialDataType(list[1], out var isAll, out var ownID, out var itemID) == false) return;
                     if (title.IndexOf("WaferData") == 0)
@@ -884,6 +944,15 @@ namespace SFE.TRACK.ViewModel
                 {
                     //여기에 모니터링 데이터를 넣어준다.
                 }
+                else if (eValue == EnumCommand_Status.Chamber___PutReady)
+                {
+                    packet = string.Format("Chamber:2:1");
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber___StartProcess, packet);
+                }
+                else if (eValue == EnumCommand_Status.Chamber___EndProcess)
+                {
+                    Console.WriteLine("");
+                }
             }
 
             e.SetResult(CommandResult.Success, "done");
@@ -907,6 +976,27 @@ namespace SFE.TRACK.ViewModel
                     {
                         info.ActualPosition = Convert.ToDouble(commandArr[1]);
                         break;
+                    }
+                }
+            }
+            else if(item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.TermManual___Do.ToString())
+            {
+                Global.ManualMessageClose();
+                if(result == CommandResult.Success)
+                {
+                    //groupArr = resultString.Split(':');
+                    //commandArr = groupArr[1].Split(' ');
+
+                    //if (commandArr[0] == "DoScanCassette")
+                    {
+                        //FoupCls foupCls = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == Convert.ToInt32(commandArr[1])) as FoupCls;
+                        //foupCls.IsDetect = true;
+                        //foupCls.IsScan = true;
+                        //for (int i = 0; i < groupArr[2].Length; i++)
+                        //{
+                        //    if (groupArr[2][i] == '1') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EXIST;
+                        //    else if (groupArr[2][i] == '0') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EMPTY;
+                        //}
                     }
                 }
             }
@@ -937,6 +1027,10 @@ namespace SFE.TRACK.ViewModel
                 else if (enumItem == EnumConfig_Environment.RecipeTransperInfo)
                 {
                     Console.WriteLine("");
+                }
+                else if(enumItem == EnumConfig_Environment.TowerLamp)
+                {
+                    GetTowerLamp(item);
                 }
             }
             else if (enumGroup == EnumConfigGroup.Lot)
@@ -1102,7 +1196,7 @@ namespace SFE.TRACK.ViewModel
             ownID = -1;
             itemID = -1;
 
-            List<string> list = Tokenizer.SplitString(message, false, false, ":");
+            List<string> list = Tokenizer.Split(message, false, false, ":");
             if (list.Count < 2) return false;
             if (list[index++] == "ALL") isAll = true;
             ownID = Convert.ToInt32(list[index++]);
@@ -1112,7 +1206,7 @@ namespace SFE.TRACK.ViewModel
 
         private void TreatSerialWaferData(NameBase.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList)
         {
-            List<string> list = Tokenizer.SplitString(title, "_");
+            List<string> list = Tokenizer.Split(title, "_");
             string middleName = list[1];
             ModuleBaseCls moduleBase = null;
             if (typeName == NameBase.TYPE_NAME.ASSY)
@@ -1169,7 +1263,7 @@ namespace SFE.TRACK.ViewModel
         private void SetDataInWaferDataArray(string moduleName, string middleName, ModuleBaseCls moduleBase, string strValue)
         {
             WaferCls wafer = moduleBase.Wafer;
-            List<string> list = Tokenizer.SplitString(strValue, ",");
+            List<string> list = Tokenizer.Split(strValue, ",");
 
             int id = Convert.ToInt32(list[0]);
             bool exist = false; if (Convert.ToInt32(list[1]) == 1) exist = true;
@@ -1219,7 +1313,7 @@ namespace SFE.TRACK.ViewModel
             step = WorkStep.IsNot;
             blockNo = -1;
             moduleNo = new List<int>();
-            List<string> list = Tokenizer.SplitString(message, false, false, ":");
+            List<string> list = Tokenizer.Split(message, false, false, ":");
             if (list.Count < 6) return false;
 
             recipeID = Convert.ToInt32(list[index++]);
@@ -1246,7 +1340,7 @@ namespace SFE.TRACK.ViewModel
             name = "";
             unitID = -1;
             remain = "";
-            List<string> list = Tokenizer.SplitString(message, false, false, ":");
+            List<string> list = Tokenizer.Split(message, false, false, ":");
             if (list.Count < 2) return false;
             typeName = MachineReader.Instance.GetTypeName(list[index++]);
             name = list[index++];

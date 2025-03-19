@@ -91,8 +91,8 @@ namespace DefaultBase
                     sb.AppendLine($"{info._Name}:{info._RecipeType.ToString()}:{info._WorkStep.ToString()}");
 
                     Tokenizer t = new Tokenizer();
-                    foreach (var id in info._moudleNoList) t.AddCombineString(id.ToString());
-                    sb.AppendLine($"B({info._BlockNo}) - M({t.CombineString(",")})");
+                    foreach (var id in info._moudleNoList) t.AddItem(id.ToString());
+                    sb.AppendLine($"B({info._BlockNo}) - M({t.ToString(",")})");
                 }
             }
             return sb.ToString();

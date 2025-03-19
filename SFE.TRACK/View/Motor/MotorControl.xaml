@@ -54,7 +54,15 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="190" Header="Servo State">
+                            <DataGridTextColumn Width="175" Header="Home State">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Height" Value="40"/>
+                                        <Setter Property="Background" Value="{Binding IsHomeState}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="175" Header="Servo State">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -62,7 +70,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="Alarm State">
+                            <DataGridTextColumn Width="175" Header="Alarm State">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -70,7 +78,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="InMotion">
+                            <DataGridTextColumn Width="173" Header="InMotion">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -78,7 +86,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="InPosition">
+                            <DataGridTextColumn Width="173" Header="InPosition">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -86,7 +94,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="Home[+]" >
+                            <DataGridTextColumn Width="173" Header="Home[+]" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -94,7 +102,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="Home[-]">
+                            <DataGridTextColumn Width="173" Header="Home[-]">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -102,7 +110,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="Limit[+]" >
+                            <DataGridTextColumn Width="173" Header="Limit[+]" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -110,7 +118,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Header="Limit[-]">
+                            <DataGridTextColumn Width="173" Header="Limit[-]">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Height" Value="40"/>
@@ -125,7 +133,7 @@
         </Grid>
         <Grid Grid.Row="1"  Grid.ColumnSpan="2">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Border BorderBrush="Gray" BorderThickness="0.3" Margin="5 0 0 0" Height="132" Width="903">
+                <Border BorderBrush="Gray" BorderThickness="0.3" Margin="5 0 0 0" Height="132" Width="603">
                     <StackPanel Orientation="Vertical" Margin="0 0 0 0">
                         <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="#8F98AC" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
                             <StackPanel Orientation="Horizontal">
@@ -179,7 +187,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="300" Header="Encoder Pulse">
+                                <!--<DataGridTextColumn Width="300" Header="Encoder Pulse">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="Height" Value="25"/>
@@ -190,7 +198,7 @@
                                             <Setter Property="Text" Value="0"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
+                                </DataGridTextColumn>-->
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

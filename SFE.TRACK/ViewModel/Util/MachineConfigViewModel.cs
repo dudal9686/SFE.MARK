@@ -56,7 +56,7 @@ namespace SFE.TRACK.ViewModel.Util
                 }
 
                 PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.CoaterInfo);
-                item.SetValue(arChamberInfo);
+                item.SetValueAll(arChamberInfo);
                 arChamberInfo.Clear();
 
                 arList = Global.STModuleList.FindAll(x => x.MachineName.IndexOf("DEV") != -1).OrderBy(x => x.ModuleNo).ToList();
@@ -68,7 +68,8 @@ namespace SFE.TRACK.ViewModel.Util
                 }
 
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.DeveloperInfo);
-                item.SetValue(arChamberInfo);
+                item.SetValueAll(arChamberInfo);
+                
                 arChamberInfo.Clear();
 
                 arList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER).OrderBy(x => x.ModuleNo).ToList();
@@ -80,7 +81,7 @@ namespace SFE.TRACK.ViewModel.Util
                 }
 
                 item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.ChamberInfo);
-                item.SetValue(arChamberInfo);
+                item.SetValueAll(arChamberInfo);
                 arChamberInfo.Clear();
 
                 Global.MessageOpen(enMessageType.OK, "It has been saved.");

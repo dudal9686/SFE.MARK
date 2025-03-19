@@ -366,6 +366,29 @@ namespace SFE.TRACK
         IsDoneFail,
     };
 
+    public enum enLamp
+    {
+        OFF,
+        ON,
+        TOGGLE,
+    };
+    public enum enBuzzer
+    {
+        OFF,
+        ON,
+    };
+
+    public enum enLampDesc
+    {
+        NormalStop = 1,
+        NormalStopping,
+        ErrorStop,
+        ErrorStopping,
+        NomalRunning,
+        Initializing,
+        ManualRunning,
+    };
+
     public class DefineCls
     {
     }
@@ -478,7 +501,11 @@ namespace SFE.TRACK
         public bool IsExtraPin
         {
             get { return isExtraPin; }
-            set { isExtraPin = value; RaisePropertyChanged("IsExtraPin"); }
+            set {
+                if (!Global.GetRecipeEditMode()) return;
+                isExtraPin = value; 
+                RaisePropertyChanged("IsExtraPin"); 
+            }
         }
 
         public string RecipeName
@@ -940,7 +967,9 @@ namespace SFE.TRACK
         public bool IsArm1MoveWait
         {
             get { return isArm1MoveWait; }
-            set { isArm1MoveWait = value; RaisePropertyChanged("IsArm1MoveWait"); }
+            set {
+                if (!Global.GetRecipeEditMode()) return;
+                isArm1MoveWait = value; RaisePropertyChanged("IsArm1MoveWait"); }
         }
 
         public string Arm2Pos
@@ -958,7 +987,9 @@ namespace SFE.TRACK
         public bool IsArm2MoveWait
         {
             get { return isArm2MoveWait; }
-            set { isArm2MoveWait = value; RaisePropertyChanged("IsArm2MoveWait"); }
+            set {
+                if (!Global.GetRecipeEditMode()) return;
+                isArm2MoveWait = value; RaisePropertyChanged("IsArm2MoveWait"); }
         }
 
         public string PumpRecipe

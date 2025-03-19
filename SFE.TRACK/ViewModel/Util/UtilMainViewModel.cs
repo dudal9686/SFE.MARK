@@ -14,7 +14,7 @@ namespace SFE.TRACK.ViewModel.Util
         bool isDispenseConfig = false;
         bool isRobotConfig = true;
         bool isCassetteConfig = false;
-
+        bool isLampConfig = false;
         public bool IsMachineConfig
         {
             get { return isMachineConfig; }
@@ -34,6 +34,11 @@ namespace SFE.TRACK.ViewModel.Util
         {
             get { return isCassetteConfig; }
             set { isCassetteConfig = value; RaisePropertyChanged("IsCassetteConfig"); }
+        }
+        public bool IsLampConfig
+        {
+            get { return isLampConfig; }
+            set { isLampConfig = value; RaisePropertyChanged("IsLampConfig"); }
         }
     }
 }

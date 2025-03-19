@@ -2359,6 +2359,17 @@ namespace SFE.TRACK
             return isDone;
         }
 
+        public bool ReadLampData()
+        {
+            for (int i = 0; i < 7; i++) // 램프 수
+            {
+                LampCls lampCls = new LampCls();
+                lampCls.Title = Enum.GetName(typeof(enLampDesc), i + 1);
+                Global.STLampList.Add(lampCls);
+            }
+            return true;
+        }
+
         public bool ReadJobInfoData(string filename)
         {
             bool isDone = true;

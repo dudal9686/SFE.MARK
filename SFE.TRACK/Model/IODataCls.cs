@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Messaging;
 using CoreCSRunSim;
 using MachineDefine;
 using CoreCSBase;
+using System.Windows.Threading;
 
 namespace SFE.TRACK.Model
 {
@@ -28,15 +29,34 @@ namespace SFE.TRACK.Model
         bool enable = false;
         string name = string.Empty;
         string alias = string.Empty;
+        string company = string.Empty;
         SolidColorBrush stateColor = new SolidColorBrush();
 
         public RelayCommand IORelayCommand { get; set; }
-        public String Company { get; set; }
-
+        DispatcherTimer timer = new DispatcherTimer();
         public IODataCls()
         {
             IORelayCommand = new RelayCommand(IOCommand);
             stateColor = Brushes.Red;
+
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            State = io.ReadIO();
+        }
+
+        public string Company
+        {
+            get { return company; }
+            set
+            {
+                company = value;
+                if(company.ToUpper() == "AZINECAT") timer.Start();
+            }
         }
 
         public UnitIO IO

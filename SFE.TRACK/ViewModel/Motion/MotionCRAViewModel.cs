@@ -53,6 +53,8 @@ namespace SFE.TRACK.ViewModel.Motion
             int cstNo = GetCstNo();
             string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
             //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PickManualMove, msg);
+            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual___Do, "AssyCRA:DoPickDropWaferOnCassette 0,0,0",true,20000);
+            Global.ManualMessageOpen();
         }
         private void PlaceMotionCommand()
         {
