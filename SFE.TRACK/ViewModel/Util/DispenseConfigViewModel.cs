@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -12,20 +13,40 @@ using SFE.TRACK.Model;
 
 namespace SFE.TRACK.ViewModel.Util
 {
+    public enum enDispenseEdit
+    {
+        PUMP,
+        FLOW,
+        AUTOSUPPLY,
+        AUTODRAIN
+    };
     public class DispenseConfigViewModel : ViewModelBase
     {
         List<DispenseInfoCls> DispenseList_ { get; set; }
-        public DispenseInfoCls DispenseInfo { get; set; }
+        DispenseInfoCls dispenseInfo { get; set; }
         public List<DispenseInfoCls> ModuleList { get; set; } = new List<DispenseInfoCls>();
         public DispenseInfoCls ModuleInfo { get; set; } = null;
         public RelayCommand SaveDispenseRelayCommand { get; set; }
         public RelayCommand<object> DispenseDetailDoubleClickRelayCommand { get; set; }
+        public RelayCommand PumpEditRelayCommand { get; set; }
+        public RelayCommand FlowSensorEditRelayCommand { get; set; }
+        public RelayCommand AutoSupplyEditRelayCommand { get; set; }
+        public RelayCommand AutoDrainEditRelayCommand { get; set; }
         int SelectedIndex_ = 0;
         int DispSelectedIndex_ = 0;
+        ObservableCollection<bool> isEnableDisp { get; set; }
 
         public DispenseConfigViewModel()
         {
             SaveDispenseRelayCommand = new RelayCommand(SaveDispenseCommand);
+            isEnableDisp = new ObservableCollection<bool>();
+            for (int i = 0; i < 4; i++) isEnableDisp.Add(false);
+
+            PumpEditRelayCommand = new RelayCommand(PumpEditCommand);
+            FlowSensorEditRelayCommand = new RelayCommand(FlowSensorEditCommand);
+            AutoSupplyEditRelayCommand = new RelayCommand(AutoSupplyEditCommand);
+            AutoDrainEditRelayCommand = new RelayCommand(AutoDrainEditCommand);
+
             DispenseDetailDoubleClickRelayCommand = new RelayCommand<object>(DispenseDetailDoubleClickCommand);
             //ModuleList = Global.STModuleList.FindAll(x => x.MachineName.IndexOf("DEV") != -1 || x.MachineName.IndexOf("COT") != -1 || x.MachineName.IndexOf("ADH") != -1);
             DispenseInfoCls info = new DispenseInfoCls(); info.Type = "COT"; ModuleList.Add(info);
@@ -44,6 +65,70 @@ namespace SFE.TRACK.ViewModel.Util
         {
             get { return DispenseList_; }
             set { DispenseList_ = value; RaisePropertyChanged("DispenseList"); }
+        }
+
+        public DispenseInfoCls DispenseInfo
+        {
+            get { return dispenseInfo; }
+            set { dispenseInfo = value;
+
+                if (dispenseInfo != null)
+                {
+                    if (dispenseInfo.Type == "COT")
+                    {
+                        if(dispenseInfo.DispName.IndexOf("RESIST") != -1)
+                        {
+                            IsEnableDisp[(int)enDispenseEdit.PUMP] = true;
+                            IsEnableDisp[(int)enDispenseEdit.FLOW] = false;
+                            IsEnableDisp[(int)enDispenseEdit.AUTOSUPPLY] = false;
+                            IsEnableDisp[(int)enDispenseEdit.AUTODRAIN] = false;
+                        }
+                        else
+                        {
+                            IsEnableDisp[(int)enDispenseEdit.PUMP] = false;
+                            IsEnableDisp[(int)enDispenseEdit.FLOW] = true;
+                            IsEnableDisp[(int)enDispenseEdit.AUTOSUPPLY] = true;
+                            IsEnableDisp[(int)enDispenseEdit.AUTODRAIN] = false;
+                        }
+                    }
+                    else if (dispenseInfo.Type == "DEV")
+                    {
+                        IsEnableDisp[(int)enDispenseEdit.PUMP] = false;
+                        IsEnableDisp[(int)enDispenseEdit.FLOW] = true;
+                        IsEnableDisp[(int)enDispenseEdit.AUTOSUPPLY] = true;
+                        IsEnableDisp[(int)enDispenseEdit.AUTODRAIN] = false;
+                    }
+                    else if (dispenseInfo.Type == "ADH")
+                    {
+                        if (dispenseInfo.DispName.IndexOf("HMDS") != -1)
+                        {
+                            IsEnableDisp[(int)enDispenseEdit.PUMP] = false;
+                            IsEnableDisp[(int)enDispenseEdit.FLOW] = true;
+                            IsEnableDisp[(int)enDispenseEdit.AUTOSUPPLY] = true;
+                            IsEnableDisp[(int)enDispenseEdit.AUTODRAIN] = false;
+                        }
+                        else
+                        {
+                            IsEnableDisp[(int)enDispenseEdit.PUMP] = false;
+                            IsEnableDisp[(int)enDispenseEdit.FLOW] = false;
+                            IsEnableDisp[(int)enDispenseEdit.AUTOSUPPLY] = false;
+                            IsEnableDisp[(int)enDispenseEdit.AUTODRAIN] = false;
+                        }
+                    }
+                }
+                else 
+                {
+                    for (int i = 0; i < 4; i++) IsEnableDisp[i] = false;
+                }
+
+                RaisePropertyChanged("DispenseInfo");
+            }
+        }
+
+        public ObservableCollection<bool> IsEnableDisp
+        {
+            get { return isEnableDisp; }
+            set { isEnableDisp = value; RaisePropertyChanged("IsEnableDisp"); }
         }
 
         public int SelectedIndex
@@ -69,6 +154,35 @@ namespace SFE.TRACK.ViewModel.Util
         }
 
         #region command
+        private void PumpEditCommand()
+        {
+            View.Util.EditPumpControl editPump = new View.Util.EditPumpControl();
+            editPump.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+            CommonServiceLocator.ServiceLocator.Current.GetInstance<EditPumpControlViewModel>().DispenseInfo = DispenseInfo;
+            editPump.ShowDialog();
+        }
+
+        private void FlowSensorEditCommand()
+        {
+            View.Util.EditFlowSensorControl flowSensor = new View.Util.EditFlowSensorControl();
+            flowSensor.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+            CommonServiceLocator.ServiceLocator.Current.GetInstance<EditFlowSensorControlViewModel>().DispenseInfo = DispenseInfo;
+            flowSensor.ShowDialog();
+        }
+
+        private void AutoSupplyEditCommand()
+        {
+            View.Util.EditAutoSupplyControl autoSupply = new View.Util.EditAutoSupplyControl();
+            autoSupply.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
+            CommonServiceLocator.ServiceLocator.Current.GetInstance<EditAutoSupplyControlViewModel>().DispenseInfo = DispenseInfo;
+            autoSupply.ShowDialog();
+        }
+
+        private void AutoDrainEditCommand()
+        {
+
+        }
+
         private void SaveDispenseCommand()
         {
             if(ModuleInfo == null)

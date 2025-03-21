@@ -76,6 +76,9 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Util.MachineConfigViewModel>();
             SimpleIoc.Default.Register<Util.CassetteConfigViewModel>();
             SimpleIoc.Default.Register<Util.LampConfigViewModel>();
+            SimpleIoc.Default.Register<Util.EditPumpControlViewModel>();
+            SimpleIoc.Default.Register<Util.EditFlowSensorControlViewModel>();
+            SimpleIoc.Default.Register<Util.EditAutoSupplyControlViewModel>();
             SimpleIoc.Default.Register<AlarmMessageViewModel>();
             SimpleIoc.Default.Register<Recipe.RecipeMainViewModel>();
             SimpleIoc.Default.Register<Recipe.WaferFlowRecipeViewModel>();            
@@ -405,6 +408,18 @@ namespace SFE.TRACK.ViewModel
         public Util.LampConfigViewModel LampConfigViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Util.LampConfigViewModel>(); }
+        }
+        public Util.EditPumpControlViewModel EditPumpControlViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Util.EditPumpControlViewModel>(); }
+        }
+        public Util.EditAutoSupplyControlViewModel EditAutoSupplyControlViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Util.EditAutoSupplyControlViewModel>(); }
+        }
+        public Util.EditFlowSensorControlViewModel EditFlowSensorControlViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<Util.EditFlowSensorControlViewModel>(); }
         }
         #endregion
 

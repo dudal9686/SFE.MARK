@@ -98,9 +98,4 @@ namespace SFE.TRACK.ViewModel
         public double Position { get; set; }
         public Model.AxisInfoCls Axis { get; set; } 
     }
-
-    public class LogDataMesssageCls : MessageBase 
-    {
-        public string LogDataDirectory { get; set; }
-    }
 }

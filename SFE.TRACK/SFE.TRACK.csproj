@@ -251,6 +251,9 @@
     <Compile Include="ViewModel\Recipe\WaferFlowRecipeViewModel.cs" />
     <Compile Include="ViewModel\Util\CassetteConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\DispenseConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\EditAutoSupplyControlViewModel.cs" />
+    <Compile Include="ViewModel\Util\EditFlowSensorControlViewModel.cs" />
+    <Compile Include="ViewModel\Util\EditPumpControlViewModel.cs" />
     <Compile Include="ViewModel\Util\LampConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\MachineConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\RobotConfigViewModel.cs" />
@@ -436,6 +439,18 @@
     </Compile>
     <Compile Include="View\Util\DispenseConfig.xaml.cs">
       <DependentUpon>DispenseConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\EditAutoDrainControl.xaml.cs">
+      <DependentUpon>EditAutoDrainControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\EditAutoSupplyControl.xaml.cs">
+      <DependentUpon>EditAutoSupplyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\EditFlowSensorControl.xaml.cs">
+      <DependentUpon>EditFlowSensorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\EditPumpControl.xaml.cs">
+      <DependentUpon>EditPumpControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Util\LampConfig.xaml.cs">
       <DependentUpon>LampConfig.xaml</DependentUpon>
@@ -725,6 +740,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Util\DispenseConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\EditAutoDrainControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\EditAutoSupplyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\EditFlowSensorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\EditPumpControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

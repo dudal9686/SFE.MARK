@@ -84,11 +84,169 @@ namespace SFE.TRACK
                         dispInfo.IsUse = Convert.ToInt32(dt.Rows[i]["Use"]).Equals(0) ? false : true;
                         dispInfo.IsUseDummy = Convert.ToInt32(dt.Rows[i]["DummyUse"]).Equals(0) ? false : true;
                         dispInfo.IsUseRecipe = Convert.ToInt32(dt.Rows[i]["RecipeUse"]).Equals(0) ? false : true;
+                        GetPumpControlData(dispInfo);
+                        GetFlowControlData(dispInfo);
+                        GetAutoSupplyControlData(dispInfo);
                         Global.STDispenseList.Add(dispInfo);
                     }
                 }
             }
-            else return false;
+            else isDone = false;
+
+            dt.Clear();
+            dt.Dispose();
+
+            return isDone;
+        }
+
+        public bool GetPumpControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = false;
+            DataTable dt = new DataTable();
+            if(Global.STAccessDB.GetPumpControlData(dispInfo.Type, dispInfo.DispNo, ref dt))
+            {
+                if(dt.Rows.Count > 0)
+                {
+                    dispInfo.PumpControlData.DispIndex = Convert.ToInt32(dt.Rows[0]["DispIndex"]);
+                    dispInfo.PumpControlData.DispName = dt.Rows[0]["DispName"].ToString();
+                    //dispInfo.PumpControlData.PumpName = dt.Rows[0]["PumpName"].ToString();
+                    dispInfo.PumpControlData.PumpCapa = Convert.ToSingle(dt.Rows[0]["PumpCapa"]);
+                    dispInfo.PumpControlData.PassOper = Convert.ToInt32(dt.Rows[0]["PassOper"]).Equals(1) ? true : false;
+                    dispInfo.PumpControlData.PulseCount = Convert.ToInt32(dt.Rows[0]["PulseCount"]);
+                    dispInfo.PumpControlData.SpareReload = Convert.ToInt32(dt.Rows[0]["SpareReload"]);
+                    dispInfo.PumpControlData.TotalDispCountAlarm = Convert.ToInt32(dt.Rows[0]["TotalDispCountAlarm"]);
+                    dispInfo.PumpControlData.TotalDispCountStop = Convert.ToInt32(dt.Rows[0]["TotalDispCountStop"]);
+                    dispInfo.PumpControlData.Calibration = Convert.ToSingle(dt.Rows[0]["Calibration"]);
+                }
+                else
+                {
+                    dispInfo.PumpControlData.DispIndex = 0;
+                    dispInfo.PumpControlData.DispName = string.Empty;
+                    dispInfo.PumpControlData.PumpName = string.Empty;
+                    dispInfo.PumpControlData.PumpCapa = 0;
+                    dispInfo.PumpControlData.PassOper = false;
+                    dispInfo.PumpControlData.PulseCount = 0;
+                    dispInfo.PumpControlData.SpareReload = 0;
+                    dispInfo.PumpControlData.TotalDispCountAlarm = 0;
+                    dispInfo.PumpControlData.TotalDispCountStop = 0;
+                    dispInfo.PumpControlData.Calibration = 0;
+                }
+            }
+
+            dt.Clear();
+            dt.Dispose();
+            return isDone;
+        }
+
+        public bool SetPumpControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = true;
+
+            if (!Global.STAccessDB.SetPumpControlData(dispInfo)) isDone = false;
+
+            return isDone;
+        }
+
+        public bool GetFlowControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = true;
+            DataTable dt = new DataTable();
+            if(Global.STAccessDB.GetFlowControlData(dispInfo.Type, dispInfo.DispNo, ref dt))
+            {
+                if(dt.Rows.Count > 0)
+                {
+                    dispInfo.FlowControlData.DispIndex = Convert.ToInt32(dt.Rows[0]["DispIndex"]);
+                    dispInfo.FlowControlData.DispName = dt.Rows[0]["DispName"].ToString();
+                    //dispInfo.FlowControlData.SensorName = dt.Rows[0]["SensorName"].ToString();
+                    dispInfo.FlowControlData.PulseRate = Convert.ToSingle(dt.Rows[0]["PulseRate"]);
+                    dispInfo.FlowControlData.SamplingDelayTime = Convert.ToSingle(dt.Rows[0]["SamplingDelayTime"]);
+                    dispInfo.FlowControlData.ReferenceValue = Convert.ToSingle(dt.Rows[0]["ReferenceValue"]);
+                    dispInfo.FlowControlData.Calibration = Convert.ToSingle(dt.Rows[0]["Calibration"]);
+                    dispInfo.FlowControlData.AlarmUpper = Convert.ToSingle(dt.Rows[0]["AlarmUpper"]);
+                    dispInfo.FlowControlData.AlarmLower = Convert.ToSingle(dt.Rows[0]["AlarmLower"]);
+                    dispInfo.FlowControlData.StopUpper = Convert.ToSingle(dt.Rows[0]["StopUpper"]);
+                    dispInfo.FlowControlData.StopLower = Convert.ToSingle(dt.Rows[0]["StopLower"]);
+                    dispInfo.FlowControlData.CheckTiming = Convert.ToInt32(dt.Rows[0]["CheckTiming"]).Equals(1) ? true : false;
+                    dispInfo.FlowControlData.FlowMonitoring = Convert.ToInt32(dt.Rows[0]["FlowMonitoring"]).Equals(1) ? true : false;
+                }
+                else
+                {
+                    dispInfo.FlowControlData.DispIndex = 0;
+                    dispInfo.FlowControlData.DispName = string.Empty;
+                    //dispInfo.FlowControlData.SensorName = dt.Rows[0]["SensorName"].ToString();
+                    dispInfo.FlowControlData.PulseRate = 0;
+                    dispInfo.FlowControlData.SamplingDelayTime = 0;
+                    dispInfo.FlowControlData.ReferenceValue = 0;
+                    dispInfo.FlowControlData.Calibration = 0;
+                    dispInfo.FlowControlData.AlarmUpper = 0;
+                    dispInfo.FlowControlData.AlarmLower = 0;
+                    dispInfo.FlowControlData.StopUpper = 0;
+                    dispInfo.FlowControlData.StopLower = 0;
+                    dispInfo.FlowControlData.CheckTiming = false;
+                    dispInfo.FlowControlData.FlowMonitoring = false;
+                }
+            }
+
+            dt.Clear();
+            dt.Dispose();
+
+            return isDone;
+        }
+
+        public bool SetFlowControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = true;
+
+            if (!Global.STAccessDB.SetFlowControlData(dispInfo)) isDone = false;
+
+            return isDone;
+        }
+
+        public bool GetAutoSupplyControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = true;
+            DataTable dt = new DataTable();
+
+            if(Global.STAccessDB.GetAutoSupplyControlData(dispInfo.Type, dispInfo.DispNo, ref dt))
+            {
+                if(dt.Rows.Count > 0)
+                {
+                    dispInfo.AutoSupplyControlData.DispIndex = Convert.ToInt32(dt.Rows[0]["DispIndex"]);
+                    dispInfo.AutoSupplyControlData.DispName = dt.Rows[0]["DispName"].ToString();
+                    //dispInfo.AutoSupplyControlData.AutoSupplyName = dt.Rows[0]["AutoSupplyName"].ToString();
+                    dispInfo.AutoSupplyControlData.AutoMode = Convert.ToInt32(dt.Rows[0]["AutoMode"]).Equals(1) ? true : false;
+                    dispInfo.AutoSupplyControlData.LiquidSource = Convert.ToInt32(dt.Rows[0]["LiquidSource"]);
+                    dispInfo.AutoSupplyControlData.SupplyTime = Convert.ToInt32(dt.Rows[0]["SupplyTime"]);
+                    dispInfo.AutoSupplyControlData.VacuumeTime = Convert.ToInt32(dt.Rows[0]["VacuumTime"]);
+                    dispInfo.AutoSupplyControlData.WaitTime = Convert.ToInt32(dt.Rows[0]["WaitTime"]);
+                    dispInfo.AutoSupplyControlData.SupplyDelayTime = Convert.ToInt32(dt.Rows[0]["SupplyDelayTime"]);
+                    dispInfo.AutoSupplyControlData.PurgeTime = Convert.ToInt32(dt.Rows[0]["PurgeTime"]);
+                }
+                else
+                {
+                    dispInfo.AutoSupplyControlData.DispIndex = 0;
+                    dispInfo.AutoSupplyControlData.DispName = string.Empty;
+                    //dispInfo.AutoSupplyControlData.AutoSupplyName = dt.Rows[0]["AutoSupplyName"].ToString();
+                    dispInfo.AutoSupplyControlData.AutoMode = false;
+                    dispInfo.AutoSupplyControlData.LiquidSource = 0;
+                    dispInfo.AutoSupplyControlData.SupplyTime = 0;
+                    dispInfo.AutoSupplyControlData.VacuumeTime = 0;
+                    dispInfo.AutoSupplyControlData.WaitTime = 0;
+                    dispInfo.AutoSupplyControlData.SupplyDelayTime = 0;
+                    dispInfo.AutoSupplyControlData.PurgeTime = 0;
+                }
+            }
+
+            dt.Clear();
+            dt.Dispose();
+            return isDone;
+        }
+
+        public bool SetAutoSupplyControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = true;
+
+            if (!Global.STAccessDB.SetAutoSupplyControlData(dispInfo)) isDone = false;
 
             return isDone;
         }

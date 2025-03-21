@@ -1923,8 +1923,8 @@ namespace SFE.TRACK
         int nBlockNo = 0;
         int nModuleNo = 0;
         int nDispIndex = 0;
-        int nCheckTiming = 0;
-        int nFlowMonitoring = 0;
+        bool bCheckTiming = false;
+        bool bFlowMonitoring = false;
 
         string sDispName = string.Empty;
         string sSensorName = string.Empty;
@@ -1953,15 +1953,15 @@ namespace SFE.TRACK
             get { return nDispIndex; }
             set { nDispIndex = value; RaisePropertyChanged("DispIndex"); }
         }
-        public int CheckTiming
+        public bool CheckTiming
         {
-            get { return nCheckTiming; }
-            set { nCheckTiming = value; RaisePropertyChanged("CheckTiming"); }
+            get { return bCheckTiming; }
+            set { bCheckTiming = value; RaisePropertyChanged("CheckTiming"); }
         }
-        public int FlowMonitoring
+        public bool FlowMonitoring
         {
-            get { return nFlowMonitoring; }
-            set { nFlowMonitoring = value; RaisePropertyChanged("FlowMonitoring"); }
+            get { return bFlowMonitoring; }
+            set { bFlowMonitoring = value; RaisePropertyChanged("FlowMonitoring"); }
         }
         public string DispName
         {
@@ -2020,7 +2020,7 @@ namespace SFE.TRACK
         int nBlockNo = 0;
         int nModuleNo = 0;
         int nDispIndex = 0;
-        int nPassOper = 0;
+        bool bPassOper = false;
         int nPulseCount = 0;
         int nSpareReload = 0;
         int nTotalDispCountAlarm = 0;
@@ -2047,10 +2047,10 @@ namespace SFE.TRACK
             get { return nDispIndex; }
             set { nDispIndex = value; RaisePropertyChanged("DispIndex"); }
         }
-        public int PassOper
+        public bool PassOper
         {
-            get { return nPassOper; }
-            set { nPassOper = value; RaisePropertyChanged("PassOper"); }
+            get { return bPassOper; }
+            set { bPassOper = value; RaisePropertyChanged("PassOper"); }
         }
         public int PulseCount
         {
@@ -2099,7 +2099,7 @@ namespace SFE.TRACK
         int nBlockNo = 0;
         int nModuleNo = 0;
         int nDispIndex = 0;
-        int nAutoMode = 0;
+        bool bAutoMode = false;
         int nLiquidSource = 0;
         int nSupplyTime = 0;
         int nVacuumeTime = 0;
@@ -2124,10 +2124,10 @@ namespace SFE.TRACK
             get { return nDispIndex; }
             set { nDispIndex = value; RaisePropertyChanged("DispIndex"); }
         }
-        public int AutoMode
+        public bool AutoMode
         {
-            get { return nAutoMode; }
-            set { nAutoMode = value; RaisePropertyChanged("AutoMode"); }
+            get { return bAutoMode; }
+            set { bAutoMode = value; RaisePropertyChanged("AutoMode"); }
         }
         public int LiquidSource
         {
@@ -2182,7 +2182,7 @@ namespace SFE.TRACK
         bool isUseRecipe = false;
         bool isCheck = false;
 
-        public FlowControlDataCls FlowContrlData { get; set; } = new FlowControlDataCls();
+        public FlowControlDataCls FlowControlData { get; set; } = new FlowControlDataCls();
         public PumpControlDataCls PumpControlData { get; set; }  = new PumpControlDataCls();
         public AutoSupplyControlDataCls AutoSupplyControlData { get; set; }  = new AutoSupplyControlDataCls();
 
@@ -2225,6 +2225,11 @@ namespace SFE.TRACK
         {
             get { return isCheck; }
             set { isCheck = value; RaisePropertyChanged("IsCheck"); }
+        }
+
+        public void Clone()
+        {
+            
         }
     }
 

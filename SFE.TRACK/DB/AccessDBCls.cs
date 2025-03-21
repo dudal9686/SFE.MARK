@@ -151,6 +151,176 @@ namespace SFE.TRACK.DB
             return ExecuteReader(query, ref dt);
         }
 
+        public bool GetFlowControlData(string type, uint dispNo, ref DataTable dt)
+        {
+            string query = string.Format("SELECT * FROM tbFlowControlData WHERE `Type` = '{0}' AND `DispIndex` = {1}", type, dispNo);
+            return ExecuteReader(query, ref dt);
+        }
+
+        public bool SetFlowControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = true;
+            DataTable dt = new DataTable();
+            string query = string.Empty;
+
+            if(GetFlowControlData(dispInfo.Type, dispInfo.DispNo, ref dt))
+            {
+                if(dt.Rows.Count == 0)
+                {
+                    //Insert
+                    query = string.Format("INSERT INTO tbFlowControlData(`Type`, `DispIndex`, `DispName`, `PulseRate`, `SamplingDelayTime`, `ReferenceValue`, `Calibration`," +
+                        "`AlarmUpper`, `AlarmLower`, `StopUpper`, `StopLower`, `CheckTiming`, `FlowMonitoring`)" +
+                        " VALUES('{0}',{1},'{2}',{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})",
+                        dispInfo.Type,
+                        dispInfo.DispNo,
+                        dispInfo.DispName,
+                        dispInfo.FlowControlData.PulseRate,
+                        dispInfo.FlowControlData.SamplingDelayTime,
+                        dispInfo.FlowControlData.ReferenceValue,
+                        dispInfo.FlowControlData.Calibration,
+                        dispInfo.FlowControlData.AlarmUpper,
+                        dispInfo.FlowControlData.AlarmLower,
+                        dispInfo.FlowControlData.StopUpper,
+                        dispInfo.FlowControlData.StopLower,
+                        dispInfo.FlowControlData.CheckTiming.Equals(true) ? 1 : 0,
+                        dispInfo.FlowControlData.FlowMonitoring.Equals(true) ? 1 : 0);
+                }
+                else
+                {
+                    //Update
+                    query = string.Format("UPDATE tbFlowControlData SET `PulseRate` = {0}, `SamplingDelayTime` = {1}, `ReferenceValue` = {2}, `Calibration` = {3}, " +
+                        "`AlarmUpper` = {4}, `AlarmLower` = {5}, `StopUpper` = {6}, `StopLower` = {7}, `CheckTiming` = {8}, `FlowMonitoring` = {9} " +
+                        "WHERE `Type` = '{10}' AND `DispIndex` = {11}",
+                        dispInfo.FlowControlData.PulseRate,
+                        dispInfo.FlowControlData.SamplingDelayTime,
+                        dispInfo.FlowControlData.ReferenceValue,
+                        dispInfo.FlowControlData.Calibration,
+                        dispInfo.FlowControlData.AlarmUpper,
+                        dispInfo.FlowControlData.AlarmLower,
+                        dispInfo.FlowControlData.StopUpper,
+                        dispInfo.FlowControlData.StopLower,
+                        dispInfo.FlowControlData.CheckTiming.Equals(true) ? 1 : 0,
+                        dispInfo.FlowControlData.FlowMonitoring.Equals(true) ? 1 : 0,
+                        dispInfo.Type,
+                        dispInfo.DispNo);
+                }
+
+                isDone = ExecuteNonQuery(query);
+            }
+
+            dt.Clear();
+            dt.Dispose();
+
+            return isDone;
+        }
+
+        public bool GetAutoSupplyControlData(string type, uint dispNo, ref DataTable dt)
+        {
+            string query = string.Format("SELECT * FROM tbAutoSupplyControlData WHERE `Type` = '{0}' AND DispIndex = {1}", type, dispNo);
+            return ExecuteReader(query, ref dt);
+        }
+
+        public bool SetAutoSupplyControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = false;
+            string query = string.Empty;
+            DataTable dt = new DataTable();
+            if(GetAutoSupplyControlData(dispInfo.Type, dispInfo.DispNo, ref dt))
+            {
+                if(dt.Rows.Count == 0)
+                {
+                    query = string.Format("INSERT INTO tbAutoSupplyControlData(`Type`,`DispIndex`,`DispName`,`AutoMode`,`LiquidSource`,`SupplyTime`,`VacuumTime`, " +
+                        "`WaitTime`,`SupplyDelayTime`,`PurgeTime`) VALUES('{0}',{1},'{2}',{3},{4},{5},{6},{7},{8},{9})",
+                        dispInfo.Type,
+                        dispInfo.DispNo,
+                        dispInfo.DispName,
+                        dispInfo.AutoSupplyControlData.AutoMode.Equals(true) ? 1 : 0,
+                        dispInfo.AutoSupplyControlData.LiquidSource,
+                        dispInfo.AutoSupplyControlData.SupplyTime,
+                        dispInfo.AutoSupplyControlData.VacuumeTime,
+                        dispInfo.AutoSupplyControlData.WaitTime,
+                        dispInfo.AutoSupplyControlData.SupplyDelayTime,
+                        dispInfo.AutoSupplyControlData.PurgeTime);
+                }
+                else
+                {
+                    query = string.Format("UPDATE tbAutoSupplyControlData SET `DispName`='{0}',`AutoMode`={1},`LiquidSource`={2},`SupplyTime`={3},`VacuumTime`={4}, " +
+                        "`WaitTime`={5},`SupplyDelayTime`={6},`PurgeTime`={7} WHERE Type='{8}' AND DispIndex={9}",
+                        dispInfo.DispName,
+                        dispInfo.AutoSupplyControlData.AutoMode.Equals(true) ? 1 : 0,
+                        dispInfo.AutoSupplyControlData.LiquidSource,
+                        dispInfo.AutoSupplyControlData.SupplyTime,
+                        dispInfo.AutoSupplyControlData.VacuumeTime,
+                        dispInfo.AutoSupplyControlData.WaitTime,
+                        dispInfo.AutoSupplyControlData.SupplyDelayTime,
+                        dispInfo.AutoSupplyControlData.PurgeTime,
+                        dispInfo.Type,
+                        dispInfo.DispNo);
+                }
+
+                isDone = ExecuteNonQuery(query);
+            }
+
+            dt.Clear();
+            dt.Dispose();
+
+            return isDone;
+        }
+
+        public bool GetPumpControlData(string type, uint dispNo, ref DataTable dt)
+        {
+            string query = string.Format("SELECT * FROM tbPumpControlData WHERE `Type` ='{0}' AND `DispIndex` = {1}", type, dispNo);
+            return ExecuteReader(query, ref dt);
+        }
+
+        public bool SetPumpControlData(DispenseInfoCls dispInfo)
+        {
+            bool isDone = false;
+            DataTable dt = new DataTable();
+            string query = string.Empty;
+
+            if(GetPumpControlData(dispInfo.Type, dispInfo.DispNo, ref dt))
+            {
+                if(dt.Rows.Count == 0)
+                {
+                    query = string.Format("INSERT INTO tbPumpControlData(`Type`,`DispIndex`,`DispName`,`PumpCapa`,`PassOper`,`PulseCount`,`SpareReload`,`TotalDispCountAlarm`," +
+                        "`TotalDispCountStop`,`Calibration`) VALUES('{0}',{1},'{2}',{3},{4},{5},{6},{7},{8},{9})",
+                        dispInfo.Type,
+                        dispInfo.DispNo,
+                        dispInfo.DispName,
+                        dispInfo.PumpControlData.PumpCapa,
+                        dispInfo.PumpControlData.PassOper.Equals(true) ? 1 : 0,
+                        dispInfo.PumpControlData.PulseCount,
+                        dispInfo.PumpControlData.SpareReload,
+                        dispInfo.PumpControlData.TotalDispCountAlarm,
+                        dispInfo.PumpControlData.TotalDispCountStop,
+                        dispInfo.PumpControlData.Calibration);
+                }
+                else 
+                {
+                    query = string.Format("UPDATE tbPumpControlData SET `DispName` = '{0}',`PumpCapa`={1},`PassOper`={2},`PulseCount`={3},`SpareReload`={4},`TotalDispCountAlarm`={5}, " +
+                        "`TotalDispCountStop`={6},`Calibration`={7} WHERE Type = '{8}' AND DispIndex = {9}",
+                        dispInfo.DispName,
+                        dispInfo.PumpControlData.PumpCapa,
+                        dispInfo.PumpControlData.PassOper.Equals(true) ? 1 : 0,
+                        dispInfo.PumpControlData.PulseCount,
+                        dispInfo.PumpControlData.SpareReload,
+                        dispInfo.PumpControlData.TotalDispCountAlarm,
+                        dispInfo.PumpControlData.TotalDispCountStop,
+                        dispInfo.PumpControlData.Calibration,
+                        dispInfo.Type,
+                        dispInfo.DispNo);
+                }
+
+                isDone = ExecuteNonQuery(query);
+            }
+
+            dt.Clear();
+            dt.Dispose();
+
+            return isDone;
+        }
+
         public bool SaveDispenseInfo()
         {
             string query = string.Empty;
