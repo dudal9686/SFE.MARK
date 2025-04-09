@@ -165,6 +165,7 @@
     <Compile Include="Model\IODataCls.cs" />
     <Compile Include="Model\LampCls.cs" />
     <Compile Include="Model\SpinChamberCls.cs" />
+    <Compile Include="Model\SystemCfgCls.cs" />
     <Compile Include="Model\TeachingDataCls.cs" />
     <Compile Include="Model\WaferCls.cs" />
     <Compile Include="Model\ModuleBaseCls.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="ViewModel\Util\LampConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\MachineConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\RobotConfigViewModel.cs" />
+    <Compile Include="ViewModel\Util\SystemConfigViewModel.cs" />
     <Compile Include="ViewModel\Util\UtilMainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\ViewModelMessage.cs" />
@@ -460,6 +462,9 @@
     </Compile>
     <Compile Include="View\Util\RobotConfig.xaml.cs">
       <DependentUpon>RobotConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Util\SystemConfig.xaml.cs">
+      <DependentUpon>SystemConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Util\UCUtilMain.xaml.cs">
       <DependentUpon>UCUtilMain.xaml</DependentUpon>
@@ -768,6 +773,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Util\RobotConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Util\SystemConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

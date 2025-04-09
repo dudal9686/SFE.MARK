@@ -15,8 +15,8 @@ namespace SFE.TRACK.Log
         private object LockObject = new object();
         private object SocketLockObject = new object();
         private object AlarmLockObject = new object();
-        Logger socketLogger = new Logger();
-        Logger alarmLogger = new Logger();
+        Logger socketLogger;
+        Logger alarmLogger;
         public LogCls()
         {
             socketLogger = new Logger();

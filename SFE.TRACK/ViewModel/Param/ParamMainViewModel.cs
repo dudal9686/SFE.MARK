@@ -9,6 +9,9 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using SFE.TRACK.Model;
+using MachineDefine;
+using CoreCSRunSim;
+
 namespace SFE.TRACK.ViewModel.Param
 {
     public class ParamMainViewModel : ViewModelBase
@@ -17,6 +20,7 @@ namespace SFE.TRACK.ViewModel.Param
         ObservableCollection<ParamModuleCls> teachingModuleList = new ObservableCollection<ParamModuleCls>();
         public RelayCommand<object> TeachDataDoubleClickRelayCommand { get; set; }
         public RelayCommand SaveTeachingRelayCommand { get; set; }
+        public RelayCommand MoveTeachingRelayCommand { get; set; }
         List<TeachingDataCls> teachingData { get; set; }
         int selectedModuleIndex = 0;
         int selectedTeachingedIndex = 0;
@@ -24,9 +28,11 @@ namespace SFE.TRACK.ViewModel.Param
         TeachingDataCls paramData { get; set; }
         string teachingName = string.Empty;
         string teachingGroupName = string.Empty;
-
+        AxisInfoCls axisInfo { get; set; }
+        TSpeedPack speedPack = new TSpeedPack();
         public ParamMainViewModel()
         {
+            ParamMenuCls param;
             List<string> list = new List<string>();
             foreach (TeachingDataCls data in Global.STTeachingData)
             {
@@ -35,7 +41,7 @@ namespace SFE.TRACK.ViewModel.Param
 
             foreach(string Name in list)
             {
-                ParamMenuCls param = new ParamMenuCls();
+                param = new ParamMenuCls();
                 param.Title = Name;
                 teachingTypeList.Add(param);
             }
@@ -44,6 +50,7 @@ namespace SFE.TRACK.ViewModel.Param
 
             Messenger.Default.Register<TeachModuleMessageCls>(this, OnReceiveMessageAction);
             SaveTeachingRelayCommand = new RelayCommand(SaveTeachingCommand);
+            MoveTeachingRelayCommand = new RelayCommand(MoveTeachingCommand);
             TeachDataDoubleClickRelayCommand = new RelayCommand<object>(TeachDataDoubleClickCommand);
         }
         ~ParamMainViewModel()
@@ -124,6 +131,12 @@ namespace SFE.TRACK.ViewModel.Param
             set { teachingGroupName = value; RaisePropertyChanged("TeachingGroupName"); }
         }
 
+        public AxisInfoCls Axis
+        {
+            get { return axisInfo; }
+            set { axisInfo = value; RaisePropertyChanged("Axis"); }
+        }
+
         private void GetTeachingData()
         {
             //COT, DEV는 모터 타입으로 나뉜다.
@@ -167,6 +180,21 @@ namespace SFE.TRACK.ViewModel.Param
             set
             {
                 paramData = value;
+
+                if (paramData != null)
+                {
+                    foreach (AxisInfoCls axis in Global.STAxis)
+                    {
+                        if (paramData.Motor.GetName() == axis.Motor.GetName())
+                        {
+                            Axis = axis;
+                            if(Axis.Company == "SFE_CAN")
+                                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorAxisRequest, string.Format("MOTOR:{0}", Axis.AxisID));
+                            break;
+                        }
+                    }
+                }
+
                 RaisePropertyChanged("ParamData");
             }
         }
@@ -198,6 +226,36 @@ namespace SFE.TRACK.ViewModel.Param
             Global.MessageOpen(enMessageType.OK, "Saved.");
         }
 
+        private void MoveTeachingCommand()
+        {
+            if (paramData == null) return;
+
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, "Would you like to move?")) return;
+
+            string command = string.Empty;
+            Console.WriteLine(paramData.Motor.GetName());
+
+            foreach(AxisInfoCls axis in Global.STAxis)
+            {
+                if(axis.Motor.GetName() == paramData.Motor.GetName())
+                {
+                    if (axis.Company == "SFE_CAN")
+                    {
+                        command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", axis.AxisID, paramData.Pos, paramData.Vel, paramData.Acc, paramData.Dec, 10000);
+                        Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___DirectMove, command);
+                    }
+                    else
+                    {
+                        speedPack.acc = paramData.Acc;
+                        speedPack.dec = paramData.Dec;
+                        speedPack.speed = paramData.Vel;
+                        speedPack.timeout = 5000;
+                        axis.Motor.DoSCurveMove(paramData.Pos, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                    }
+                }
+            }
+        }
+
         private void TeachDataDoubleClickCommand(object o)
         {
             if (ParamData == null) return;
@@ -215,17 +273,16 @@ namespace SFE.TRACK.ViewModel.Param
                     }
                     break;
                 case 2:
-                    ParamData.Acc = Global.KeyPad();
+                    ParamData.Acc = Global.KeyPad((float)ParamData.Acc);
                     break;
                 case 3:
-                    ParamData.Dec = Global.KeyPad();
+                    ParamData.Dec = Global.KeyPad((float)ParamData.Dec);
                     break;
                 case 4:
-                    ParamData.Vel = Global.KeyPad();
+                    ParamData.Vel = Global.KeyPad((float)ParamData.Vel);
                     break;
                 case 5:                    
-                    float pos = Convert.ToSingle(ParamData.Pos);
-                    ParamData.Pos = Global.KeyPad(pos);
+                    ParamData.Pos = Global.KeyPad((float)ParamData.Pos);
                     break;
 
             }

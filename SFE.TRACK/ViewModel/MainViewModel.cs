@@ -924,21 +924,23 @@ namespace SFE.TRACK.ViewModel
 
                     if (chamber == null || axis == null) return;
 
-                    chamber.ProcessValue = Convert.ToSingle(arr[3]);
-                    chamber.SetValue = Convert.ToSingle(arr[4]);
-                    if (Convert.ToInt32(arr[5]) == 1) axis.InMotion = true;
+                    for(int i = 0; i < 4; i++) chamber.HeatTempList[i].ProcessValue = Convert.ToSingle(arr[3+i]);
+                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].SetValue = Convert.ToSingle(arr[7+i]);
+                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].ControllerStatus = Convert.ToInt32(arr[11 + i]).Equals(1) ? "STOP" : "RUN";
+
+                    if (Convert.ToInt32(arr[15]) == 1) axis.InMotion = true;
                     else axis.InMotion = false;
 
-                    if (Convert.ToInt32(arr[6]) == 1) axis.MinusLimit = true;
+                    if (Convert.ToInt32(arr[16]) == 1) axis.MinusLimit = true;
                     else axis.MinusLimit = false;
 
-                    if (Convert.ToInt32(arr[7]) == 1) axis.PlusLimit = true;
+                    if (Convert.ToInt32(arr[17]) == 1) axis.PlusLimit = true;
                     else axis.PlusLimit = false;
 
-                    if (Convert.ToInt32(arr[8]) == 1) axis.HomeSituation = enHomeState.HOME_OK;
+                    if (Convert.ToInt32(arr[18]) == 1) axis.HomeSituation = enHomeState.HOME_OK;
                     else axis.HomeSituation = enHomeState.HOME_NONE;
 
-                    axis.ActualPosition = Convert.ToInt32(arr[9]);
+                    axis.ActualPosition = Convert.ToInt32(arr[19]);
                 }
                 else if (eValue == EnumCommand_Status.DATA___ChamberMonitoringData)
                 {
@@ -968,6 +970,7 @@ namespace SFE.TRACK.ViewModel
 
             if (item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.Move___EncoderPos.ToString())
             {
+                if (resultString == "") return;
                 groupArr = resultString.Split(':');
                 commandArr = groupArr[1].Split(',');
                 foreach (AxisInfoCls info in Global.STAxis)
@@ -1181,6 +1184,236 @@ namespace SFE.TRACK.ViewModel
             {
                 if (Enum.TryParse<EnumConfig_Motor_CB12_Pin>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
+            }
+            else if(enumGroup ==  EnumConfigGroup.SystemChamber)
+            {
+                if (Enum.TryParse<EnumConfig_SystemChamber>(item.Name, out var enumItem) == false) return;
+                SetSystemConfig(item);
+
+
+            }
+        }
+
+        private void SetSystemConfig(PrgCfgItem item)
+        {
+            Model.SystemCfgCls systemCfg;
+
+            systemCfg = Global.STSystemCfgList.Find(x => x.Name == item.Name);
+
+            if (systemCfg == null)
+            {
+                systemCfg = new SystemCfgCls();
+                //SYSTEM
+                if(item.Name == "VelocityRatio")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Run Speed Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if(item.Name == "TemphumidityControllerComNo")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Temp/Humi Com No";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "TempControllerComNo")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Heat Com No";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "DryRunMode")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Dry Run Mode";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                //DEV-R
+                else if (item.Name == "Dev_R_Rinse_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 3;
+                    systemCfg.Title = "DevR Rinse Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }                
+                else if (item.Name == "Dev_R_Dispense_Flag")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 3;
+                    systemCfg.Title = "DevR Dispense flag";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Dev_R_BackRinse_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 3;
+                    systemCfg.Title = "DevR BackRinse Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Dev_R_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 3;
+                    systemCfg.Title = "DevR Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                //DEV-L
+                else if (item.Name == "Dev_L_Rinse_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 2;
+                    systemCfg.Title = "DevL Rinse Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Dev_L_Dispense_Flag")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 2;
+                    systemCfg.Title = "DevL Dispense flag";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Dev_L_BackRinse_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 2;
+                    systemCfg.Title = "DevL BackRinse Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Dev_L_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 2;
+                    systemCfg.Title = "DevL Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                //COT
+                else if (item.Name == "Cot_Rinse_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Rinse Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump_Reload_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Reload Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump_Dispense_Decel")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump Dec";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump_Dispense_Amout")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump Amount";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump_Dispense_Accel")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump Acc";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump_Calibration")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump Cal";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_PR_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot PR Dispnese Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Dispense_Flag")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Dispnese Flag";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Bath_Sel_NozzleNo")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Bath Select Noz";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Bath_OperationTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Bath Operation Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Bath_IntervalTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Bath Interval Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_BackRinse_DispTime")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot BackRinse Dispense Time";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if(item.Name == "Cot_Pump_Dispense_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump Dispense Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+
+                if (systemCfg.Name != string.Empty) Global.STSystemCfgList.Add(systemCfg);
+
+            }
+            else
+            {
+                systemCfg.Value = item.Contents;
             }
         }
 

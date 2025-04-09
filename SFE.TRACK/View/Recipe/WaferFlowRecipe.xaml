@@ -103,8 +103,7 @@
 
                         <Button Command="{Binding AddDetailRelayCommand}" ToolTip="New" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="630 0 0 0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <materialDesign:PackIcon Kind="AddAlert"
-                                                         Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="AddAlert" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Command="{Binding SaveDetailRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="0 0 0 0">

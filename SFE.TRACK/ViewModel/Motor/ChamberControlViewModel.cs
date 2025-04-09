@@ -15,6 +15,7 @@ namespace SFE.TRACK.ViewModel.Motor
         string axisInfo = string.Empty;
         AxisInfoCls axis { get; set; }
         ChamberCls chamber { get; set; }
+        HeatTempCls heatTemp { get; set; }
         List<AxisInfoCls> list { get; set; }
         public RelayCommand HomeRelayCommand { get; set; }
         public RelayCommand ServoOnRelayCommand { get; set; }
@@ -22,6 +23,7 @@ namespace SFE.TRACK.ViewModel.Motor
         public RelayCommand StopRelayCommand { get; set; }
         public RelayCommand TempRunRelayCommand { get; set; }
         public RelayCommand TempStopRelayCommand { get; set; }
+        public RelayCommand TempSetRelayCommand { get; set; }
         public RelayCommand AutoTuningRelayCommand { get; set; }
         public RelayCommand PinHomeRelayCommand { get; set; }
         public RelayCommand PinReadyRelayCommand { get; set; }
@@ -35,6 +37,7 @@ namespace SFE.TRACK.ViewModel.Motor
         public RelayCommand MouseUpMinusRelayCommand { get; set; }
         public RelayCommand PitchClickRelayCommand { get; set; }
         public RelayCommand<object> GridlDoubleClickRelayCommand { get; set; }
+        public RelayCommand<object> GridTempDoubleClickRelayCommand { get; set; }
         bool[] isVelocity = new bool[2] { false, true };
         float pitch = 0.1f;
         string command = string.Empty;
@@ -46,6 +49,7 @@ namespace SFE.TRACK.ViewModel.Motor
             StopRelayCommand = new RelayCommand(StopCommand);
             TempRunRelayCommand = new RelayCommand(TempRunCommand);
             TempStopRelayCommand = new RelayCommand(TempStopCommand);
+            TempSetRelayCommand = new RelayCommand(TempSetCommand);
             AutoTuningRelayCommand = new RelayCommand(AutoTuningCommand);
             PinHomeRelayCommand = new RelayCommand(PinHomeCommand);
             PinReadyRelayCommand = new RelayCommand(PinReadyCommand);
@@ -59,6 +63,7 @@ namespace SFE.TRACK.ViewModel.Motor
             MouseUpMinusRelayCommand = new RelayCommand(MouseUpMinusCommand);
             PitchClickRelayCommand = new RelayCommand(PitchClickCommand);
             GridlDoubleClickRelayCommand = new RelayCommand<object>(GridlDoubleClickCommand);
+            GridTempDoubleClickRelayCommand = new RelayCommand<object>(GridTempDoubleClickCommand);
         }
         private void MouseDownPlusCommand()
         {
@@ -136,19 +141,29 @@ namespace SFE.TRACK.ViewModel.Motor
         private void TempRunCommand()
         {
             if (Chamber == null) return;
-            command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
+            if (HeatTemp == null) return;
+            command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
             Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___Run, command);
         }
         private void TempStopCommand()
         {
             if (Chamber == null) return;
-            command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
+            if (HeatTemp == null) return;
+            command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
             Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___Stop, command);
+        }
+        private void TempSetCommand()
+        {
+            if (Chamber == null) return;
+            if (HeatTemp == null) return;
+            command = string.Format("Chamber:{0}:{1}:{2}:{3}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex, HeatTemp.SetValue);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, command);
         }
         private void AutoTuningCommand()
         {
             if (Chamber == null) return;
-            command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
+            if (HeatTemp == null) return;
+            command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
             Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___AutoTuning, command);
         }
         private void PinHomeCommand()
@@ -191,6 +206,24 @@ namespace SFE.TRACK.ViewModel.Motor
         {
             Pitch = Global.KeyPad(Pitch, 10, -10);
         }
+        private void GridTempDoubleClickCommand(object o)
+        {
+            System.Windows.Controls.DataGrid grid = o as System.Windows.Controls.DataGrid;
+            int index = grid.CurrentCell.Column.DisplayIndex;
+
+            if (Chamber == null) return;
+            if (HeatTemp == null) return;
+
+            Console.WriteLine(HeatTemp.ZoneIndex);
+
+            switch (index)
+            {
+                case 2:
+                    Chamber.HeatTempList[HeatTemp.ZoneIndex - 1].SetValue = Global.KeyPad(HeatTemp.SetValue);
+                    break;
+            }
+
+        }
         private void GridlDoubleClickCommand(object o)
         {
             System.Windows.Controls.DataGrid grid = o as System.Windows.Controls.DataGrid;
@@ -207,8 +240,8 @@ namespace SFE.TRACK.ViewModel.Motor
                     else if (Chamber.MachineName.ToUpper().IndexOf("LHP") != -1) { max = 180; min = 50; }
                     else if (Chamber.MachineName.ToUpper().IndexOf("HHP") != -1) { max = 300; min = 50; }
 
-                    Chamber.SetValue = Global.KeyPad(Chamber.SetValue, max, min);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Chamber.SetValue));
+                    //Chamber.SetValue = Global.KeyPad(Chamber.SetValue, max, min);
+                    //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Chamber.SetValue));
                     break;
             }
         }
@@ -255,6 +288,11 @@ namespace SFE.TRACK.ViewModel.Motor
         {
             get { return chamber; }
             set { chamber = value; RaisePropertyChanged("Chamber"); }
+        }
+        public HeatTempCls HeatTemp
+        {
+            get { return heatTemp; }
+            set { heatTemp = value; RaisePropertyChanged("HeatTemp"); }
         }
     }
 }

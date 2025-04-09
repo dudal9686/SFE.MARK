@@ -55,11 +55,11 @@ namespace SFE.TRACK
 
             Dictionary<int, string> list = Global.MachineWorker.Controller.GetCmdHelper().GetClientList();
 
-            if (list.ContainsKey(Global.CHAMBER_ID)) ChamberConnectColor = Brushes.Green;
-            else ChamberConnectColor = Brushes.Red;
+            if (list.ContainsKey(Global.CHAMBER_ID)) { ChamberConnectColor = Brushes.Green; Global.IsChamberConnection = true; }
+            else { ChamberConnectColor = Brushes.Red; Global.IsChamberConnection = false; }
 
-            if (list.ContainsKey(Global.MCS_ID)) RobotConnectColor = Brushes.Green;
-            else RobotConnectColor = Brushes.Red;
+            if (list.ContainsKey(Global.MCS_ID)) { RobotConnectColor = Brushes.Green; Global.IsMCSConnection = true; }
+            else { RobotConnectColor = Brushes.Red; Global.IsMCSConnection = false; }
         }
     }
 }

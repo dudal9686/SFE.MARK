@@ -35,6 +35,8 @@ namespace SFE.TRACK
         public static List<TeachingDataCls> STTeachingData = new List<TeachingDataCls>();
         public static List<MonitoringDataCls> STMonitoringList = new List<MonitoringDataCls>();
 
+        public static List<SystemCfgCls> STSystemCfgList = new List<SystemCfgCls>();
+
         public static ObservableCollection<AlarmLogCls> STAlarmList { get; set; } = new ObservableCollection<AlarmLogCls>();
         public static ObservableCollection<AlarmLogCls> STWarningList { get; set; } = new ObservableCollection<AlarmLogCls>();
         public static List<DispenseInfoCls> STDispenseList { get; set; } = new List<DispenseInfoCls>();
@@ -45,6 +47,8 @@ namespace SFE.TRACK
         public static int MCS_ID = 1;
         public static int CHAMBER_ID = 55;
         public static int MMI_ID = 1000;
+        public static bool IsChamberConnection = false;
+        public static bool IsMCSConnection = false;
         public static int HOME_TIMEOUT = 90000;
         public static bool IsShutDown = false;
         public static enMachineStatus STMachineStatus = enMachineStatus.STOP;
@@ -351,6 +355,15 @@ namespace SFE.TRACK
 
         public static void SendCommand<TEnumGroup, TEnumItem>(int id, CoreCSBase.IPC.IPCNetClient.DataType dataType, TEnumGroup cmdGroup, TEnumItem cmdItem, string msg, bool isAnswer = false, int timeOut = 5000) where TEnumGroup : struct, Enum where TEnumItem : struct, Enum
         {
+            if(id == CHAMBER_ID)
+            {
+                if (!IsChamberConnection) return;
+            }
+            else if(id == MCS_ID)
+            {
+                if (!IsMCSConnection) return;
+            }
+
             MachineWorker.SendCommand(id, dataType, cmdGroup, cmdItem, msg, isAnswer, timeOut);
             Global.STLog.AddSocketLog(id, "SEND", dataType.ToString(), cmdGroup, cmdItem.ToString(), msg);
         }

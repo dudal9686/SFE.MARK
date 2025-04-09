@@ -17,7 +17,11 @@
             <RowDefinition Height="1.3*"/>
             <RowDefinition Height="1.4*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5.5*"/>
+            <ColumnDefinition Width="4.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
             <Border BorderBrush="Gray" BorderThickness="0.3" Margin="5 -45 0 0" Canvas.Top="100" Height="132">
                 <StackPanel Orientation="Vertical" Margin="0 0 0 0">
                     <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="#8F98AC" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
@@ -66,12 +70,6 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="190" Header="PV" Binding="{Binding DataContext.Chamber.ProcessValue,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" FontSize="20" Foreground="Black">
-                                
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Width="190" Header="SV" Binding="{Binding DataContext.Chamber.SetValue,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" FontSize="20" Foreground="Black">
-                                
-                            </DataGridTextColumn>
                             <DataGridTextColumn Width="190" Header="Limit[+]" >
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -89,7 +87,6 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn Width="190" Header="Position" Binding="{Binding ActualPosition}" FontSize="20" Foreground="Black">
-                                
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
@@ -101,7 +98,7 @@
                 
             </Border>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Border BorderBrush="Gray" BorderThickness="0.3" Margin="5 0 0 0">
                 <StackPanel Orientation="Vertical" Margin="0 0 0 0">
                     <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="#8F98AC" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
@@ -146,27 +143,27 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Grid.Column="0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 5 0 0">
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding HomeRelayCommand}">
+                <Button Height="100" Width="200" ToolTip="Home" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding HomeRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Home" Width="40" Height="40" Foreground="Peru" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Home" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding ServoOnRelayCommand}">
+                <Button Height="100" Width="200" ToolTip="Servo On" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding ServoOnRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Circle" Width="40" Height="40" Foreground="Green" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Servo On" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding ServoOffRelayCommand}">
+                <Button Height="100" Width="200" ToolTip="Servo Off" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding ServoOffRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="NullOff" Width="40" Height="40" Foreground="Green" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Servo Off" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding StopRelayCommand}">
+                <Button Height="100" Width="200" ToolTip="Stop" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding StopRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Stop" Width="40" Height="40" Foreground="Red" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Stop" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
@@ -174,28 +171,85 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="3">
+            <Border BorderBrush="Gray" BorderThickness="0.3" Margin="-20 -85 0 0" Width="700" Height="250">
+                <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+                    <materialDesign:ColorZone BorderBrush="Navy" Height="50" BorderThickness="0" Mode="Custom" Background="#8F98AC" Foreground="White" Padding="7" CornerRadius="5"  ClipToBounds="False">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Temperature" Width="30" Height="30" Foreground="Navy"/>
+                            <TextBlock Text="Temperature" Foreground="White" FontSize="20"  VerticalAlignment="Center" Margin="10 -5 0 0"/>
+                            <Button Command="{Binding TempRunRelayCommand}" ToolTip="Controller Run" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="250,-4,0,0" VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Play" Width="40" Height="40" Foreground="Blue" Margin="0 0 0 0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding TempStopRelayCommand}" ToolTip="Controller Stop" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Stop" Width="40" Height="40" Foreground="Red" Margin="0 0 0 0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding TempSetCommand}" ToolTip="Set Temperature" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <materialDesign:PackIcon Kind="Message" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>                            
+                        </StackPanel>
+                    </materialDesign:ColorZone>
+                    <DataGrid Name="DataGridChamberValue" SelectedIndex="0" ItemsSource="{Binding Chamber.HeatTempList}" GridLinesVisibility="All" Height="200" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" SelectedItem="{Binding HeatTemp}">
+                        <!--Height="100"-->
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="DarkBlue"/>
+                                <Setter Property="FontSize" Value="17"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="Height" Value="40"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Height" Value="40"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="150" Header="ZoneIndex" Binding="{Binding ZoneIndex}" FontSize="20" Foreground="Black">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="150" Header="PV" Binding="{Binding ProcessValue}" FontSize="20" Foreground="Black">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="150" Header="SV" Binding="{Binding SetValue}" FontSize="20" Foreground="Black">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="200" Header="CONTROLLER STATUS" Binding="{Binding ControllerStatus}" FontSize="20" Foreground="Black">
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding GridTempDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DataGridChamberValue}"/>
+                        </DataGrid.InputBindings>
+                    </DataGrid>
+
+                </StackPanel>
+
+            </Border>
+
+
+
+
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 5 0 0">
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Run" Command="{Binding TempRunRelayCommand}">
-                    <StackPanel>
-                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Play" Width="40" Height="40" Foreground="Blue" Margin="0 5 0 0"/>
-                        <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Temp Run" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
-                    </StackPanel>
-                </Button>
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Stop" Command="{Binding TempStopRelayCommand}">
-                    <StackPanel>
-                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Stop" Width="40" Height="40" Foreground="Red" Margin="0 5 0 0"/>
-                        <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Temp Stop" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
-                    </StackPanel>
-                </Button>
-                
                 <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Pin Home" Command="{Binding PinHomeRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Pin" Width="40" Height="40" Foreground="Orange" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Pin Home" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>
-                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Pin Home" Command="{Binding PinReadyRelayCommand}">
+                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Pin Ready" Command="{Binding PinReadyRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Pin" Width="40" Height="40" Foreground="Orange" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Pin Ready" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
@@ -209,7 +263,7 @@
                 </Button>-->
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="4" Grid.Column="0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 5 0 0">
                 <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Pin Down" Command="{Binding PinDownRelayCommand}">
                     <StackPanel>

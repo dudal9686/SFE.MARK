@@ -66,7 +66,7 @@ namespace SFE.TRACK.Model
             Thread.Sleep(100);
             if (nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
             {
-                Global.STLog.AddLog(string.Format("[ServoOn] {0}Axis ServoOn Fail"));
+                //Global.STLog.AddLog(string.Format("[ServoOn] {0}Axis ServoOn Fail"));
                 return false;
             }
             else
@@ -86,7 +86,7 @@ namespace SFE.TRACK.Model
             if (IsServoOn()) nErrorCode = CAXM.AxmSignalServoOn(AxisNo, 0);
             if (nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS) 
             {
-                Global.STLog.AddLog(string.Format("[ServoOff] {0}Axis ServoOff Fail"));
+                //Global.STLog.AddLog(string.Format("[ServoOff] {0}Axis ServoOff Fail"));
                 return false; 
             }
             return true;
@@ -185,7 +185,7 @@ namespace SFE.TRACK.Model
             nErrorCode = CAXM.AxmSignalServoAlarmReset(AxisNo, (uint)AXT_MOTION_SIGNAL_LEVEL.ACTIVE);
             if (nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS) 
             {
-                Global.STLog.AddLog(string.Format("[SetAlarmReset] {0}Axis AlarmReset Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[SetAlarmReset] {0}Axis AlarmReset Fail", AxisNo));
                 return false; 
             }
             Thread.Sleep(20);
@@ -226,13 +226,13 @@ namespace SFE.TRACK.Model
         {
             if(!IsServoOn())
             {
-                Global.STLog.AddLog(string.Format("[MoveAxis] {0}Axis Servo On Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[MoveAxis] {0}Axis Servo On Fail", AxisNo));
                 return false;
             }
 
             if(!CheckAlarm())
             {
-                Global.STLog.AddLog(string.Format("[MoveAxis] {0}Axis No Alarm Clear", AxisNo));
+                //Global.STLog.AddLog(string.Format("[MoveAxis] {0}Axis No Alarm Clear", AxisNo));
                 return false;
             }
 
@@ -244,7 +244,7 @@ namespace SFE.TRACK.Model
             Thread.Sleep(5);
             if(nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
             {
-                Global.STLog.AddLog(string.Format("[MoveAxis] {0}Axis Position Move Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[MoveAxis] {0}Axis Position Move Fail", AxisNo));
                 return false;
             }
 
@@ -255,13 +255,13 @@ namespace SFE.TRACK.Model
         {
             if (!IsServoOn())
             {
-                Global.STLog.AddLog(string.Format("[MoveVelAxis] {0}Axis Servo On Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[MoveVelAxis] {0}Axis Servo On Fail", AxisNo));
                 return false;
             }
 
             if (!CheckAlarm())
             {
-                Global.STLog.AddLog(string.Format("[MoveVelAxis] {0}Axis No Alarm Clear", AxisNo));
+                //Global.STLog.AddLog(string.Format("[MoveVelAxis] {0}Axis No Alarm Clear", AxisNo));
                 return false;
             }
 
@@ -273,7 +273,7 @@ namespace SFE.TRACK.Model
             Thread.Sleep(5);
             if (nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
             {
-                Global.STLog.AddLog(string.Format("[MoveVelAxis] {0}Axis Position Move Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[MoveVelAxis] {0}Axis Position Move Fail", AxisNo));
                 return false;
             }
             return true;
@@ -295,7 +295,7 @@ namespace SFE.TRACK.Model
             if (!CheckHomeEnd(30000))
             {
                 HomeState = enHomeState.HOME_ERROR;
-                Global.STLog.AddLog(string.Format("[AxisHomeSearch] {0}Axis HomeSearch Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[AxisHomeSearch] {0}Axis HomeSearch Fail", AxisNo));
                 return false;
             }
             else HomeState = enHomeState.HOME_OK;
@@ -309,7 +309,7 @@ namespace SFE.TRACK.Model
             if(nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
             {
                 HomeState = enHomeState.HOME_ERROR;
-                Global.STLog.AddLog(string.Format("[StartOrigin] {0}Axis HomeSearch Fail", AxisNo));
+                //Global.STLog.AddLog(string.Format("[StartOrigin] {0}Axis HomeSearch Fail", AxisNo));
                 return false;
             }
             return true;
@@ -328,7 +328,7 @@ namespace SFE.TRACK.Model
                 if(nErrorCode != (int)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
                 {
                     HomeState = enHomeState.HOME_ERROR;
-                    Global.STLog.AddLog(string.Format("[CheckHomeEnd] {0}Axis CheckHomeEnd Fail", AxisNo));
+                    //Global.STLog.AddLog(string.Format("[CheckHomeEnd] {0}Axis CheckHomeEnd Fail", AxisNo));
                     isHome = false;
                     break;
                 }

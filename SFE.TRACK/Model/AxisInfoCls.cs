@@ -73,7 +73,8 @@ namespace SFE.TRACK.Model
         string company = string.Empty;
         public AxisInfoCls()
         {
-            servoState = Brushes.GreenYellow;
+            Servo = false;
+            //servoState = Brushes.Red;
             alarmState = Brushes.White;
             plusLimitState = Brushes.White;
             minusLimitState = Brushes.Red;

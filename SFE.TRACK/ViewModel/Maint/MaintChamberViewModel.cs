@@ -98,8 +98,8 @@ namespace SFE.TRACK.ViewModel.Maint
             else if (ModuleInfo.MachineName.ToUpper().IndexOf("LHP") != -1) { max = 180; min = 50; }
             else if (ModuleInfo.MachineName.ToUpper().IndexOf("HHP") != -1) { max = 300; min = 50; }
 
-            ModuleInfo.SetValue = Global.KeyPad(ModuleInfo.SetValue, max, min);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, string.Format("Chamber:{0}:{1}:{2}", ModuleInfo.BlockNo, ModuleInfo.ModuleNo, ModuleInfo.SetValue));
+            //ModuleInfo.SetValue = Global.KeyPad(ModuleInfo.SetValue, max, min);
+            //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, string.Format("Chamber:{0}:{1}:{2}", ModuleInfo.BlockNo, ModuleInfo.ModuleNo, ModuleInfo.SetValue));
         }
         private void RunCommand()
         {
