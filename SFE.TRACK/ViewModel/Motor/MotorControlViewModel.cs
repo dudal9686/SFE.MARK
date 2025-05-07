@@ -75,21 +75,33 @@ namespace SFE.TRACK.ViewModel.Motor
             if (Axis.IsRepeatMode) return;
             if (IsVelocity[0])
             {
-                speedPack.acc = 100;
-                speedPack.dec = 100;
+                speedPack.acc = 50;
+                speedPack.dec = 50;
                 speedPack.speed = 10;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, (int)enJogMode.LOW);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
-                else Axis.Motor.DoVelocityMove(speedPack);
+                else
+                {
+                    speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                    speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                    speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                    Axis.Motor.DoVelocityMove(speedPack);
+                }
             }
             else if (IsVelocity[1])
             {
-                speedPack.acc = 100;
-                speedPack.dec = 100;
+                speedPack.acc = 50;
+                speedPack.dec = 50;
                 speedPack.speed = 20;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, (int)enJogMode.HIGH);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
-                else Axis.Motor.DoVelocityMove(speedPack);
+                else
+                {
+                    speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                    speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                    speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                    Axis.Motor.DoVelocityMove(speedPack);
+                }
             }
             else if (IsVelocity[2])
             {
@@ -99,7 +111,13 @@ namespace SFE.TRACK.ViewModel.Motor
                 //command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, Pitch);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
-                else Axis.Motor.DoSCurveMove((double)Pitch, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+                else
+                {
+                    speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                    speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                    speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                    Axis.Motor.DoSCurveMove((double)Pitch * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+                }
             }
         }
 
@@ -121,21 +139,33 @@ namespace SFE.TRACK.ViewModel.Motor
             if (Axis.IsRepeatMode) return;
             if (IsVelocity[0])
             {
-                speedPack.acc = 100;
-                speedPack.dec = 100;
+                speedPack.acc = 50;
+                speedPack.dec = 50;
                 speedPack.speed = -10;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.LOW);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
-                else Axis.Motor.DoVelocityMove(speedPack);
+                else
+                {
+                    speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                    speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                    speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                    Axis.Motor.DoVelocityMove(speedPack);
+                }
             }
             else if (IsVelocity[1])
             {
-                speedPack.acc = 100;
-                speedPack.dec = 100;
+                speedPack.acc = 50;
+                speedPack.dec = 50;
                 speedPack.speed = -20;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.HIGH);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
-                else Axis.Motor.DoVelocityMove(speedPack);
+                else
+                {
+                    speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                    speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                    speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                    Axis.Motor.DoVelocityMove(speedPack);
+                }
             }
             else if (IsVelocity[2])
             {
@@ -144,7 +174,13 @@ namespace SFE.TRACK.ViewModel.Motor
                 speedPack.speed = Axis.VEL.Equals(0) ? 20 : Axis.VEL;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, Pitch);
                 if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
-                else Axis.Motor.DoSCurveMove((-1) * (double)Pitch, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+                else
+                {
+                    speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                    speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                    speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                    Axis.Motor.DoSCurveMove((-1) * (double)Pitch * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.INCREMENTAL);
+                }
             }
         }
 
@@ -180,12 +216,18 @@ namespace SFE.TRACK.ViewModel.Motor
             speedPack.dec = Axis.DEC;
             speedPack.speed = Axis.VEL;
             speedPack.timeout = 10000;
-            if(Axis.Company == "SFE_CAN")
+            if (Axis.Company == "SFE_CAN")
             {
                 command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, Axis.ManualFirstTeachingPosition, Axis.VEL, Axis.ACC, Axis.DEC, 10000);
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___DirectMove, command);
             }
-            else Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+            else
+            {
+                speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+            }
         }
         private void SecondMoveCommand()
         {
@@ -210,7 +252,13 @@ namespace SFE.TRACK.ViewModel.Motor
                 command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, Axis.ManualSecondTeachingPosition, Axis.VEL, Axis.ACC, Axis.DEC, 10000);
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___DirectMove, command);
             }
-            else Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+            else
+            {
+                speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+            }
         }
         private void FirstTeachingCommand()
         {
@@ -281,7 +329,13 @@ namespace SFE.TRACK.ViewModel.Motor
                             command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, Axis.ManualFirstTeachingPosition, Axis.VEL, Axis.ACC, Axis.DEC, 10000);
                             Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___DirectMove, command);
                         }
-                        else Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        else
+                        {
+                            speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                            speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                            speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                            Axis.Motor.DoSCurveMove(Axis.ManualFirstTeachingPosition * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        }
 
                         while (Axis.IsRepeatMode)
                         {
@@ -297,7 +351,13 @@ namespace SFE.TRACK.ViewModel.Motor
                             command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, Axis.ManualSecondTeachingPosition, Axis.VEL, Axis.ACC, Axis.DEC, 10000);
                             Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___DirectMove, command);
                         }
-                        else Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        else
+                        {
+                            speedPack.acc = speedPack.acc * Global.STPulseToUnit;
+                            speedPack.dec = speedPack.dec * Global.STPulseToUnit;
+                            speedPack.speed = speedPack.speed * Global.STPulseToUnit;
+                            Axis.Motor.DoSCurveMove(Axis.ManualSecondTeachingPosition * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        }
                         while (Axis.IsRepeatMode)
                         {
                             if (Axis.InPosition && !Axis.Motor.IsMoving && !Axis.Motor.IsAlarm) break;

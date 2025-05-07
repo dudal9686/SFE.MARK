@@ -1814,6 +1814,7 @@ namespace SFE.TRACK
         string owner = string.Empty;
         string maker = string.Empty;
         string time = string.Empty;
+        string param = string.Empty;
         int sendID = -1;
         enAlarmMessageType messageType = enAlarmMessageType.ALARM; 
 
@@ -1845,6 +1846,12 @@ namespace SFE.TRACK
         {
             get { return owner; }
             set { owner = value; RaisePropertyChanged("Owner"); }
+        }
+
+        public string Param
+        {
+            get { return param; }
+            set { param = value; }
         }
 
         public string Maker

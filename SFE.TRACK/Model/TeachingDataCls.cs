@@ -24,6 +24,7 @@ namespace SFE.TRACK.Model
         bool isArray = false;
         bool isOwn = false;
         int timeOut = 10000;
+        string company = string.Empty;
         public string MainTitle
         {
             get { return mainTitle; }
@@ -53,6 +54,11 @@ namespace SFE.TRACK.Model
             get { return moduleNo; }
             set { moduleNo = value; RaisePropertyChanged("ModuleNo"); }
         }
+        public string Company
+        {
+            get { return company; }
+            set { company = value; RaisePropertyChanged("Company"); }
+        }
         public UnitMotor Motor
         {
             get { return motor; }
@@ -63,6 +69,15 @@ namespace SFE.TRACK.Model
                 Dec = GetData().speedPack.dec;
                 Vel = GetData().speedPack.speed;
                 Pos = GetData().position;
+
+                if(Company == "AzinECAT")
+                {
+                    Acc = Acc / Global.STPulseToUnit;
+                    Dec = Dec / Global.STPulseToUnit;
+                    Vel = Vel / Global.STPulseToUnit;
+                    Pos = Pos / Global.STPulseToUnit;
+                }
+
                 TimeOut = GetData().speedPack.timeout;
                 RaisePropertyChanged("Motor");
             }
@@ -112,7 +127,8 @@ namespace SFE.TRACK.Model
         }
         public void SetData()
         {
-            Motor.SetTeachingPosition(TeachingName, Pos, Vel, Acc, Dec, TimeOut);
+            if(Company == "AzinECAT") Motor.SetTeachingPosition(TeachingName, Pos * Global.STPulseToUnit, Vel * Global.STPulseToUnit, Acc * Global.STPulseToUnit, Dec * Global.STPulseToUnit, TimeOut);
+            else Motor.SetTeachingPosition(TeachingName, Pos, Vel, Acc, Dec, TimeOut);
         }
     }
 }

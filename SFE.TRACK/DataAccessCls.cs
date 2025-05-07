@@ -441,7 +441,7 @@ namespace SFE.TRACK
             return isDone;
         }
 
-        public bool SavePrcessWaferRecipe(string filename, ProcessWaferDataCls waferdata)
+        public bool SaveProcessWaferRecipe(string filename, ProcessWaferDataCls waferdata)
         {
             bool isDone = true;
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filename));

@@ -67,8 +67,8 @@
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="DarkSlateGray" Width="150" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}X{0:D3}}" Margin="20 5 0 0"/>
-                                        <Label Width="200" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="-35 0 0 0"/>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="100 0 0 0">
+                                        <Label Width="220" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="-35 0 0 0"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="80 0 0 0">
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>
@@ -115,8 +115,11 @@
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="DarkSlateGray" Width="150" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}Y{0:D3}}" Margin="20 5 0 0"/>
-                                        <Label Width="200" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="-35 0 0 0"/>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="100 0 0 0" Command="{Binding IORelayCommand}">
+                                        <Label Width="220" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="-35 0 0 0"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="80 0 0 0" >
+                                            <Button.InputBindings>
+                                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding IORelayCommand}" />
+                                            </Button.InputBindings>
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>

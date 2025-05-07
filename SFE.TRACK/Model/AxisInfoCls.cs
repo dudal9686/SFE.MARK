@@ -92,9 +92,8 @@ namespace SFE.TRACK.Model
             StopRelayCommand = new RelayCommand(StopCommand);
             AlarmResetRelayCommand = new RelayCommand(AlarmResetCommand);
 
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromMilliseconds(500);
             timer.Tick += Timer_Tick;
-            
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -103,17 +102,18 @@ namespace SFE.TRACK.Model
             MinusLimit = Motor.IsNegativeLimit;
             Servo = Motor.IsServoOn;
             InMotion = Motor.IsMoving;
-            //IsStop = !Motor.IsMoving;
+            InPosition = Motor.IsInPosition;
+            IsStop = !Motor.IsMoving;
             Alarm = Motor.IsAlarm;
-            //IsHome = Motor.IsHome;
-            ActualPosition = Motor.GetEncoderPos();
-            CommandPosition = Motor.CommandPosition;
+            IsHome = Motor.IsHome;
+            ActualPosition = Motor.GetEncoderPos() / 1000;
+            CommandPosition = Motor.CommandPosition / 1000;
         }
 
         ~AxisInfoCls()
         {
-
-        }
+            timer.Stop();
+        }   
 
         public string Company
         {

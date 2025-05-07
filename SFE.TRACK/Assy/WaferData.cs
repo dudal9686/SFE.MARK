@@ -31,7 +31,6 @@ namespace DefaultBase
             _WorkStep = WorkStep.IsNot;
             _BlockNo = -1;
         }
-
         public void SetInfo(string recipeName, EnumRecipeDetailType recipeType, WorkStep step, int blockNo, List<int> moduleNoList)
         {
             _Name = recipeName;
@@ -42,9 +41,6 @@ namespace DefaultBase
             _moudleNoList.Clear();
             foreach (var id in moduleNoList) _moudleNoList.Add(id);
         }
-
-
-
     }
     public class WaferData
     {
@@ -69,8 +65,6 @@ namespace DefaultBase
 
             for (int i = 0; i < 30; i++) _RecipeInfos[i] = new RecipeInfo();
         }
-
-
         public string GetInfomation(out int status)
         {
             status = 0;
@@ -97,7 +91,6 @@ namespace DefaultBase
             }
             return sb.ToString();
         }
-
         public RecipeInfo FindNextRecipeInfo()
         {
             RecipeInfo info = null;
@@ -110,8 +103,6 @@ namespace DefaultBase
 
             return null;
         }
-
-
         public void Init()
         {
             _WorkType = "";
@@ -131,21 +122,17 @@ namespace DefaultBase
             {
                 _listWaferData.Add(new WaferData());
             }
-
         }
-
         public int GetWaferCount() { return _listWaferData.Count; }
         public WaferData GetWaferData(int index)
         {
             if (index >= _listWaferData.Count) return null;
             return _listWaferData[index];
         }
-
         public List<WaferData> GetList()
         {
             return _listWaferData;
         }
-
         public void Initialize()
         {
             foreach (WaferData waferData in _listWaferData)
@@ -153,6 +140,5 @@ namespace DefaultBase
                 waferData.Init();
             }
         }
-
     }
 }

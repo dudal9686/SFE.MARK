@@ -171,7 +171,7 @@
                                             <Setter Property="Foreground" Value="Black"/>
                                             <Setter Property="VerticalAlignment" Value="Center"/>
                                             <Setter Property="HorizontalAlignment" Value="Center"/>
-                                            <Setter Property="Text" Value="{Binding CommandPosition}"/>
+                                            <Setter Property="Text" Value="{Binding CommandPosition,StringFormat={}{0:F3}}"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
@@ -183,7 +183,7 @@
                                             <Setter Property="Foreground" Value="Black"/>
                                             <Setter Property="VerticalAlignment" Value="Center"/>
                                             <Setter Property="HorizontalAlignment" Value="Center"/>
-                                            <Setter Property="Text" Value="{Binding ActualPosition}"/>
+                                            <Setter Property="Text" Value="{Binding ActualPosition,StringFormat={}{0:F3}}"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>

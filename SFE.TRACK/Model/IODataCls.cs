@@ -39,9 +39,14 @@ namespace SFE.TRACK.Model
             IORelayCommand = new RelayCommand(IOCommand);
             stateColor = Brushes.Red;
 
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromMilliseconds(500);
             timer.Tick += Timer_Tick;
             
+        }
+
+        ~IODataCls()
+        {
+            timer.Stop();
         }
 
         private void Timer_Tick(object sender, EventArgs e)

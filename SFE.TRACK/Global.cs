@@ -51,6 +51,7 @@ namespace SFE.TRACK
         public static bool IsMCSConnection = false;
         public static int HOME_TIMEOUT = 90000;
         public static bool IsShutDown = false;
+        public static int STPulseToUnit = 1000;
         public static enMachineStatus STMachineStatus = enMachineStatus.STOP;
         //Maint Suppot List
         public static List<MaintSupportCls> STMaintSupportList = new List<MaintSupportCls>();

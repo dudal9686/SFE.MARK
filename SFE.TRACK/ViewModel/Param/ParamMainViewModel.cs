@@ -246,11 +246,11 @@ namespace SFE.TRACK.ViewModel.Param
                     }
                     else
                     {
-                        speedPack.acc = paramData.Acc;
-                        speedPack.dec = paramData.Dec;
-                        speedPack.speed = paramData.Vel;
+                        speedPack.acc = paramData.Acc * Global.STPulseToUnit;
+                        speedPack.dec = paramData.Dec * Global.STPulseToUnit;
+                        speedPack.speed = paramData.Vel * Global.STPulseToUnit;
                         speedPack.timeout = 5000;
-                        axis.Motor.DoSCurveMove(paramData.Pos, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                        axis.Motor.DoSCurveMove(paramData.Pos * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
                     }
                 }
             }

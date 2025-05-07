@@ -44,7 +44,8 @@ namespace SFE.TRACK.ViewModel.Alarm
         {
             if(AlarmSelectedItem != null)
             {
-                Global.MachineWorker.SendCommand(AlarmSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Alarm, EnumCommand_Alarm.Request___AlarmClear, AlarmSelectedItem.Code);
+                string command = string.Format("{0}:{1}:{2}", AlarmSelectedItem.Code, AlarmSelectedItem.Owner, AlarmSelectedItem.Param);
+                Global.MachineWorker.SendCommand(AlarmSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Alarm, EnumCommand_Alarm.Request___AlarmClear, command);
                 Global.STAlarmList.Remove(AlarmSelectedItem);
                 if (Global.STAlarmList.Count == 0)
                     CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();

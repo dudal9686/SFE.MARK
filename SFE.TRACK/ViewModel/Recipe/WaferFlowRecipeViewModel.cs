@@ -195,7 +195,7 @@ namespace SFE.TRACK.ViewModel.Recipe
             JobDataCheckCls jobCheck = new JobDataCheckCls();
             if (!jobCheck.WaferFlowCheckCls(Waferdata)) return;
 
-            if(Global.STDataAccess.SavePrcessWaferRecipe(RecipeFileInfo.FileFullName, Waferdata))
+            if(Global.STDataAccess.SaveProcessWaferRecipe(RecipeFileInfo.FileFullName, Waferdata))
             {
                 Global.MessageOpen(enMessageType.OK, "It has been saved.");
             }

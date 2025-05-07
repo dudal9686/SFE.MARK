@@ -283,6 +283,7 @@ namespace SFE.TRACK.ViewModel
                     {
                         TeachingDataCls teachingData = new TeachingDataCls();
                         teachingData.IsArray = false;
+                        teachingData.Company = axis.Company;
                         teachingData.TeachingName = motorTeachingList[i];
                         if (parentType == "PRA")
                         {
@@ -331,6 +332,7 @@ namespace SFE.TRACK.ViewModel
                 TeachingDataCls data = new TeachingDataCls();
                 data.MainTitle = "CHAMBER";
                 data.ModuleNo = module.ModuleNo;
+                data.Company = axis.Company;
                 data.IsArray = true;
                 data.TeachingName = name.Substring(0, name.IndexOf("("));
                 data.Motor = axis.Motor;
@@ -414,10 +416,10 @@ namespace SFE.TRACK.ViewModel
                 data.Enable = true;
                 parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
 
-                if (parentType == "CRA" || parentType == "PRA")
+                if (parentType == "CRA" || parentType == "PRA" || parentType == "TowerLamp")
                 {
                     if (io.MyNameInfo.Alias == "CRA") data.BlockNo = 1;
-                    data.ModuleNo = 1;
+                    data.ModuleNo = 0;
                     data.BoardNo = 0;//Convert.ToInt32(arr[arr.Length - 2]);
                     data.ChannelNo = Convert.ToInt32(arr[arr.Length - 2]);
                     data.IONum = data.ChannelNo * 32 + Convert.ToInt32(arr[arr.Length - 1]);
@@ -434,7 +436,7 @@ namespace SFE.TRACK.ViewModel
 
                     if (data.BoardType == "MINI") data.IOIndex = Convert.ToInt32(arr[3]);
 
-                    if (parentType == "ChemicalBox") data.Alias = string.Format("{0}", parentType);
+                    if (parentType == "ChemicalBox") { data.Alias = string.Format("{0}", parentType); data.ModuleNo = 1000; } //ChemicalBox ModuleNo = 1000 (IO 모듈 순서데로 보이기)
                     else data.Alias = string.Format("{0}[{1}-{2}]", module.MachineName, data.BlockNo, moduleNo);
                 }
 
@@ -584,6 +586,8 @@ namespace SFE.TRACK.ViewModel
                 string maker = (string)e.GetParam(index++);
                 string owner = (string)e.GetParam(index++);
                 string fullMsg = (string)e.GetParam(index++);
+                List<string> paramList = (List<string>)e.GetParam(index++);
+
                 AlarmItem item = _worker.Reader.FindAlarmItem(code);
 
                 AlarmLogCls alarm = new AlarmLogCls();
@@ -591,6 +595,7 @@ namespace SFE.TRACK.ViewModel
                 alarm.Owner = owner;
                 alarm.Message = fullMsg;
                 alarm.Help = item.Action;
+                alarm.Param = paramList[0];
                 alarm.Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 alarm.SendID = launch.FromID;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -1437,12 +1442,12 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        private void TreatSerialWaferData(NameBase.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList)
+        private void TreatSerialWaferData(NameInfo.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList)
         {
             List<string> list = Tokenizer.Split(title, "_");
             string middleName = list[1];
             ModuleBaseCls moduleBase = null;
-            if (typeName == NameBase.TYPE_NAME.ASSY)
+            if (typeName == NameInfo.TYPE_NAME.ASSY)
             {
                 if (name == "CRA")
                 {
@@ -1566,10 +1571,10 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        protected bool AnalyseOwner(string message, out NameBase.TYPE_NAME typeName, out string name, out int unitID, out string remain)
+        protected bool AnalyseOwner(string message, out NameInfo.TYPE_NAME typeName, out string name, out int unitID, out string remain)
         {
             int index = 0;
-            typeName = NameBase.TYPE_NAME.MACHINE;
+            typeName = NameInfo.TYPE_NAME.MACHINE;
             name = "";
             unitID = -1;
             remain = "";
