@@ -63,12 +63,51 @@
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
                 <StackPanel>
+                    <Button Command="{Binding SaveCotCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <DataGrid x:Name="CotConfigDataGrid" SelectedItem="{Binding CotConfig}" GridLinesVisibility="All" SelectedIndex="{Binding CotSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" 
+                              ItemsSource="{Binding arCotCfgList}" AutoGenerateColumns="False"
+                                SelectionMode="Single" FontSize="17" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="DarkBlue"/>
+                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Description" Width="250" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Value" Width="120" Binding="{Binding Value}"/>
+                        </DataGrid.Columns>
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding CotConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=CotConfigDataGrid}"/>
+                        </DataGrid.InputBindings>
+                    </DataGrid>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Column="2">
+            <GroupBox  materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Margin="5">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="InfoCircle" Height="40" Width="20" VerticalAlignment="Center" />
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Dev-L Config" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <StackPanel>
                     <Button Command="{Binding SaveDevLCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <DataGrid x:Name="DevLConfigDataGrid" SelectedItem="{Binding DevLConfig}" GridLinesVisibility="All" SelectedIndex="{Binding DevLSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" ItemsSource="{Binding arCotCfgList}" AutoGenerateColumns="False"
+                    <DataGrid x:Name="DevLConfigDataGrid" SelectedItem="{Binding DevLConfig}" GridLinesVisibility="All" SelectedIndex="{Binding DevLSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" 
+                              ItemsSource="{Binding arDevLCfgList}" AutoGenerateColumns="False"
                                 SelectionMode="Single" FontSize="17" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                         <DataGrid.Resources>
                             <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -89,13 +128,13 @@
                 </StackPanel>
             </GroupBox>
         </Grid>
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="3">
             <GroupBox  materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Margin="5">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="InfoCircle" Height="40" Width="20" VerticalAlignment="Center" />
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Dev-L Config" />
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Dev-R Config" />
                         </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
@@ -105,7 +144,8 @@
                             <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <DataGrid x:Name="DevRConfigDataGrid" SelectedItem="{Binding DevRConfig}" GridLinesVisibility="All" SelectedIndex="{Binding DevRSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" ItemsSource="{Binding arDevLCfgList}" AutoGenerateColumns="False"
+                    <DataGrid x:Name="DevRConfigDataGrid" SelectedItem="{Binding DevRConfig}" GridLinesVisibility="All" SelectedIndex="{Binding DevRSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" 
+                              ItemsSource="{Binding arDevRCfgList}" AutoGenerateColumns="False"
                                 SelectionMode="Single" FontSize="17" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                         <DataGrid.Resources>
                             <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -121,43 +161,6 @@
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DevRConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DevRConfigDataGrid}"/>
-                        </DataGrid.InputBindings>
-                    </DataGrid>
-                </StackPanel>
-            </GroupBox>
-        </Grid>
-        <Grid Grid.Column="3">
-            <GroupBox  materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Margin="5">
-                <GroupBox.HeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="InfoCircle" Height="40" Width="20" VerticalAlignment="Center" />
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Dev-R Config" />
-                        </StackPanel>
-                    </DataTemplate>
-                </GroupBox.HeaderTemplate>
-                <StackPanel>
-                    <Button Command="{Binding SaveCotCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <DataGrid x:Name="CotConfigDataGrid" SelectedItem="{Binding CotConfig}" GridLinesVisibility="All" SelectedIndex="{Binding CotSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" ItemsSource="{Binding arDevRCfgList}" AutoGenerateColumns="False"
-                                SelectionMode="Single" FontSize="17" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
-                        <DataGrid.Resources>
-                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Foreground" Value="DarkBlue"/>
-                                <Setter Property="FontSize" Value="20"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </Style>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Description" Width="250" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Value" Width="120" Binding="{Binding Value}"/>
-                        </DataGrid.Columns>
-                        <DataGrid.InputBindings>
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding CotConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=CotConfigDataGrid}"/>
                         </DataGrid.InputBindings>
                     </DataGrid>
                 </StackPanel>

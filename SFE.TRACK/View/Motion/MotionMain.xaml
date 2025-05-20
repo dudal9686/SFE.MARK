@@ -50,14 +50,14 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    <TreeViewItem IsSelected="{Binding IsIRA}" x:Name="lvIRA">
+                    <!--<TreeViewItem IsSelected="{Binding IsIRA}" x:Name="lvIRA">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArmBarrierDown" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>
                                 <Label Content="IRA" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
-                    </TreeViewItem>
+                    </TreeViewItem>-->
                 </TreeView>
             </Border>
         </Grid>
