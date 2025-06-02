@@ -62,17 +62,17 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="CoreCSBase">
-      <HintPath>bin\Debug\Library\CoreCSBase\CoreCSBase.dll</HintPath>
+    <Reference Include="CoreCSBase, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\CoreCSBase\CoreCSBase.dll</HintPath>
     </Reference>
-    <Reference Include="CoreCSDB">
-      <HintPath>bin\Debug\Library\CoreCSDB\CoreCSDB.dll</HintPath>
+    <Reference Include="CoreCSMac, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\CoreCSMac\CoreCSMac.dll</HintPath>
     </Reference>
-    <Reference Include="CoreCSMac">
-      <HintPath>bin\Debug\Library\CoreCSMac\CoreCSMac.dll</HintPath>
-    </Reference>
-    <Reference Include="CoreCSRunSim">
-      <HintPath>bin\Debug\Library\CoreCSRunSim\CoreCSRunSim.dll</HintPath>
+    <Reference Include="CoreCSRunSim, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\CoreCSRunSim\CoreCSRunSim.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>

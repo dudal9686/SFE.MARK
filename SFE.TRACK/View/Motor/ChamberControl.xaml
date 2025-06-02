@@ -180,7 +180,7 @@
                             <TextBlock Text="Temperature" Foreground="White" FontSize="20"  VerticalAlignment="Center" Margin="10 -5 0 0"/>
                             <Button Command="{Binding TempRunRelayCommand}" ToolTip="Controller Run" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="250,-4,0,0" VerticalAlignment="Top">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Play" Width="40" Height="40" Foreground="Blue" Margin="0 0 0 0"/>
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Play" Width="40" Height="40" Foreground="Blue" Margin="-50 0 0 0"/>
                                 </StackPanel>
                             </Button>
                             <Button Command="{Binding TempStopRelayCommand}" ToolTip="Controller Stop" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
@@ -188,11 +188,12 @@
                                     <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Stop" Width="40" Height="40" Foreground="Red" Margin="0 0 0 0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Command="{Binding TempSetCommand}" ToolTip="Set Temperature" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
+                            <Button Command="{Binding TempSetRelayCommand}" ToolTip="Set Temperature" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                     <materialDesign:PackIcon Kind="Message" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
-                            </Button>                            
+                            </Button>
+                            <TextBox Height="20" Width="50" Text="{Binding HeatSetTemp}"></TextBox>
                         </StackPanel>
                     </materialDesign:ColorZone>
                     <DataGrid Name="DataGridChamberValue" SelectedIndex="0" ItemsSource="{Binding Chamber.HeatTempList}" GridLinesVisibility="All" Height="200" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" SelectedItem="{Binding HeatTemp}">

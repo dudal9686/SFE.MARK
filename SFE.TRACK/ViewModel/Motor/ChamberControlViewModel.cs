@@ -41,6 +41,7 @@ namespace SFE.TRACK.ViewModel.Motor
         bool[] isVelocity = new bool[2] { false, true };
         float pitch = 0.1f;
         string command = string.Empty;
+        float heatSetTemp = 0;
         public ChamberControlViewModel()
         {
             HomeRelayCommand = new RelayCommand(HomeCommand);
@@ -149,14 +150,14 @@ namespace SFE.TRACK.ViewModel.Motor
         {
             if (Chamber == null) return;
             if (HeatTemp == null) return;
-            command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
+            command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
             Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___Stop, command);
         }
         private void TempSetCommand()
         {
             if (Chamber == null) return;
             if (HeatTemp == null) return;
-            command = string.Format("Chamber:{0}:{1}:{2}:{3}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex, HeatTemp.SetValue);
+            command = string.Format("Chamber:{0}:{1}:{2}:{3}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex, HeatSetTemp);
             Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, command);
         }
         private void AutoTuningCommand()
@@ -293,6 +294,11 @@ namespace SFE.TRACK.ViewModel.Motor
         {
             get { return heatTemp; }
             set { heatTemp = value; RaisePropertyChanged("HeatTemp"); }
+        }
+        public float HeatSetTemp
+        {
+            get { return heatSetTemp; }
+            set { heatSetTemp = value; RaisePropertyChanged("HeatSetTemp"); }
         }
     }
 }

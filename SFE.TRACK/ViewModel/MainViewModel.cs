@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
 using DefaultBase;
+using System.Linq;
 
 namespace SFE.TRACK.ViewModel
 {
@@ -270,21 +271,21 @@ namespace SFE.TRACK.ViewModel
                 string parentType = axis.Parent;
 
                 MotorInfo motorInfo = (MotorInfo)axis.Motor.MyNameInfo;
-                List<string> motorTeachingList = motorInfo.Teaching; //어레이가 있는지 아는 리스트 '(' 로 구분
+                List<string> motorTeachingList = motorInfo.Teaching; //어레이가 있는지 아는 리스트 '' 로 구분
                 //List<Teaching> motorTechingArrayContainList = motor.GetTeachingPositionList();
 
                 for (int i = 0; i < motorTeachingList.Count; i++)
                 {
-                    if (motorTeachingList[i].IndexOf("(") != -1) // PRA
+                    if (motorTeachingList[i].IndexOf("[") != -1) // PRA, CRA
                     {
-                        SetTeachingArray(axis, motorTeachingList[i]);
+                        SetTeachingArray(axis, motorTeachingList[i].Replace(":::", ""));
                     }
                     else
                     {
                         TeachingDataCls teachingData = new TeachingDataCls();
                         teachingData.IsArray = false;
                         teachingData.Company = axis.Company;
-                        teachingData.TeachingName = motorTeachingList[i];
+                        teachingData.TeachingName = motorTeachingList[i].Replace(":::","");
                         if (parentType == "PRA")
                         {
                             teachingData.MainTitle = "PRA";
@@ -325,19 +326,53 @@ namespace SFE.TRACK.ViewModel
 
         private void SetTeachingArray(AxisInfoCls axis, string name)
         {
-            List<ModuleBaseCls> list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER);
-
-            foreach (ModuleBaseCls module in list)
+            List<ModuleBaseCls> list = null;// = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+            int teachingIndex = 0;
+            string parentType = axis.Parent;
+            
+            if (axis.Parent == "CRA")
             {
-                TeachingDataCls data = new TeachingDataCls();
-                data.MainTitle = "CHAMBER";
-                data.ModuleNo = module.ModuleNo;
-                data.Company = axis.Company;
-                data.IsArray = true;
-                data.TeachingName = name.Substring(0, name.IndexOf("("));
-                data.Motor = axis.Motor;
-                data.IsOwn = true;
-                Global.STTeachingData.Add(data);
+                list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+                
+                foreach (ModuleBaseCls module in list)
+                {
+                    TeachingDataCls data = new TeachingDataCls();
+                    data.MainTitle = "CRA";
+                    data.BlockNo = 1;
+                    data.ModuleNo = module.ModuleNo;
+                    data.Company = axis.Company;
+                    data.IsArray = true;
+                    data.TeachingName = name.Substring(0, name.IndexOf("["));
+                    //data.TeachingName = string.Format("{0}__{1}", name.Substring(0, name.IndexOf("[")), teachingIndex);
+                    Console.WriteLine(string.Format("{0}_{1} {2}", module.BlockNo, module.ModuleNo, data.TeachingName));
+                    data.Motor = axis.Motor;
+                    data.IsOwn = true;
+                    Global.STTeachingData.Add(data);
+                    teachingIndex++;
+                }
+
+            }
+            else if(axis.Parent == "PRA")
+            {
+                list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+                foreach (ModuleBaseCls module in list)
+                {
+                    TeachingDataCls data = new TeachingDataCls();
+                    data.MainTitle = "CHAMBER";
+                    data.ModuleNo = module.ModuleNo;
+                    data.Company = axis.Company;
+                    data.IsArray = true;
+                    data.TeachingName = name.Substring(0, name.IndexOf("["));
+                    int index = 0;
+                    if (module.ModuleNo == 3) teachingIndex++;
+                    data.TeachingName = name.Substring(0, name.IndexOf("["));
+                    Console.WriteLine(string.Format("{0}_{1} {2}", module.BlockNo, module.ModuleNo, data.TeachingName));
+                    data.Motor = axis.Motor;
+                    data.IsOwn = true;
+                    Global.STTeachingData.Add(data);
+                    teachingIndex++;
+                }
+
             }
         }
 
@@ -1598,11 +1633,23 @@ namespace SFE.TRACK.ViewModel
                 if (data.Motor.MyNameInfo.Name == group && data.TeachingName == name)
                 {
                     string[] arr = item.Contents.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                    data.Pos = Convert.ToDouble(arr[0]);
-                    data.Vel = Convert.ToDouble(arr[1]);
-                    data.Acc = Convert.ToDouble(arr[2]);
-                    data.Dec = Convert.ToDouble(arr[3]);
-                    data.TimeOut = Convert.ToInt32(arr[4]);
+
+                    if(group.IndexOf("CRA") != -1 || group.IndexOf("PRA") != -1)
+                    {
+                        data.Pos = Convert.ToDouble(arr[0]) / 1000;
+                        data.Vel = Convert.ToDouble(arr[1]) / 1000;
+                        data.Acc = Convert.ToDouble(arr[2]) / 1000;
+                        data.Dec = Convert.ToDouble(arr[3]) / 1000;
+                        data.TimeOut = Convert.ToInt32(arr[4]);
+                    }
+                    else
+                    {
+                        data.Pos = Convert.ToDouble(arr[0]);
+                        data.Vel = Convert.ToDouble(arr[1]);
+                        data.Acc = Convert.ToDouble(arr[2]);
+                        data.Dec = Convert.ToDouble(arr[3]);
+                        data.TimeOut = Convert.ToInt32(arr[4]);
+                    }
                 }
             }
         }

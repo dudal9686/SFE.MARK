@@ -51,7 +51,7 @@ namespace SFE.TRACK.Model
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            State = io.ReadIO();
+            State = io.IsActive();
         }
 
         public string Company
