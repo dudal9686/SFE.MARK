@@ -981,6 +981,8 @@ namespace SFE.TRACK.ViewModel
                     else axis.HomeSituation = enHomeState.HOME_NONE;
 
                     axis.ActualPosition = Convert.ToInt32(arr[19]);
+
+                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].AutoTuningStatus = Convert.ToInt32(arr[20 + i]).Equals(1) ? "STOP" : "RUN";
                 }
                 else if (eValue == EnumCommand_Status.DATA___ChamberMonitoringData)
                 {
@@ -1636,10 +1638,10 @@ namespace SFE.TRACK.ViewModel
 
                     if(group.IndexOf("CRA") != -1 || group.IndexOf("PRA") != -1)
                     {
-                        data.Pos = Convert.ToDouble(arr[0]) / 1000;
-                        data.Vel = Convert.ToDouble(arr[1]) / 1000;
-                        data.Acc = Convert.ToDouble(arr[2]) / 1000;
-                        data.Dec = Convert.ToDouble(arr[3]) / 1000;
+                        data.Pos = Convert.ToDouble(arr[0]) / Global.STPulseToUnit;
+                        data.Vel = Convert.ToDouble(arr[1]) / Global.STPulseToUnit;
+                        data.Acc = Convert.ToDouble(arr[2]) / Global.STPulseToUnit;
+                        data.Dec = Convert.ToDouble(arr[3]) / Global.STPulseToUnit;
                         data.TimeOut = Convert.ToInt32(arr[4]);
                     }
                     else

@@ -220,13 +220,15 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="150" Header="ZoneIndex" Binding="{Binding ZoneIndex}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="95" Header="Zone" Binding="{Binding ZoneIndex}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
                             <DataGridTextColumn Width="150" Header="PV" Binding="{Binding ProcessValue}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
                             <DataGridTextColumn Width="150" Header="SV" Binding="{Binding SetValue}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="200" Header="CONTROLLER STATUS" Binding="{Binding ControllerStatus}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="150" Header="STATUS" Binding="{Binding ControllerStatus}" FontSize="20" Foreground="Black">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="150" Header="A/T STATUS" Binding="{Binding AutoTuningStatus}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
@@ -256,12 +258,12 @@
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Pin Ready" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>
-                <!--<Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding AutoTuningRelayCommand}">
+                <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" Command="{Binding AutoTuningRelayCommand}">
                     <StackPanel>
                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Tune" Width="40" Height="40" Foreground="Yellow" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Auto Tuning" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
-                </Button>-->
+                </Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="4" Grid.Column="0">

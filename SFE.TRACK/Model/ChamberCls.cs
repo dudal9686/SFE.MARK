@@ -36,6 +36,7 @@ namespace SFE.TRACK.Model
         float processValue = 0;
         float setValue = 0;
         string controllerStatus = "STOP";
+        string autoTunigStatus = "STOP";
 
         public int ZoneIndex
         {
@@ -58,6 +59,12 @@ namespace SFE.TRACK.Model
         {
             get { return controllerStatus; }
             set { controllerStatus = value; RaisePropertyChanged("ControllerStatus"); }
+        }
+
+        public string AutoTuningStatus
+        {
+            get { return autoTunigStatus; }
+            set { autoTunigStatus = value; RaisePropertyChanged("AutoTuningStatus"); }
         }
     }
 }
