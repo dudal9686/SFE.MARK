@@ -1132,9 +1132,9 @@ namespace SFE.TRACK.ViewModel
                 if (Enum.TryParse<EnumConfig_Motor_D1_X1>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
             }
-            else if (enumGroup == EnumConfigGroup.Motor_D1_X2)
+            else if (enumGroup == EnumConfigGroup.Motor_C1_PP2)
             {
-                if (Enum.TryParse<EnumConfig_Motor_D1_X2>(item.Name, out var enumItem) == false) return;
+                if (Enum.TryParse<EnumConfig_Motor_C1_PP2>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
             }
             else if (enumGroup == EnumConfigGroup.Motor_C1_X1)
@@ -1152,9 +1152,9 @@ namespace SFE.TRACK.ViewModel
                 if (Enum.TryParse<EnumConfig_Motor_C1_BT>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
             }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_PP)
+            else if (enumGroup == EnumConfigGroup.Motor_C1_PP1)
             {
-                if (Enum.TryParse<EnumConfig_Motor_C1_PP>(item.Name, out var enumItem) == false) return;
+                if (Enum.TryParse<EnumConfig_Motor_C1_PP1>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
             }
             else if (enumGroup == EnumConfigGroup.Motor_D2_X1)
@@ -1162,9 +1162,9 @@ namespace SFE.TRACK.ViewModel
                 if (Enum.TryParse<EnumConfig_Motor_D2_X1>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
             }
-            else if (enumGroup == EnumConfigGroup.Motor_D2_X2)
+            else if (enumGroup == EnumConfigGroup.Motor_C1_PP3)
             {
-                if (Enum.TryParse<EnumConfig_Motor_D2_X2>(item.Name, out var enumItem) == false) return;
+                if (Enum.TryParse<EnumConfig_Motor_C1_PP3>(item.Name, out var enumItem) == false) return;
                 SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
             }
             else if (enumGroup == EnumConfigGroup.Motor_CB01_Pin)
@@ -1357,7 +1357,7 @@ namespace SFE.TRACK.ViewModel
                 {
                     systemCfg.BlockNo = 2;
                     systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Reload Rate";
+                    systemCfg.Title = "Cot Pump Reload Rate";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
@@ -1390,6 +1390,111 @@ namespace SFE.TRACK.ViewModel
                     systemCfg.BlockNo = 2;
                     systemCfg.ModuleNo = 1;
                     systemCfg.Title = "Cot Pump Cal";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump_Dispense_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump Dispense Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump2_Reload_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump2 Reload Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump2_Dispense_Decel")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump2 Dec";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump2_Dispense_Amout")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump2 Amount";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump2_Dispense_Accel")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump2 Acc";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump2_Calibration")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump2 Cal";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump2_Dispense_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump2 Dispense Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+
+                else if (item.Name == "Cot_Pump3_Reload_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump3 Reload Rate";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump3_Dispense_Decel")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump3 Dec";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump3_Dispense_Amout")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump3 Amount";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump3_Dispense_Accel")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump3 Acc";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump3_Calibration")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump3 Cal";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
+                else if (item.Name == "Cot_Pump3_Dispense_Rate")
+                {
+                    systemCfg.BlockNo = 2;
+                    systemCfg.ModuleNo = 1;
+                    systemCfg.Title = "Cot Pump3 Dispense Rate";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
@@ -1440,15 +1545,7 @@ namespace SFE.TRACK.ViewModel
                     systemCfg.Title = "Cot BackRinse Dispense Time";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
-                }
-                else if(item.Name == "Cot_Pump_Dispense_Rate")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump Dispense Rate";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
+                }                
 
                 if (systemCfg.Name != string.Empty) Global.STSystemCfgList.Add(systemCfg);
 

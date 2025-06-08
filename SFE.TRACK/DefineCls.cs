@@ -52,13 +52,13 @@ namespace SFE.TRACK
         C1_X1 = 30,
         C1_X2 = 31,
         C1_BT = 32, //Bath
-        C1_PP = 33, //Pump
+        C1_PP1 = 33, //Pump
 
         D1_X1 = 34,
-        D1_X2 = 35,
+        C1_PP2 = 35,
 
         D2_X1 = 36,
-        D2_X2 = 37,
+        C1_PP3 = 37,
 
         C1_SPIN = 38,
         D1_SPIN = 39,

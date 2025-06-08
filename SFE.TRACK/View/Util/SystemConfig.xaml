@@ -69,7 +69,7 @@
                         </StackPanel>
                     </Button>
                     <DataGrid x:Name="CotConfigDataGrid" SelectedItem="{Binding CotConfig}" GridLinesVisibility="All" SelectedIndex="{Binding CotSelectedIndex}" RowHeight="40"  Margin="0 0 0 0" TextBlock.TextAlignment="Center" 
-                              ItemsSource="{Binding arCotCfgList}" AutoGenerateColumns="False"
+                              ItemsSource="{Binding arCotCfgList}" AutoGenerateColumns="False" Height="810"
                                 SelectionMode="Single" FontSize="17" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                         <DataGrid.Resources>
                             <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -81,7 +81,7 @@
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Description" Width="250" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Value" Width="120" Binding="{Binding Value}"/>
+                            <DataGridTextColumn Header="Value" Width="108" Binding="{Binding Value}"/>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding CotConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=CotConfigDataGrid}"/>
