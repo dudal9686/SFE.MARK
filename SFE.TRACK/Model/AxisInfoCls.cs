@@ -408,7 +408,7 @@ namespace SFE.TRACK.Model
             command = string.Format("Motor:{0}", AxisID);
             HomeSituation = enHomeState.HOME_NONE;
             if (Company == "SFE_CAN")
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___OriginMove, command);
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__OriginMove, command);
             else Motor.DoHomming();
             HomeSituation = enHomeState.HOMMING;
         }
@@ -419,7 +419,7 @@ namespace SFE.TRACK.Model
 
             command = string.Format("Motor:{0},{1}", AxisID, 1);
             if (Company == "SFE_CAN")
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__ServoOn, command);
             else Motor.DoServoOn(true);
         }
         private void ServoOffCommand()
@@ -428,7 +428,7 @@ namespace SFE.TRACK.Model
 
             Servo = false;
             command = string.Format("Motor:{0},{1}", AxisID, 0);
-            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoOn, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__ServoOn, command);
             else Motor.DoServoOn(false);
         }
         private void EncoderClearCommand()
@@ -437,20 +437,20 @@ namespace SFE.TRACK.Model
 
             if (!Global.MessageOpen(enMessageType.OKCANCEL, "Do you want the [Encoder Clear]?")) return;
             command = string.Format("Motor:{0}", AxisID);
-            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___EncoderClear, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__EncoderClear, command);
             else Motor.SetZeroPosition();
         }
         private void StopCommand()
         {
             command = string.Format("Motor:{0}", AxisID);
-            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__Stop, command);
             else Motor.StopMove();
             if (IsRepeatMode) IsRepeatMode = false;
         }
         private void AlarmResetCommand()
         {
             command = string.Format("Motor:{0}", AxisID);
-            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___ServoAlarmClear, command);
+            if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__ServoAlarmClear, command);
             else Motor.ClerAlarm();
             Console.WriteLine("AlarmResetCommand");
             System.Threading.Thread.Sleep(300);

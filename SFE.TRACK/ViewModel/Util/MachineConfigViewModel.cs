@@ -55,7 +55,7 @@ namespace SFE.TRACK.ViewModel.Util
                     arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}", i, module.BlockNo, module.ModuleNo, module.Use));
                 }
 
-                PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.CoaterInfo);
+                PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__CoaterInfo);
                 item.SetValueAll(arChamberInfo);
                 arChamberInfo.Clear();
 
@@ -67,7 +67,7 @@ namespace SFE.TRACK.ViewModel.Util
                     arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}", i, module.BlockNo, module.ModuleNo, module.Use));
                 }
 
-                item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.DeveloperInfo);
+                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__DeveloperInfo);
                 item.SetValueAll(arChamberInfo);
                 
                 arChamberInfo.Clear();
@@ -80,7 +80,7 @@ namespace SFE.TRACK.ViewModel.Util
                     arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}, {4}", i, module.MachineName, module.BlockNo, module.ModuleNo, module.Use));
                 }
 
-                item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.ChamberInfo);
+                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__ChamberInfo);
                 item.SetValueAll(arChamberInfo);
                 arChamberInfo.Clear();
 

@@ -26,16 +26,16 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void StopCommand(Window o)
         {
-            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Stop");
-            Global.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Stop");
+            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Stop");
+            Global.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Stop");
             Global.STMachineStatus = enMachineStatus.STOP;
             o.DialogResult = true;
         }
         private void RecoveryCommand(Window o)
         {
-            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "RecoveryStop");
-            Global.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "RecoveryStop");
-            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, "RecoveryStop");
+            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "RecoveryStop");
+            Global.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "RecoveryStop");
+            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__Stop, "RecoveryStop");
             Global.STMachineStatus = enMachineStatus.STOP;
             o.DialogResult = true;
         }

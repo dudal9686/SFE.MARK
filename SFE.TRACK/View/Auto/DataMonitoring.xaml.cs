@@ -28,9 +28,9 @@ namespace SFE.TRACK.View.Auto
         private void MonitoringDataView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue)
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MonitoringDoRequest, string.Format("MONIT:TRUE"));
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__MonitoringDoRequest, string.Format("MONIT:TRUE"));
             else
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MonitoringDoRequest, string.Format("MONIT:FALSE"));
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__MonitoringDoRequest, string.Format("MONIT:FALSE"));
         }
     }
 }

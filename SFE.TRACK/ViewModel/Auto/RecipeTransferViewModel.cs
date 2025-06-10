@@ -47,7 +47,7 @@ namespace SFE.TRACK.ViewModel.Auto
             Properties.Settings.Default.Save();
 
             //챔버쪽에 알려야 한다.
-            PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.RecipeTransperInfo);
+            PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__RecipeTransperInfo);
             item.SetValue(RecipeName);
             window.DialogResult = true;
         }

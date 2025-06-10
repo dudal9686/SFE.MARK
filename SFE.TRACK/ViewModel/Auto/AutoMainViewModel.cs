@@ -45,7 +45,7 @@ namespace SFE.TRACK.ViewModel.Auto
         private void LotStartCommand()
         {
             string packet = string.Format("Chamber:2:1:COT_FLOW_TEST");
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber___PutReady, packet);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__PutReady, packet);
             
             return;
 
@@ -126,8 +126,8 @@ namespace SFE.TRACK.ViewModel.Auto
                     }
                 }
                 Global.STMachineStatus = enMachineStatus.HOME;
-                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___Initialize, "Do", true);
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
                 
                 stopWatch.Stop();
                 stopWatch.Start();
@@ -192,7 +192,7 @@ namespace SFE.TRACK.ViewModel.Auto
         {
             Dictionary<int, string> waferDictionary = new Dictionary<int, string>();
             List<string> jobList = new List<string>();
-            PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
+            PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
             item.SetValueAll(jobList);
             List<FoupCls> list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
 
@@ -230,11 +230,11 @@ namespace SFE.TRACK.ViewModel.Auto
 
             if(jobList.Count > 0)
             {
-                item = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Lot, EnumConfig_Lot.Job);
+                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
                 item.SetValueAll(jobList);
 
-                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine___Run, "Run");
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
                 Global.STMachineStatus = enMachineStatus.RUN;
             }
 

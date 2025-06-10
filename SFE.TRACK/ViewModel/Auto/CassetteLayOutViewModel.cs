@@ -39,10 +39,10 @@ namespace SFE.TRACK.ViewModel.Auto
             if (Global.STMachineStatus == enMachineStatus.STOP)
             {
                 message = string.Format("AssyCRA:DoScanCassette {0}", cst);
-                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual___Do, message, true, 10000);
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, message, true, 10000);
             }
             //message = string.Format("Cassette:{0}", cst);
-            //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette___Scan, message);
+            //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette__Scan, message);
         }
     }
 }

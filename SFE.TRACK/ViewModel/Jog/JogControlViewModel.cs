@@ -66,12 +66,12 @@ namespace SFE.TRACK.ViewModel.Jog
             Console.WriteLine(string.Format("AxisID = {0}, Actual Pos = {1}", Axis.AxisID, Axis.ActualPosition));
             if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
             {
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___ChamberState, string.Format("Chamber:{0}:{1}", Axis.BlockNo, Axis.ModuleNo));
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__ChamberState, string.Format("Chamber:{0}:{1}", Axis.BlockNo, Axis.ModuleNo));
             }
             else
             {
                 if (Axis.Company == "SFE_CAN")
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorAxisRequest, string.Format("MOTOR:{0}", Axis.AxisID));
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__MotorAxisRequest, string.Format("MOTOR:{0}", Axis.AxisID));
             }
         }
 
@@ -82,7 +82,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 if(Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (int)enDirection.CW);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___JogMove, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__JogMove, command);
                     return;
                 }
 
@@ -90,7 +90,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.dec = 100;
                 speedPack.speed = 10;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, (int)enJogMode.LOW);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__JogMove, command);
                 else
                 {
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
@@ -104,7 +104,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (int)enDirection.CW);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___JogMove, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__JogMove, command);
                     return;
                 }
 
@@ -112,7 +112,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.dec = 100;
                 speedPack.speed = 20;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, (int)enJogMode.HIGH);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__JogMove, command);
                 else
                 {
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
@@ -126,7 +126,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, PitchLen * 1000);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PitchMove, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
                     return;
                 }
 
@@ -135,7 +135,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.speed = speedPack.speed.Equals(0) ? 20 : Axis.VEL;
                 //command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CW, PitchLen);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__PitchMove, command);
                 else
                 {
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
@@ -153,12 +153,12 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}", Axis.BlockNo, Axis.ModuleNo);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___MoveStop, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__MoveStop, command);
                     return;
                 }
 
                 command = string.Format("Motor:{0}", Axis.AxisID);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__Stop, command);
                 else Axis.Motor.StopMove();
             }
         }
@@ -170,7 +170,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (int)enDirection.CCW);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___JogMove, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__JogMove, command);
                     return;
                 }
 
@@ -178,7 +178,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.dec = 100;
                 speedPack.speed = -10;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.LOW);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__JogMove, command);
                 else
                 {
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
@@ -192,7 +192,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (int)enDirection.CCW);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___JogMove, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__JogMove, command);
                     return;
                 }
 
@@ -200,7 +200,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.dec = 100;
                 speedPack.speed = -20;
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, (int)enJogMode.HIGH);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___JogMove, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__JogMove, command);
                 else
                 {
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
@@ -214,7 +214,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (-1000) * PitchLen);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PitchMove, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
                     return;
                 }
 
@@ -224,7 +224,7 @@ namespace SFE.TRACK.ViewModel.Jog
                 speedPack.speed = speedPack.speed.Equals(0) ? -20 : Axis.VEL;
                 //command = string.Format("Motor:{0},-{1},{2},{3},{4},{5}", Axis.AxisID, PitchLen, speedPack.speed, speedPack.acc, speedPack.dec, 10000);
                 command = string.Format("Motor:{0},{1},{2}", Axis.AxisID, (int)enDirection.CCW, PitchLen);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___PitchMove, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__PitchMove, command);
                 else
                 {
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
@@ -242,12 +242,12 @@ namespace SFE.TRACK.ViewModel.Jog
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
                     command = string.Format("Chamber:{0}:{1}", Axis.BlockNo, Axis.ModuleNo);
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___MoveStop, command);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__MoveStop, command);
                     return;
                 }
 
                 command = string.Format("Motor:{0}", Axis.AxisID);
-                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___Stop, command);
+                if (Axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__Stop, command);
                 else Axis.Motor.StopMove();
             }
         }

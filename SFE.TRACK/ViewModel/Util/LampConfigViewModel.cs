@@ -61,7 +61,7 @@ namespace SFE.TRACK.ViewModel.Util
                 valueList.Add(data);
             }
 
-            PrgCfgItem prgItem = Global.MachineWorker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.TowerLamp);
+            PrgCfgItem prgItem = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__TowerLamp);
             prgItem.SetValueAll(valueList);
 
             Global.MessageOpen(enMessageType.OK, "Saved.");

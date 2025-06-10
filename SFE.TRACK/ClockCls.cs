@@ -53,7 +53,7 @@ namespace SFE.TRACK
 
             if (Global.MachineWorker == null) return;
 
-            Dictionary<int, string> list = Global.MachineWorker.Controller.GetCmdHelper().GetClientList();
+            Dictionary<int, string> list = Global.MachineWorker.GetCmdHelper().GetClientList();
 
             if (list.ContainsKey(Global.CHAMBER_ID)) { ChamberConnectColor = Brushes.Green; Global.IsChamberConnection = true; }
             else { ChamberConnectColor = Brushes.Red; Global.IsChamberConnection = false; }

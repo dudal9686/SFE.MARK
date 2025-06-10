@@ -45,7 +45,7 @@ namespace SFE.TRACK.ViewModel.Alarm
             if(AlarmSelectedItem != null)
             {
                 string command = string.Format("{0}:{1}:{2}", AlarmSelectedItem.Code, AlarmSelectedItem.Owner, AlarmSelectedItem.Param);
-                Global.MachineWorker.SendCommand(AlarmSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Alarm, EnumCommand_Alarm.Request___AlarmClear, command);
+                Global.MachineWorker.SendCommand(AlarmSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Alarm, EnumCommand_Alarm.Request__AlarmClear, command);
                 Global.STAlarmList.Remove(AlarmSelectedItem);
                 if (Global.STAlarmList.Count == 0)
                     CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
@@ -58,7 +58,7 @@ namespace SFE.TRACK.ViewModel.Alarm
         {
             if (WarningSelectedItem != null)
             {
-                Global.MachineWorker.SendCommand(WarningSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Warning, EnumCommand_Warning.Send___Clear, WarningSelectedItem.Message);
+                Global.MachineWorker.SendCommand(WarningSelectedItem.SendID, IPCNetClient.DataType.String, EnumCommand.Warning, EnumCommand_Warning.Send__Clear, WarningSelectedItem.Message);
                 Global.STWarningList.Remove(WarningSelectedItem);
                 if (Global.STWarningList.Count == 0)
                     CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearWarning();
@@ -69,7 +69,7 @@ namespace SFE.TRACK.ViewModel.Alarm
 
         private void BuzzerOffCommand()
         {
-            Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request___BuzzerOff, "OFF");
+            Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__BuzzerOff, "OFF");
         }
     }
 }

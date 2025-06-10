@@ -189,7 +189,7 @@ namespace SFE.TRACK.ViewModel.Param
                         {
                             Axis = axis;
                             if(Axis.Company == "SFE_CAN")
-                                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorAxisRequest, string.Format("MOTOR:{0}", Axis.AxisID));
+                                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__MotorAxisRequest, string.Format("MOTOR:{0}", Axis.AxisID));
                             break;
                         }
                     }
@@ -242,7 +242,7 @@ namespace SFE.TRACK.ViewModel.Param
                     if (axis.Company == "SFE_CAN")
                     {
                         command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", axis.AxisID, paramData.Pos, paramData.Vel, paramData.Acc, paramData.Dec, 10000);
-                        Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___DirectMove, command);
+                        Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__DirectMove, command);
                     }
                     else
                     {

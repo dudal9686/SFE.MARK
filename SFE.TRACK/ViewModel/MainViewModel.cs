@@ -77,21 +77,24 @@ namespace SFE.TRACK.ViewModel
                 return;
             }
 
-            _worker.Controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
+            foreach (DefaultController controller in _worker.ControllerList)
+            {
+                controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
+            }
 
             InitData();
             InitJobProcess();
             InitIO();
 
-            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___MotorDoRequest, string.Format("Motor:FALSE"));
-            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange___IODoRequest, string.Format("IO:FALSE"));
+            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__MotorDoRequest, string.Format("Motor:FALSE"));
+            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__IODoRequest, string.Format("IO:FALSE"));
 
-            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.RecipeTransperInfo);
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__RecipeTransperInfo);
             prgItem.GetValue(out string recipename);
             Properties.Settings.Default.RECIPE_TRANSFER = recipename;
             Properties.Settings.Default.Save();
 
-            prgItem = _worker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.DummyLinkRecipeInfo);
+            prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__DummyLinkRecipeInfo);
             prgItem.GetValue(out string dummyLinkRecipeName);
             Properties.Settings.Default.DUMMY_COND = dummyLinkRecipeName;
             Properties.Settings.Default.Save();
@@ -168,13 +171,13 @@ namespace SFE.TRACK.ViewModel
                 return false;
             }
 
-            LmList = _worker.Controller.GetLM();
-            AssyList = _worker.Controller.GetAssy();
-            DIList = _worker.Controller.GetInput();
-            DOList = _worker.Controller.GetOutput();
-            AIOList = _worker.Controller.GetAIO();
-            MotorList = _worker.Controller.GetMotor();
-            CustomUnitList = _worker.Controller.GetCustom();
+            LmList = _worker.GetLM();
+            AssyList = _worker.GetAssy();
+            DIList = _worker.GetInput();
+            DOList = _worker.GetOutput();
+            AIOList = _worker.GetAIO();
+            MotorList = _worker.GetMotor();
+            CustomUnitList = _worker.GetCustom();
 
             SetRecipeFileList();
             SetAxisData();
@@ -189,7 +192,7 @@ namespace SFE.TRACK.ViewModel
         private void ReadBuzzerData()
         {
             Global.STDataAccess.ReadLampData();
-            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumConfigGroup.Environment, EnumConfig_Environment.TowerLamp);
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__TowerLamp);
             GetTowerLamp(prgItem);
         }
 
@@ -575,7 +578,7 @@ namespace SFE.TRACK.ViewModel
         private void LoginCommand()
         {
             #region Test Source
-            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door___DoAction, "On");
+            //_worker.SendCommand(20,IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Door__DoAction, "On");
             //IsEnabledMenu[(int)enMainMenu.RECIPE] = false;
             #endregion
 
@@ -609,6 +612,8 @@ namespace SFE.TRACK.ViewModel
 
         private void Controller_EvtAlarmOccured(object sender, LibEvtArgs e)
         {
+            DefaultController controller = (DefaultController)sender;
+
             EvtCommandLaunch launch = (EvtCommandLaunch)sender;  
             if (e.m_Params.Length == 0) // alarm cleared
             {
@@ -623,7 +628,7 @@ namespace SFE.TRACK.ViewModel
                 string fullMsg = (string)e.GetParam(index++);
                 List<string> paramList = (List<string>)e.GetParam(index++);
 
-                AlarmItem item = _worker.Reader.FindAlarmItem(code);
+                AlarmItem item = controller.FindAlarmItem(code);
 
                 AlarmLogCls alarm = new AlarmLogCls();
                 alarm.Code = code;
@@ -656,24 +661,24 @@ namespace SFE.TRACK.ViewModel
 
             EnumCommand command = item.GetGroup<EnumCommand>();
 
-            Global.STLog.AddSocketLog(e.FromID, "RECV", dataType.ToString(), command, item.GetEnumName()/* item.MainCmdName + "___" + item.SubCmdName*/, message);
+            Global.STLog.AddSocketLog(e.FromID, "RECV", dataType.ToString(), command, item.GetEnumName()/* item.MainCmdName + "__" + item.SubCmdName*/, message);
 
             if (command == EnumCommand.Action)
             {
                 EnumCommand_Action eValue = item.GetCommand<EnumCommand_Action>();
-                if (eValue == EnumCommand_Action.Door___DoAction)
+                if (eValue == EnumCommand_Action.Door__DoAction)
                 {
 
                 }
-                else if(eValue == EnumCommand_Action.TermManual___Do)
+                else if(eValue == EnumCommand_Action.TermManual__Do)
                 {
                     Global.ManualMessageClose();
                 }
-                else if (eValue == EnumCommand_Action.StatusChange___ServoOn)
+                else if (eValue == EnumCommand_Action.StatusChange__ServoOn)
                 {
 
                 }
-                else if(eValue == EnumCommand_Action.ChamberManual___DoManual)
+                else if(eValue == EnumCommand_Action.ChamberManual__DoManual)
                 {
                     if (Global.STMachineStatus == enMachineStatus.HOME) return;
 
@@ -696,7 +701,7 @@ namespace SFE.TRACK.ViewModel
             else if (command == EnumCommand.Warning)
             {
                 EnumCommand_Warning eValue = item.GetCommand<EnumCommand_Warning>();
-                if (eValue == EnumCommand_Warning.Send___Set)
+                if (eValue == EnumCommand_Warning.Send__Set)
                 {
                     AlarmLogCls alarm = new AlarmLogCls();
                     alarm.Message = message;
@@ -721,7 +726,7 @@ namespace SFE.TRACK.ViewModel
             {
                 EnumCommand_Status eValue = item.GetCommand<EnumCommand_Status>();
 
-                if (eValue == EnumCommand_Status.RunStatus___Result)
+                if (eValue == EnumCommand_Status.RunStatus__Result)
                 {
                     arr = message.Split(':');
 
@@ -731,11 +736,11 @@ namespace SFE.TRACK.ViewModel
                     }
 
                 }
-                else if (eValue == EnumCommand_Status.MCS___LotStatus)
+                else if (eValue == EnumCommand_Status.MCS__LotStatus)
                 {
 
                 }
-                else if (eValue == EnumCommand_Status.UnitStatus___MotorState)
+                else if (eValue == EnumCommand_Status.UnitStatus__MotorState)
                 {
                     arr = message.Split(':');
                     arrParam = arr[1].Split(',');
@@ -759,7 +764,7 @@ namespace SFE.TRACK.ViewModel
                         }
                     }
                 }
-                else if (eValue == EnumCommand_Status.UnitStatus___DIState)
+                else if (eValue == EnumCommand_Status.UnitStatus__DIState)
                 {
                     List<IODataCls> arInPutIO = Global.STDIList.FindAll(x => x.Company == "SFE_CAN" && x.BoardType == "SIO");
                     arInPutIO.Sort((IOListA, IOListB) => IOListA.IONum.CompareTo(IOListB.IONum));
@@ -777,7 +782,7 @@ namespace SFE.TRACK.ViewModel
                         ioData.State = ((value << (bit)) & 0x8) == 0x8;
                     }
                 }
-                else if (eValue == EnumCommand_Status.UnitStatus___DOState)
+                else if (eValue == EnumCommand_Status.UnitStatus__DOState)
                 {
                     List<IODataCls> arOutPutIO = Global.STDOList.FindAll(x => x.Company == "SFE_CAN" && x.BoardType == "SIO");
                     arOutPutIO.Sort((IOListA, IOListB) => IOListA.IONum.CompareTo(IOListB.IONum));
@@ -795,7 +800,7 @@ namespace SFE.TRACK.ViewModel
                         ioData.State = ((value << (bit)) & 0x8) == 0x8;
                     }
                 }
-                else if (eValue == EnumCommand_Status.UnitStatus___MiniBoardIOState)
+                else if (eValue == EnumCommand_Status.UnitStatus__MiniBoardIOState)
                 {
                     arr = message.Split(':');
 
@@ -828,7 +833,7 @@ namespace SFE.TRACK.ViewModel
                         //ioData.State = (value & 0x1) == 0x1;
                     }
                 }
-                else if (eValue == EnumCommand_Status.MCS___InitStep)
+                else if (eValue == EnumCommand_Status.MCS__InitStep)
                 {
                     arr = message.Split(':');
                     ModuleBaseCls module = null;
@@ -870,7 +875,7 @@ namespace SFE.TRACK.ViewModel
                         //end
                     }
                 }
-                else if (eValue == EnumCommand_Status.Chamber___InitialResult)
+                else if (eValue == EnumCommand_Status.Chamber__InitialResult)
                 {
                     arr = message.Split(':');
                     enHomeState eState = enHomeState.HOMMING;
@@ -898,7 +903,7 @@ namespace SFE.TRACK.ViewModel
                         }
                     }
                 }
-                else if (eValue == EnumCommand_Status.Chamber___OriginMove)
+                else if (eValue == EnumCommand_Status.Chamber__OriginMove)
                 {
                     arr = message.Split(':');
 
@@ -913,16 +918,16 @@ namespace SFE.TRACK.ViewModel
                         }
                     }
                 }
-                else if (eValue == EnumCommand_Status.Cassette___Scan)
+                else if (eValue == EnumCommand_Status.Cassette__Scan)
                 {
                     arr = message.Split(':');
                     if (arr[2] == enWorkingNeedStep.IsDone.ToString())
                     {
                         packet = string.Format("Foup:{0}", arr[1]);
-                        _worker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette___MapData, packet);
+                        _worker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette__MapData, packet);
                     }
                 }
-                else if (eValue == EnumCommand_Status.Cassette___MapData)
+                else if (eValue == EnumCommand_Status.Cassette__MapData)
                 {
                     arr = message.Split(':');
                     FoupCls foupCls = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == Convert.ToInt32(arr[1])) as FoupCls;
@@ -934,7 +939,7 @@ namespace SFE.TRACK.ViewModel
                         else if (arr[2][i] == '0') foupCls.FoupWaferList[i].WaferState = enWaferState.WAFER_EMPTY;
                     }
                 }
-                else if (eValue == EnumCommand_Status.UnitStatus___ChamberState)
+                else if (eValue == EnumCommand_Status.UnitStatus__ChamberState)
                 {
                     arr = message.Split(':');
                     ModuleBaseCls module = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
@@ -942,7 +947,7 @@ namespace SFE.TRACK.ViewModel
                     if (!module.Use) return;
                     module.ModuleState = (enModuleState)Convert.ToInt32(arr[3]);
                 }
-                else if (eValue == EnumCommand_Status.MCS___SerialData)
+                else if (eValue == EnumCommand_Status.MCS__SerialData)
                 {
                     List<string> list;
                     list = Tokenizer.Split(message, false, false, "\r\n");
@@ -954,7 +959,7 @@ namespace SFE.TRACK.ViewModel
                         TreatSerialWaferData(typeName, name, unitID, title, ownID, list);
                     }
                 }
-                else if (eValue == EnumCommand_Status.UnitStatus___MiniBoardState)
+                else if (eValue == EnumCommand_Status.UnitStatus__MiniBoardState)
                 {
                     arr = message.Split(':');
 
@@ -984,16 +989,16 @@ namespace SFE.TRACK.ViewModel
 
                     for (int i = 0; i < 4; i++) chamber.HeatTempList[i].AutoTuningStatus = Convert.ToInt32(arr[20 + i]).Equals(1) ? "STOP" : "RUN";
                 }
-                else if (eValue == EnumCommand_Status.DATA___ChamberMonitoringData)
+                else if (eValue == EnumCommand_Status.DATA__ChamberMonitoringData)
                 {
                     //여기에 모니터링 데이터를 넣어준다.
                 }
-                else if (eValue == EnumCommand_Status.Chamber___PutReady)
+                else if (eValue == EnumCommand_Status.Chamber__PutReady)
                 {
                     packet = string.Format("Chamber:2:1");
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber___StartProcess, packet);
+                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber__StartProcess, packet);
                 }
-                else if (eValue == EnumCommand_Status.Chamber___EndProcess)
+                else if (eValue == EnumCommand_Status.Chamber__EndProcess)
                 {
                     Console.WriteLine("");
                 }
@@ -1010,7 +1015,7 @@ namespace SFE.TRACK.ViewModel
             CommandResult result = e.Result;
             string resultString = e.ResultString;
 
-            if (item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.Move___EncoderPos.ToString())
+            if (item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.Move__EncoderPos.ToString())
             {
                 if (resultString == "") return;
                 groupArr = resultString.Split(':');
@@ -1024,7 +1029,7 @@ namespace SFE.TRACK.ViewModel
                     }
                 }
             }
-            else if(item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.TermManual___Do.ToString())
+            else if(item.GetGroupName() == EnumCommand.Action.ToString() && item.GetEnumName() == EnumCommand_Action.TermManual__Do.ToString())
             {
                 Global.ManualMessageClose();
                 if(result == CommandResult.Success)
@@ -1057,182 +1062,20 @@ namespace SFE.TRACK.ViewModel
         private void _worker_EvtPrgCfgReloaded(object sender, LibEvtArgs e)
         {
             PrgCfgItem item = (PrgCfgItem)e.GetParam();
-            if (Enum.TryParse<EnumConfigGroup>(item.GroupName, out var enumGroup) == false) return;
-            if (enumGroup == EnumConfigGroup.Environment)
+            if (item.IsSameConfig(EnumPrgCfg.Environment__TowerLamp))
             {
-                if (Enum.TryParse<EnumConfig_Environment>(item.Name, out var enumItem) == false) return;
-                if (enumItem == EnumConfig_Environment.Operation)
-                {
-                    Console.WriteLine("");
-                }
-                else if (enumItem == EnumConfig_Environment.DummyLinkRecipeInfo)
-                {
-                    Console.WriteLine("");
-                }
-                else if (enumItem == EnumConfig_Environment.RecipeTransperInfo)
-                {
-                    Console.WriteLine("");
-                }
-                else if(enumItem == EnumConfig_Environment.TowerLamp)
-                {
-                    GetTowerLamp(item);
-                }
+                GetTowerLamp(item);
             }
-            else if (enumGroup == EnumConfigGroup.Lot)
+            else if (item.GroupName == "SystemChamber")
             {
-
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CRA_X)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CRA_X>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CRA_Y)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CRA_Y>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CRA_Z)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CRA_Z>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_PRA_X1)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_PRA_X1>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_PRA_X2)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_PRA_X2>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_PRA_X3)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_PRA_X3>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_PRA_Y)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_PRA_Y>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_PRA_Z)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_PRA_Z>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_PRA_T)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_PRA_T>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_D1_X1)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_D1_X1>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_PP2)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_C1_PP2>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_X1)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_C1_X1>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_X2)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_C1_X2>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_BT)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_C1_BT>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_PP1)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_C1_PP1>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_D2_X1)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_D2_X1>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_C1_PP3)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_C1_PP3>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB01_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB01_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB02_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB02_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB03_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB03_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB04_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB04_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB05_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB05_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB06_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB06_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB07_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB07_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB08_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB08_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB09_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB09_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB10_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB10_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB11_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB11_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if (enumGroup == EnumConfigGroup.Motor_CB12_Pin)
-            {
-                if (Enum.TryParse<EnumConfig_Motor_CB12_Pin>(item.Name, out var enumItem) == false) return;
-                SetTeachingData(enumGroup.ToString(), enumItem.ToString(), item);
-            }
-            else if(enumGroup ==  EnumConfigGroup.SystemChamber)
-            {
-                if (Enum.TryParse<EnumConfig_SystemChamber>(item.Name, out var enumItem) == false) return;
                 SetSystemConfig(item);
-
-
+            }
+            else
+            {
+                if (item.IsMotorTeachingConfig(out var motorName, out var teachName))
+                {
+                    SetTeachingData(motorName, teachName, item);
+                }
             }
         }
 

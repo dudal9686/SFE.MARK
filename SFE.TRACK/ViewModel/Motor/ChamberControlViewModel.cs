@@ -73,12 +73,12 @@ namespace SFE.TRACK.ViewModel.Motor
             if(IsVelocity[0]) //Jog
             {
                 command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, (int)enDirection.CW);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___JogMove, command);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__JogMove, command);
             }
             else if(IsVelocity[1])
             {
                 command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Pitch * 1000);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PitchMove, command);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
             }
         }
         private void MouseUpPlusCommand()
@@ -88,7 +88,7 @@ namespace SFE.TRACK.ViewModel.Motor
             if(IsVelocity[0])
             {
                 command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___MoveStop, command);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__MoveStop, command);
             }
         }
         private void MouseDownMinusCommand()
@@ -98,12 +98,12 @@ namespace SFE.TRACK.ViewModel.Motor
             if (IsVelocity[0]) //Jog
             {
                 command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, (int)enDirection.CCW);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___JogMove, command);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__JogMove, command);
             }
             else if (IsVelocity[1])
             {
                 command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, (-1000)*Pitch);
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PitchMove, command);
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
             }
         }
         private void MouseUpMinusCommand()
@@ -117,91 +117,91 @@ namespace SFE.TRACK.ViewModel.Motor
             command = string.Format("Module:{0},{1},{2}", Chamber.MachineName, Chamber.BlockNo, Chamber.ModuleNo);
             Chamber.HomeSituation = enHomeState.HOMMING;
             Chamber.ModuleState = enModuleState.NOTINITIAL;
-            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move___ModuleOriginMove, command, true);
+            Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__ModuleOriginMove, command, true);
         }
         private void ServoOnCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___ServoOn, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__ServoOn, command);
             Axis.Servo = true;
         }
         private void ServoOffCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___ServoOff, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__ServoOff, command);
             Axis.Servo = false;
         }
         private void StopCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___MoveStop, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__MoveStop, command);
         }
         private void TempRunCommand()
         {
             if (Chamber == null) return;
             if (HeatTemp == null) return;
             command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___Run, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__Run, command);
         }
         private void TempStopCommand()
         {
             if (Chamber == null) return;
             if (HeatTemp == null) return;
             command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___Stop, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__Stop, command);
         }
         private void TempSetCommand()
         {
             if (Chamber == null) return;
             if (HeatTemp == null) return;
             command = string.Format("Chamber:{0}:{1}:{2}:{3}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex, HeatSetTemp);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__SetTemperature, command);
         }
         private void AutoTuningCommand()
         {
             if (Chamber == null) return;
             if (HeatTemp == null) return;
             command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, HeatTemp.ZoneIndex);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___AutoTuning, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__AutoTuning, command);
         }
         private void PinHomeCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PinHome, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PinHome, command);
         }
         private void PinReadyCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PinReady, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PinReady, command);
         }
         private void PinDownCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PinDown, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PinDown, command);
         }
         private void PinUpCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___PinUp, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PinUp, command);
         }
         private void ShutterOpenCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___ShutterOpen, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__ShutterOpen, command);
         }
         private void ShutterCloseCommand()
         {
             if (Chamber == null) return;
             command = string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___ShutterClose, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__ShutterClose, command);
         }
         private void PitchClickCommand()
         {
@@ -242,7 +242,7 @@ namespace SFE.TRACK.ViewModel.Motor
                     else if (Chamber.MachineName.ToUpper().IndexOf("HHP") != -1) { max = 300; min = 50; }
 
                     //Chamber.SetValue = Global.KeyPad(Chamber.SetValue, max, min);
-                    //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___SetTemperature, string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Chamber.SetValue));
+                    //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__SetTemperature, string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Chamber.SetValue));
                     break;
             }
         }
@@ -255,7 +255,7 @@ namespace SFE.TRACK.ViewModel.Motor
                 Axis = AxisList[0];
                 Chamber = (ChamberCls)Global.GetModule(Axis.BlockNo, Axis.ModuleNo);
                 AxisInfo += " " + Chamber.MachineTitle;
-                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual___ChamberState, string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo));
+                Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__ChamberState, string.Format("Chamber:{0}:{1}", Chamber.BlockNo, Chamber.ModuleNo));
             }
         }
         public float Pitch
