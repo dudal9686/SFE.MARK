@@ -806,7 +806,7 @@ namespace SFE.TRACK.ViewModel
 
                     //IODataCls ioData = null;
                     int value = 0;
-                    for (int i = 0; i < arr[0].Length; i++)//DO
+                    for (int i = 0; i < arr[0].Length; i++)//DO 한개라서
                     {
                         value = Convert.ToByte(arr[0][i].ToString(), 16);
                         //for (int j = 0; j < 3; j++)
@@ -818,7 +818,7 @@ namespace SFE.TRACK.ViewModel
                         }
                     }
 
-                    for (int i = 0; i < arr[1].Length; i++)//DI
+                    for (int i = 0; i < arr[1].Length; i++)//DI  3개라서
                     {
                         value = Convert.ToByte(arr[1][i].ToString(), 16);
                         //IODataCls data = Global.STDIList.Find(x => x.BoardType == "MINI" && x.IOIndex == 0 && x.ModuleNo == 5 + i);
