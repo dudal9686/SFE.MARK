@@ -179,6 +179,7 @@ namespace SFE.TRACK.ViewModel.Auto
         }
         private void MonitoringCommand()
         {
+            Global.STMachineStatus = enMachineStatus.STOP;
             View.Auto.DataMonitoring dataMonit = new View.Auto.DataMonitoring();
             dataMonit.ShowDialog();
         }
@@ -286,6 +287,15 @@ namespace SFE.TRACK.ViewModel.Auto
                 Global.ManualMessageClose();
                 Global.MessageOpen(enMessageType.OK, "Initialize Error");
             }
+        }
+
+        public void FailHome()
+        {
+            stopWatch.Stop();
+            stopWatch.Reset();
+            timer.Stop();
+            Global.STMachineStatus = enMachineStatus.STOP;
+            Global.ManualMessageClose();
         }
     }
 }

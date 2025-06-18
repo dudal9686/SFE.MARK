@@ -41,6 +41,9 @@ namespace SFE.TRACK.ViewModel.Log
             //directoryInfo = @"D:\MARK_LOG\CHAMBER\SOCKET_LOG\";
 
             DirectoryInfo di = new DirectoryInfo(directoryInfo);
+
+            if (!di.Exists) di.Create();
+
             foreach (FileInfo file in di.GetFiles())
             {
                 if(file.Name.IndexOf(date) != -1)

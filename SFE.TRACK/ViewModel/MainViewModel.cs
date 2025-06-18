@@ -67,7 +67,7 @@ namespace SFE.TRACK.ViewModel
             _worker.EvtCommandLaunched += _worker_EvtCommandLaunched;
             _worker.EvtCommandStatusChanged += _worker_EvtCommandStatusChanged;
             _worker.EvtCommandResultComes += _worker_EvtCommandResultComes;
-            _worker.EvtInfoReloaded += _worker_EvtInfoReloaded;
+            _worker.EvtNameInfoReloaded += _worker_EvtNameInfoReloaded;
             _worker.EvtPrgCfgReloaded += _worker_EvtPrgCfgReloaded;
            
             Global.MachineWorker = _worker;
@@ -76,6 +76,9 @@ namespace SFE.TRACK.ViewModel
                 MessageBox.Show("Starting worker failed");
                 return;
             }
+
+            _worker.GetController("SFETrack").ComID = Global.MCS_ID;
+            _worker.GetController("Chamber").ComID = Global.CHAMBER_ID;
 
             foreach (DefaultController controller in _worker.ControllerList)
             {
@@ -118,6 +121,7 @@ namespace SFE.TRACK.ViewModel
             //foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
         }
 
+      
         private void Timer_Tick(object sender, EventArgs e)
         {
             if(Global.STMachineStatus == enMachineStatus.RUN)
@@ -614,7 +618,7 @@ namespace SFE.TRACK.ViewModel
         {
             DefaultController controller = (DefaultController)sender;
 
-            EvtCommandLaunch launch = (EvtCommandLaunch)sender;  
+            //EvtCommandLaunch launch = (EvtCommandLaunch)sender;  
             if (e.m_Params.Length == 0) // alarm cleared
             {
                 //_worker.Controller.   ();
@@ -622,28 +626,28 @@ namespace SFE.TRACK.ViewModel
             else // alarm occured
             {
                 int index = 0;
-                string code = (string)e.GetParam(index++);
+                int fromID = (int)e.GetParam(index++);
+                MachineInfo macInfo = (MachineInfo)e.GetParam(index++);
+                AlarmItem item = (AlarmItem)e.GetParam(index++);
                 string maker = (string)e.GetParam(index++);
                 string owner = (string)e.GetParam(index++);
                 string fullMsg = (string)e.GetParam(index++);
                 List<string> paramList = (List<string>)e.GetParam(index++);
-
-                AlarmItem item = controller.FindAlarmItem(code);
-
                 AlarmLogCls alarm = new AlarmLogCls();
-                alarm.Code = code;
+                alarm.Code = item.Name;
                 alarm.Owner = owner;
                 alarm.Message = fullMsg;
                 alarm.Help = item.Action;
                 alarm.Param = paramList[0];
                 alarm.Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                alarm.SendID = launch.FromID;
+                alarm.SendID = fromID;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     Global.STAlarmList.Add(alarm);
                     Global.STLog.AddAlarmLog(string.Format("{0}({1}){2}", alarm.Code, alarm.SendID, alarm.Message));
                 });
-
+                //에러가 뜬다고 무조건 끄는거 아닌거 같다.
+                //Global.ManualMessageClose();
                 SetAlarm();
             }
         }
@@ -1059,6 +1063,10 @@ namespace SFE.TRACK.ViewModel
             CommandStatus status = e.Status;
         }
 
+        private void _worker_EvtNameInfoReloaded(object sender, LibEvtArgs e)
+        {
+        }
+
         private void _worker_EvtPrgCfgReloaded(object sender, LibEvtArgs e)
         {
             PrgCfgItem item = (PrgCfgItem)e.GetParam();
@@ -1399,10 +1407,6 @@ namespace SFE.TRACK.ViewModel
             }
         }
 
-        private void _worker_EvtInfoReloaded(object sender, EventArgs e)
-        {
-
-        }
 
         private bool AnalyseSerialDataType(string message, out bool isAll, out int ownID, out int itemID)
         {

@@ -49,7 +49,7 @@ namespace SFE.TRACK
         public static int MMI_ID = 1000;
         public static bool IsChamberConnection = false;
         public static bool IsMCSConnection = false;
-        public static int HOME_TIMEOUT = 90000;
+        public static int HOME_TIMEOUT = 300000;
         public static bool IsShutDown = false;
         public static int STPulseToUnit = 1000;
         public static enMachineStatus STMachineStatus = enMachineStatus.STOP;
@@ -156,6 +156,7 @@ namespace SFE.TRACK
             if (manualView == null) return;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
+                if (manualView == null) return;
                 manualView.CloseDialog();
                 manualView = null;
             });
