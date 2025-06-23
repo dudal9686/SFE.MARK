@@ -17,7 +17,7 @@ namespace SFE.TRACK.ViewModel.Param
     public class ParamMainViewModel : ViewModelBase
     {
         List<ParamMenuCls> teachingTypeList = new List<ParamMenuCls>();
-        ObservableCollection<ParamModuleCls> teachingModuleList = new ObservableCollection<ParamModuleCls>();
+        List<ParamModuleCls> teachingModuleList = new List<ParamModuleCls>();
         public RelayCommand<object> TeachDataDoubleClickRelayCommand { get; set; }
         public RelayCommand SaveTeachingRelayCommand { get; set; }
         public RelayCommand MoveTeachingRelayCommand { get; set; }
@@ -99,6 +99,7 @@ namespace SFE.TRACK.ViewModel.Param
 
             if (TeachingModuleList.Count != 0)
             {
+                TeachingModuleList = TeachingModuleList.OrderBy(x => x.ModuleNo).ToList();
                 ParamModule = TeachingModuleList[0];
                 SelectedModuleIndex = 0;
             }
@@ -157,7 +158,7 @@ namespace SFE.TRACK.ViewModel.Param
             get { return teachingTypeList; }
             set { teachingTypeList = value; RaisePropertyChanged("TeachingTypeList"); }
         }
-        public ObservableCollection<ParamModuleCls> TeachingModuleList
+        public List<ParamModuleCls> TeachingModuleList
         {
             get { return teachingModuleList; }
             set { teachingModuleList = value; RaisePropertyChanged("TeachingModuleList"); }

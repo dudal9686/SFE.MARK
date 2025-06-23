@@ -298,7 +298,11 @@ namespace SFE.TRACK.ViewModel
                             teachingData.MainTitle = "PRA";
                             teachingData.ModuleNo = 0;
                             teachingData.IsOwn = true;
-                            //techingInfo
+                            if(teachingData.TeachingName.IndexOf("Coater") != -1)
+                            {
+                                teachingData.MainTitle = "CHAMBER";
+                                teachingData.ModuleNo = 1;
+                            }
                         }
                         else if (parentType == "CRA")
                         {
@@ -336,10 +340,12 @@ namespace SFE.TRACK.ViewModel
             List<ModuleBaseCls> list = null;// = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
             int teachingIndex = 0;
             string parentType = axis.Parent;
+            bool isArray = false;            
             
             if (axis.Parent == "CRA")
             {
                 list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+                teachingIndex = 0;
                 
                 foreach (ModuleBaseCls module in list)
                 {
@@ -349,7 +355,7 @@ namespace SFE.TRACK.ViewModel
                     data.ModuleNo = module.ModuleNo;
                     data.Company = axis.Company;
                     data.IsArray = true;
-                    data.TeachingName = name.Substring(0, name.IndexOf("["));
+                    data.TeachingName = string.Format("{0}__{1}", name.Substring(0, name.IndexOf("[")), teachingIndex);
                     //data.TeachingName = string.Format("{0}__{1}", name.Substring(0, name.IndexOf("[")), teachingIndex);
                     Console.WriteLine(string.Format("{0}_{1} {2}", module.BlockNo, module.ModuleNo, data.TeachingName));
                     data.Motor = axis.Motor;
@@ -361,18 +367,29 @@ namespace SFE.TRACK.ViewModel
             }
             else if(axis.Parent == "PRA")
             {
-                list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER || x.ModuleType == enModuleType.SPINCHAMBER).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+                //Chamber, Coater, Develop 이 나누어져 있다.
+                if(name.IndexOf("Chamber") != -1)
+                    list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+                else if (name.IndexOf("Developer") != -1)
+                    list = Global.STModuleList.FindAll(x=>x.ModuleType == enModuleType.SPINCHAMBER && x.MachineName.IndexOf("DEV") != -1).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+                else if (name.IndexOf("Coater") != -1)
+                    list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.SPINCHAMBER && x.MachineName.IndexOf("COT") != -1).OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
+
+                if (name.IndexOf("Chamber") != -1 || name.IndexOf("Developer") != -1) isArray = true;
+                else isArray = false;
+                teachingIndex = 0;
                 foreach (ModuleBaseCls module in list)
                 {
                     TeachingDataCls data = new TeachingDataCls();
                     data.MainTitle = "CHAMBER";
                     data.ModuleNo = module.ModuleNo;
                     data.Company = axis.Company;
-                    data.IsArray = true;
-                    data.TeachingName = name.Substring(0, name.IndexOf("["));
-                    int index = 0;
-                    if (module.ModuleNo == 3) teachingIndex++;
-                    data.TeachingName = name.Substring(0, name.IndexOf("["));
+                    data.IsArray = isArray;
+                    if (isArray) data.TeachingName = string.Format("{0}__{1}", name.Substring(0, name.IndexOf("[")), teachingIndex);
+                    else data.TeachingName = name;
+                    //int index = 0;
+                    //if (module.ModuleNo == 3) teachingIndex++;
+                    //data.TeachingName = name.Substring(0, name.IndexOf("["));
                     Console.WriteLine(string.Format("{0}_{1} {2}", module.BlockNo, module.ModuleNo, data.TeachingName));
                     data.Motor = axis.Motor;
                     data.IsOwn = true;

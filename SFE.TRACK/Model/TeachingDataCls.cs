@@ -39,7 +39,7 @@ namespace SFE.TRACK.Model
         {
             get
             {
-                if (IsArray) return string.Format("{0}__{1}", teachingName, moduleNo - 1);
+                //if (IsArray) return string.Format("{0}__{1}", teachingName, moduleNo - 1);
                 //if (IsArray) return string.Format("{0}", teachingName);
                 return teachingName;
             }
