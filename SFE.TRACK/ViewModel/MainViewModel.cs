@@ -778,7 +778,7 @@ namespace SFE.TRACK.ViewModel
                             axis.PlusHomeLimit = arrParam[7].Equals("1") ? true : false;
                             axis.MinusLimit = arrParam[8].Equals("1") ? true : false;
                             axis.MinusHomeLimit = arrParam[9].Equals("1") ? true : false;
-                            //axis.IsHome = arrParam[10].Equals("1") ? true : false;
+                            axis.IsHome = arrParam[10].Equals("1") ? true : false;
                             axis.ActualPosition = Convert.ToDouble(arrParam[11]);
                             axis.CommandPosition = Convert.ToDouble(arrParam[12]);
                             break;
