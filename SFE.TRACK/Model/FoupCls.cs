@@ -41,10 +41,14 @@ namespace SFE.TRACK.Model
         {
             get { return isDetect; }
             set { isDetect = value;
-                if (!IsScan && !IsDetect) FoupColor = System.Windows.Media.Brushes.Gray;
-                if (IsDetect) FoupColor = System.Windows.Media.Brushes.Red;
-                if (IsScan) FoupColor = System.Windows.Media.Brushes.Blue;
-                if (!Use) FoupColor = System.Windows.Media.Brushes.Gray;
+                if (!IsScan && !IsDetect) 
+                    FoupColor = System.Windows.Media.Brushes.Gray;
+                if (IsDetect) 
+                    FoupColor = System.Windows.Media.Brushes.Red;
+                if (IsScan) 
+                    FoupColor = System.Windows.Media.Brushes.Blue;
+                if (!Use) 
+                    FoupColor = System.Windows.Media.Brushes.Gray;
                 RaisePropertyChanged("IsDetect"); }
         }
 

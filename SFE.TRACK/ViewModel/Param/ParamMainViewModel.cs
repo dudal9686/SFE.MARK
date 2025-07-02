@@ -270,7 +270,10 @@ namespace SFE.TRACK.ViewModel.Param
                     if (axis == null) break;
                     if (Global.JogTeachingOpen(ParamData.Pos, axis))
                     {
-                        ParamData.Pos = Global.STTeachingMessage.Position;
+                        double positionValue = 0;
+                        if (axis.Parent == "Chamber") positionValue = Global.STTeachingMessage.Position / 500;
+                        else positionValue = Global.STTeachingMessage.Position;
+                        ParamData.Pos = positionValue;
                     }
                     break;
                 case 2:

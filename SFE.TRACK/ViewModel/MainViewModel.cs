@@ -102,13 +102,18 @@ namespace SFE.TRACK.ViewModel
             Properties.Settings.Default.DUMMY_COND = dummyLinkRecipeName;
             Properties.Settings.Default.Save();
 
-            timer.Tick += Timer_Tick; ;
+            timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
 
-            //FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 1) as FoupCls;
-            //foup_.IsDetect = true;
-            //foup_.IsScan = true;
+            FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
+            foup_.IsDetect = true;
+            foup_.IsScan = true;
+
+            foreach(WaferCls wafer in foup_.FoupWaferList)
+            {
+                wafer.WaferState = enWaferState.WAFER_EXIST;
+            }
 
             //foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
             //foup_.IsDetect = true;
@@ -664,7 +669,7 @@ namespace SFE.TRACK.ViewModel
                     Global.STLog.AddAlarmLog(string.Format("{0}({1}){2}", alarm.Code, alarm.SendID, alarm.Message));
                 });
                 //에러가 뜬다고 무조건 끄는거 아닌거 같다.
-                //Global.ManualMessageClose();
+                Global.ManualMessageClose();
                 SetAlarm();
             }
         }
@@ -713,6 +718,10 @@ namespace SFE.TRACK.ViewModel
                     {
                         Global.ManualMessageClose();
                     }
+                }
+                else if(eValue == EnumCommand_Action.Request__Initialize)
+                {
+                    arr = message.Split(':');
                 }
             }
             else if (command == EnumCommand.Alarm)
@@ -945,7 +954,7 @@ namespace SFE.TRACK.ViewModel
                     if (arr[2] == enWorkingNeedStep.IsDone.ToString())
                     {
                         packet = string.Format("Foup:{0}", arr[1]);
-                        _worker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette__MapData, packet);
+                        //_worker.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette__MapData, packet);
                     }
                 }
                 else if (eValue == EnumCommand_Status.Cassette__MapData)

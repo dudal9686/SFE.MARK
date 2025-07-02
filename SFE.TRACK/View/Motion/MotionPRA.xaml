@@ -106,6 +106,11 @@
             <Canvas>
                 <Button Content="Motion" FontSize="15" Margin="520 0 0 0" Command="{Binding PickMotionRelayCommand}" Canvas.Top="135" Canvas.Left="180"/>
                 <Button Content="Motion" FontSize="15" Margin="520 0 0 0" Command="{Binding PlaceMotionRelayCommand}" Canvas.Top="375" Canvas.Left="180"/>
+
+                <Button Content="Put Ready" Width="100" Height="100" FontSize="15" Margin="0 0 0 0" Command="{Binding PutReadyRelayCommand}" Canvas.Top="700" Canvas.Left="50"/>
+                <Button Content="Get Ready" Width="100" Height="100" FontSize="15" Margin="0 0 0 0" Command="{Binding GetReadyRelayCommand}" Canvas.Top="700" Canvas.Left="200"/>
+                <Button Content="UnLoad" Width="100" Height="100" FontSize="15" Margin="0 0 0 0" Command="{Binding UnLoadReadyRelayCommand}" Canvas.Top="700" Canvas.Left="350"/>
+                <Button Content="Process" Width="100" Height="100" FontSize="15" Margin="0 0 0 0" Command="{Binding ProcessStartRelayCommand}" Canvas.Top="700" Canvas.Left="550"/>
             </Canvas>
         </Grid>
         <Grid Grid.Column="1">

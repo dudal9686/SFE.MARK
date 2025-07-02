@@ -71,7 +71,28 @@ namespace SFE.TRACK.Model
         public bool IsHomeChecked
         {
             get { return isHomeChecked; }
-            set { isHomeChecked = value; RaisePropertyChanged("IsHomeChecked"); }
+            set { isHomeChecked = value;
+
+                if(BlockNo == 1 && ModuleNo == 0)
+                {
+                    ModuleBaseCls mod = Global.STModuleList.Find(x => x.BlockNo == 2 && x.ModuleNo == 0);
+                    mod.SyncRobotHomeCheck(isHomeChecked);
+                }
+                else if(BlockNo == 2 && ModuleNo == 0)
+                {
+                    ModuleBaseCls mod = Global.STModuleList.Find(x => x.BlockNo == 1 && x.ModuleNo == 0);
+                    mod.SyncRobotHomeCheck(isHomeChecked);
+                }
+
+                RaisePropertyChanged("IsHomeChecked"); 
+            }
+        }
+
+        //로봇이 따로 홈을 잡을수 없고 같이 홈을 잡아야 해서 로봇에 관한 것만 바꾼다.
+        public void SyncRobotHomeCheck(bool check)
+        {
+            isHomeChecked = check;
+            RaisePropertyChanged("IsHomeChecked");
         }
 
         public enHomeState HomeSituation

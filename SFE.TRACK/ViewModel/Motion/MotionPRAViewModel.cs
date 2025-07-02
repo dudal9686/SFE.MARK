@@ -18,6 +18,10 @@ namespace SFE.TRACK.ViewModel.Motion
         public RelayCommand ModuleRelayCommand { get; set; }
         public RelayCommand PickMotionRelayCommand { get; set; }
         public RelayCommand PlaceMotionRelayCommand { get; set; }
+        public RelayCommand PutReadyRelayCommand { get; set; }
+        public RelayCommand GetReadyRelayCommand { get; set; }
+        public RelayCommand UnLoadReadyRelayCommand { get; set; }
+        public RelayCommand ProcessStartRelayCommand { get; set; }
         public List<Model.IODataCls> DIList { get; set; }
         public List<Model.IODataCls> DOList { get; set; }
         int blockNo = 0;
@@ -27,8 +31,47 @@ namespace SFE.TRACK.ViewModel.Motion
             ModuleRelayCommand = new RelayCommand(ModuleCommand);
             PickMotionRelayCommand = new RelayCommand(PickMotionCommand);
             PlaceMotionRelayCommand = new RelayCommand(PlaceMotionCommand);
+            PutReadyRelayCommand = new RelayCommand(PutReadyCommand);
+            GetReadyRelayCommand = new RelayCommand(GetReadyCommand);
+            UnLoadReadyRelayCommand = new RelayCommand(UnLoadCommand);
+            ProcessStartRelayCommand = new RelayCommand(ProcessStartCommand);
             DIList = Global.STDIList.FindAll(x => x.BlockNo == 2).OrderBy(x => x.ModuleNo).ThenBy(x => x.IONum).ToList();
             DOList = Global.STDOList.FindAll(x => x.BlockNo == 2).OrderBy(x => x.ModuleNo).ThenBy(x => x.IONum).ToList();
+        }
+
+        private void PutReadyCommand()
+        {
+            if (Module == null) return;
+            string fileName = string.Empty;
+            if (Module.MachineName.ToUpper().IndexOf("CPL") != -1) fileName = "CPL_CHANGE";
+            else if (Module.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_TEST";
+            else if (Module.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_RECIPE";
+            else if (Module.MachineName.ToUpper().IndexOf("HHP") != -1) fileName = "HHP_RECIPE";
+
+
+            string command = string.Format("CHAMBER:{0}:{1}:{2}", Module.BlockNo, Module.ModuleNo, fileName);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__PutReady, command);
+        }
+
+        private void GetReadyCommand()
+        {
+            if (Module == null) return;
+            string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__GetReady, command);
+        }
+
+        private void UnLoadCommand()
+        {
+            if (Module == null) return;
+            string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__UnLoad, command);
+        }
+
+        private void ProcessStartCommand()
+        {
+            if (Module == null) return;
+            string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber__StartProcess, command);
         }
 
         public Model.ModuleBaseCls Module

@@ -49,14 +49,28 @@ namespace SFE.TRACK.ViewModel.Auto
         {
             string message = string.Empty;
             //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__OriginMove, moduleName);
+            bool isRobot = false;
             foreach (Model.ModuleBaseCls module in ModuleList)
             {
                 if (!module.IsHomeChecked) continue;
                 message = string.Format("Module:{0},{1},{2}", module.MachineName, module.BlockNo, module.ModuleNo);
+                Console.WriteLine(message);
                 module.HomeSituation = enHomeState.HOMMING;
                 module.ModuleState = enModuleState.HOMMING;
                 if (module.ModuleNo == 0)
-                    Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__ModuleOriginMove, message, true);
+                {
+                    if (!isRobot)
+                    {
+                        isRobot = true;
+                        if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsRun) continue;
+                        Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                        if(Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsIdle ||
+                            Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsStop)
+                        {
+                            Global.MachineWorker.GetController("SFETrack").StartMachine();
+                        }
+                    }
+                }
                 else
                     Global.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__ModuleOriginMove, message, true);
             

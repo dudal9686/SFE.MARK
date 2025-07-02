@@ -44,12 +44,6 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void LotStartCommand()
         {
-            string packet = string.Format("Chamber:2:1:COT_FLOW_TEST");
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__PutReady, packet);
-            
-            return;
-
-
             if (Global.STMachineStatus == enMachineStatus.RUN || Global.STMachineStatus == enMachineStatus.STOPING) return;
             bool isStart = false;
             View.Auto.LotStart lotStart = new View.Auto.LotStart();
@@ -126,6 +120,15 @@ namespace SFE.TRACK.ViewModel.Auto
                     }
                 }
                 Global.STMachineStatus = enMachineStatus.HOME;
+
+                if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsIdle ||
+                        Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsStop)
+                {
+                    Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                    Global.MachineWorker.GetController("SFETrack").StartMachine();
+                }
+                
+
                 Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
                 
@@ -194,15 +197,20 @@ namespace SFE.TRACK.ViewModel.Auto
             Dictionary<int, string> waferDictionary = new Dictionary<int, string>();
             List<string> jobList = new List<string>();
             PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
-            item.SetValueAll(jobList);
+            //item.SetValueAll(jobList);
             List<FoupCls> list = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
 
             foreach(FoupCls foup in list)
             {
-                if (!foup.Use || !foup.IsDetect || !foup.IsScan) continue;
+                string strJob = string.Empty;
+                if (!foup.Use || !foup.IsDetect || !foup.IsScan)
+                {
+                    item.SetValue(strJob, foup.ModuleNo - 1); continue;
+                }
                 waferDictionary.Clear();
                 bool isFind = false;
-                foreach(WaferCls wafer in foup.FoupWaferList)
+                
+                foreach (WaferCls wafer in foup.FoupWaferList)
                 {
                     if(!wafer.Use || wafer.Recipe.Name == string.Empty)
                     {
@@ -217,7 +225,7 @@ namespace SFE.TRACK.ViewModel.Auto
 
                 if(isFind)
                 {
-                    string strJob = string.Empty;
+                    
                     strJob = string.Format("{0},", foup.ModuleNo);
                     foreach (KeyValuePair<int, string> item_ in waferDictionary)
                     {
@@ -227,15 +235,19 @@ namespace SFE.TRACK.ViewModel.Auto
                     strJob = strJob.Substring(0, strJob.Length - 1);
                     jobList.Add(strJob);
                 }
+
+                //item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
+                item.SetValue(strJob, foup.ModuleNo - 1);
             }
 
             if(jobList.Count > 0)
             {
-                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
-                item.SetValueAll(jobList);
+                //item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
+                //item.SetValueAll(jobList);
 
-                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
+                //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
                 Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
+                //Recipe Setting 이 되었다는 Command 보내야 한다.
                 Global.STMachineStatus = enMachineStatus.RUN;
             }
 
@@ -256,6 +268,16 @@ namespace SFE.TRACK.ViewModel.Auto
                     isDone = true;
                     isError = true;
                     break;
+                }
+
+                if (Global.MachineWorker.GetController("SFETrack").InitializeStep == CoreCSRunSim.WorkingNeedStep.IsDone)
+                {
+                    if(moduleBase.ModuleNo == 0 && moduleBase.IsHomeChecked)
+                    {
+                        moduleBase.HomeSituation = enHomeState.HOME_OK;
+                        moduleBase.ModuleState = enModuleState.STANDBY;
+                        isDone = true;
+                    }
                 }
 
                 if (moduleBase.IsHomeChecked && moduleBase.Use)
@@ -287,6 +309,8 @@ namespace SFE.TRACK.ViewModel.Auto
                 Global.ManualMessageClose();
                 Global.MessageOpen(enMessageType.OK, "Initialize Error");
             }
+
+            //Global.MachineWorker.GetController("SFETrack").GetS
         }
 
         public void FailHome()

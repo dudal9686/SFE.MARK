@@ -27,6 +27,7 @@ namespace SFE.TRACK.ViewModel.Auto
         public LotStartViewModel()
         {
             FoupList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
+            //FoupTempList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
             LoadRelayCommand = new RelayCommand(LoadCommand);
             SetRecipeRelayCommand = new RelayCommand(SetRecipeCommand);
             SetLotNameRelayCommand = new RelayCommand(SetLotNameCommand);
@@ -103,7 +104,8 @@ namespace SFE.TRACK.ViewModel.Auto
         {
             if (Foup == null) return;
 
-            if(Foup.IsScan == false)
+            if (Foup.IsDetect == false)
+            //if(Foup.IsScan == false)
             {
                 Global.MessageOpen(enMessageType.OK, "Use after scanning the cassette!");
                 return;
@@ -123,7 +125,8 @@ namespace SFE.TRACK.ViewModel.Auto
         private void SetLotNameCommand()
         {
             if (Foup == null) return;
-            if (Foup.IsScan == false)
+            if (Foup.IsDetect == false)
+            //if (Foup.IsScan == false)
             {
                 Global.MessageOpen(enMessageType.OK, "Use after scanning the cassette!");
                 return;
@@ -138,7 +141,8 @@ namespace SFE.TRACK.ViewModel.Auto
         private void SetCommentCommand()
         {
             if (Foup == null) return;
-            if (Foup.IsScan == false)
+            if (Foup.IsDetect == false)
+            //if (Foup.IsScan == false)
             {
                 Global.MessageOpen(enMessageType.OK, "Use after scanning the cassette!");
                 return;
@@ -154,7 +158,8 @@ namespace SFE.TRACK.ViewModel.Auto
         private void SetPilotProcessCommand(Window window)
         {
             if (Foup == null) return;
-            if (Foup.IsScan == false)
+            if (Foup.IsDetect == false)
+            //if (Foup.IsScan == false)
             {
                 Global.MessageOpen(enMessageType.OK, "Use after scanning the cassette!");
                 return;
@@ -253,6 +258,16 @@ namespace SFE.TRACK.ViewModel.Auto
         {
             FoupTempList.Clear();
             window.DialogResult = false;
+        }
+
+        public void SetIsDetect(int moduleNo)
+        {
+            FoupCls foup = Global.STModuleList.Find(x => x.ModuleNo == moduleNo && x.ModuleType == enModuleType.FOUP) as FoupCls;
+            FoupCls foupTemp = FoupTempList.Find(x => x.ModuleNo == moduleNo) as FoupCls;
+
+            if (foupTemp == null) return;
+            foupTemp.IsDetect = foup.IsDetect;
+            foupTemp.IsScan = foup.IsScan;
         }
     }
 }

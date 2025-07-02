@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MachineDefine;
+using SFE.TRACK.Model;
 
 namespace SFE.TRACK
 {
@@ -15,6 +17,8 @@ namespace SFE.TRACK
         public static DependencyProperty STRobotConnection_ = DependencyProperty.Register("RobotConnectColor", typeof(System.Windows.Media.SolidColorBrush), typeof(ClockCls));
         public static DependencyProperty STChamberConnection_ = DependencyProperty.Register("ChamberConnectColor", typeof(System.Windows.Media.SolidColorBrush), typeof(ClockCls));
         DispatcherTimer timer = new DispatcherTimer();
+        string ioName = string.Empty;
+        bool isStatus = false;
         public DateTime DateTime
         {
             set { SetValue(STDateTimeProperty_, value); }
@@ -58,7 +62,22 @@ namespace SFE.TRACK
             if (list.ContainsKey(Global.CHAMBER_ID)) { ChamberConnectColor = Brushes.Green; Global.IsChamberConnection = true; }
             else { ChamberConnectColor = Brushes.Red; Global.IsChamberConnection = false; }
 
-            if (list.ContainsKey(Global.MCS_ID)) { RobotConnectColor = Brushes.Green; Global.IsMCSConnection = true; }
+            if (list.ContainsKey(Global.MCS_ID)) 
+            { 
+                RobotConnectColor = Brushes.Green; 
+                Global.IsMCSConnection = true;
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.UnitStatus__SendStart, "IO_IN");
+
+                
+                List<ModuleBaseCls> foupList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).ToList();
+                foreach(ModuleBaseCls foup in foupList)
+                {
+                    FoupCls foupCls = foup as FoupCls;
+                    ioName = string.Format("CST{0}checksensor", foupCls.ModuleNo);
+                    //foupCls.IsDetect = IODataCls.GetDIStatus(ioName);
+                    //CommonServiceLocator.ServiceLocator.Current.GetInstance<SFE.TRACK.ViewModel.Auto.LotStartViewModel>().SetIsDetect(foupCls.ModuleNo);
+                }                
+            }
             else { RobotConnectColor = Brushes.Red; Global.IsMCSConnection = false; }
         }
     }

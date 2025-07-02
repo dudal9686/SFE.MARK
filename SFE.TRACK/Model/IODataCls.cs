@@ -149,6 +149,21 @@ namespace SFE.TRACK.Model
             if (Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.IO__ManualToggle, string.Format("IO:{0}", Name));
             else IO.WriteIO(!IO.ReadIO(), null);
         }
+
+        public static bool GetDIStatus(string name)
+        {
+            bool isStatus = false;
+            foreach(IODataCls io in Global.STDIList)
+            {
+                if(io.Name == name)
+                {
+                    isStatus = io.State;
+                    break;
+                }
+            }
+
+            return isStatus;
+        }
     }
 
     public class AIODataCls : ViewModelBase
