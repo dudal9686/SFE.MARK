@@ -106,14 +106,14 @@ namespace SFE.TRACK.ViewModel
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
 
-            FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
-            foup_.IsDetect = true;
-            foup_.IsScan = true;
+            //FoupCls foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
+            //foup_.IsDetect = true;
+            //foup_.IsScan = true;
 
-            foreach(WaferCls wafer in foup_.FoupWaferList)
-            {
-                wafer.WaferState = enWaferState.WAFER_EXIST;
-            }
+            //foreach(WaferCls wafer in foup_.FoupWaferList)
+            //{
+            //    wafer.WaferState = enWaferState.WAFER_EXIST;
+            //}
 
             //foup_ = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.ModuleNo == 2) as FoupCls;
             //foup_.IsDetect = true;
@@ -979,14 +979,28 @@ namespace SFE.TRACK.ViewModel
                 }
                 else if (eValue == EnumCommand_Status.MCS__SerialData)
                 {
-                    List<string> list;
+                    List<string> list, tempList;
                     list = Tokenizer.Split(message, false, false, "\r\n");
                     if (AnalyseOwner(list[0], out var typeName, out var name, out var unitID, out var title) == false) return;
                     if (AnalyseSerialDataType(list[1], out var isAll, out var ownID, out var itemID) == false) return;
                     if (title.IndexOf("WaferData") == 0)
                     {
-                        list.RemoveRange(0, 2);
-                        TreatSerialWaferData(typeName, name, unitID, title, ownID, list);
+                        int exist = 1;
+                        int recipeSet = 1;
+                        WaferStorageUseStep useStep = WaferStorageUseStep.IsRun;
+                        WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot;
+                        tempList = list.ToList();
+                        if (isAll)
+                        {
+                            Tokenizer ttt = new Tokenizer(tempList[2], ",");
+                            exist = ttt.GetInt(0);// == 0) exist = false;
+                            recipeSet = ttt.GetInt(1);// == 0) recipeSet = false;
+                            useStep = (WaferStorageUseStep)ttt.GetInt(2);
+                            workStep = (WaferStorageWorkStep)ttt.GetInt(3);
+                            tempList.RemoveRange(0, 3);
+                        }
+                        else tempList.RemoveRange(0, 2);
+                        TreatSerialWaferData(typeName, name, unitID, title, ownID, tempList, exist, recipeSet, useStep, workStep);
                     }
                 }
                 else if (eValue == EnumCommand_Status.UnitStatus__MiniBoardState)
@@ -1449,7 +1463,7 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        private void TreatSerialWaferData(NameInfo.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList)
+        private void TreatSerialWaferData(NameInfo.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList, int exist = 1, int recipeSet = 1, WaferStorageUseStep useStep = WaferStorageUseStep.IsRun, WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot)
         {
             List<string> list = Tokenizer.Split(title, "_");
             string middleName = list[1];

@@ -16,6 +16,7 @@ namespace DefaultBase
         ItemCoat, ItemDevleop, ItemADH, ItemTemp, ItemTransition, ItemWEE, ItemExposure,
     };
     public enum WaferStorageWorkStep { IsNot, IsScanNeed, IsScanDone, IsRecipeNeed, IsRecipeDone };
+    public enum WaferStorageUseStep { IsStop, IsRun, IsTryRun, IsTryStop };
     public class RecipeInfo
     {
         public string _Name = "";
