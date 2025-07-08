@@ -205,7 +205,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 string strJob = string.Empty;
                 if (!foup.Use || !foup.IsDetect || !foup.IsScan)
                 {
-                    item.SetValue(strJob, foup.ModuleNo - 1); continue;
+                    /*item.SetValue(strJob, foup.ModuleNo - 1);*/ continue;
                 }
                 waferDictionary.Clear();
                 bool isFind = false;
@@ -225,19 +225,21 @@ namespace SFE.TRACK.ViewModel.Auto
 
                 if(isFind)
                 {
-                    
-                    strJob = string.Format("{0},", foup.ModuleNo);
+
+                    strJob = string.Empty;/*string.Format("{0},", foup.ModuleNo)*/;
                     foreach (KeyValuePair<int, string> item_ in waferDictionary)
                     {
                         strJob += item_.Value + ",";
                     }
 
                     strJob = strJob.Substring(0, strJob.Length - 1);
+                    item.SetValue(strJob, foup.ModuleNo - 1);
+                    Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__RecipeSet, "Run");
                     jobList.Add(strJob);
                 }
 
                 //item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Lot__Job);
-                item.SetValue(strJob, foup.ModuleNo - 1);
+                
             }
 
             if(jobList.Count > 0)
@@ -246,7 +248,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 //item.SetValueAll(jobList);
 
                 //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Machine__Run, "Run");
+                
                 //Recipe Setting 이 되었다는 Command 보내야 한다.
                 Global.STMachineStatus = enMachineStatus.RUN;
             }

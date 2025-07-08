@@ -712,7 +712,7 @@ namespace SFE.TRACK.ViewModel
 
                     if(arr[1].ToUpper().Trim() == "TRUE")
                     {
-                        Global.ManualMessageOpen();
+                        //Global.ManualMessageOpen();
                     }
                     else
                     {
@@ -1039,8 +1039,8 @@ namespace SFE.TRACK.ViewModel
                 }
                 else if (eValue == EnumCommand_Status.Chamber__PutReady)
                 {
-                    packet = string.Format("Chamber:2:1");
-                    Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber__StartProcess, packet);
+                    //packet = string.Format("Chamber:2:1");
+                    //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber__StartProcess, packet);
                 }
                 else if (eValue == EnumCommand_Status.Chamber__EndProcess)
                 {
