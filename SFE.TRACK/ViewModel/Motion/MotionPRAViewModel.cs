@@ -71,7 +71,7 @@ namespace SFE.TRACK.ViewModel.Motion
         {
             if (Module == null) return;
             string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber__StartProcess, command);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StartProcess, command);
         }
 
         public Model.ModuleBaseCls Module

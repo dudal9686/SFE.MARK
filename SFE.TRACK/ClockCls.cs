@@ -74,9 +74,9 @@ namespace SFE.TRACK
                 {
                     FoupCls foupCls = foup as FoupCls;
                     ioName = string.Format("CST{0}checksensor", foupCls.ModuleNo);
-                    //foupCls.IsDetect = IODataCls.GetDIStatus(ioName);
-                    //CommonServiceLocator.ServiceLocator.Current.GetInstance<SFE.TRACK.ViewModel.Auto.LotStartViewModel>().SetIsDetect(foupCls.ModuleNo);
-                }                
+                    foupCls.IsDetect = IODataCls.GetDIStatus(ioName);
+                    CommonServiceLocator.ServiceLocator.Current.GetInstance<SFE.TRACK.ViewModel.Auto.LotStartViewModel>().SetIsDetect(foupCls.ModuleNo);
+                }
             }
             else { RobotConnectColor = Brushes.Red; Global.IsMCSConnection = false; }
         }

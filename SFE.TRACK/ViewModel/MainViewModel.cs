@@ -77,8 +77,8 @@ namespace SFE.TRACK.ViewModel
                 return;
             }
 
-            _worker.GetController("SFETrack").ComID = Global.MCS_ID;
-            _worker.GetController("Chamber").ComID = Global.CHAMBER_ID;
+            _worker.GetController("SFETrack").ConnectedComID = Global.MCS_ID;
+            _worker.GetController("Chamber").ConnectedComID = Global.CHAMBER_ID;
 
             foreach (DefaultController controller in _worker.ControllerList)
             {
@@ -990,16 +990,17 @@ namespace SFE.TRACK.ViewModel
                         WaferStorageUseStep useStep = WaferStorageUseStep.IsRun;
                         WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot;
                         tempList = list.ToList();
+                        tempList.RemoveRange(0, 2);
                         if (isAll)
                         {
-                            Tokenizer ttt = new Tokenizer(tempList[2], ",");
+                            string final = tempList[tempList.Count - 1];
+                            Tokenizer ttt = new Tokenizer(final, ",");
                             exist = ttt.GetInt(0);// == 0) exist = false;
                             recipeSet = ttt.GetInt(1);// == 0) recipeSet = false;
                             useStep = (WaferStorageUseStep)ttt.GetInt(2);
                             workStep = (WaferStorageWorkStep)ttt.GetInt(3);
-                            tempList.RemoveRange(0, 3);
+                            tempList.RemoveAt(tempList.Count - 1);
                         }
-                        else tempList.RemoveRange(0, 2);
                         TreatSerialWaferData(typeName, name, unitID, title, ownID, tempList, exist, recipeSet, useStep, workStep);
                     }
                 }
@@ -1029,7 +1030,7 @@ namespace SFE.TRACK.ViewModel
                     if (Convert.ToInt32(arr[18]) == 1) axis.HomeSituation = enHomeState.HOME_OK;
                     else axis.HomeSituation = enHomeState.HOME_NONE;
 
-                    axis.ActualPosition = Convert.ToInt32(arr[19]);
+                    axis.ActualPosition = Convert.ToDouble(arr[19]) / 1000;
 
                     for (int i = 0; i < 4; i++) chamber.HeatTempList[i].AutoTuningStatus = Convert.ToInt32(arr[20 + i]).Equals(1) ? "STOP" : "RUN";
                 }
@@ -1455,10 +1456,12 @@ namespace SFE.TRACK.ViewModel
             ownID = -1;
             itemID = -1;
 
-            List<string> list = Tokenizer.Split(message, false, false, ":");
+            List<string> list = Tokenizer.Split(message, ":", false, false);
             if (list.Count < 2) return false;
             if (list[index++] == "ALL") isAll = true;
             ownID = Convert.ToInt32(list[index++]);
+            string strType = list[index++];
+            int maxCount = Convert.ToInt32(list[index++]);
             if (list.Count > index) itemID = Convert.ToInt32(list[index++]);
             return true;
         }
@@ -1525,7 +1528,8 @@ namespace SFE.TRACK.ViewModel
             List<string> list = Tokenizer.Split(strValue, ",");
 
             int id = Convert.ToInt32(list[0]);
-            bool exist = false; if (Convert.ToInt32(list[1]) == 1) exist = true;
+            bool exist = false; 
+            if (Convert.ToInt32(list[1]) == 1) exist = true;
             string name = list[6];
             list.RemoveRange(0, 7);
 
@@ -1554,6 +1558,9 @@ namespace SFE.TRACK.ViewModel
 
             if (middleName == "Cassette")
             {
+                //if (wafer.IsWafer != Visibility.Visible) return;
+                Console.WriteLine(string.Format("-------------Wafer {0}-{1} ({2}) ", wafer.BlockNo, wafer.ModuleNo, wafer.Index));
+                Console.WriteLine(strValue);
                 wafer.SetCstWaferState();
             }
             else

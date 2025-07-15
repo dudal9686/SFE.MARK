@@ -231,12 +231,12 @@ namespace SFE.TRACK.Model
             bool isProcessEnd = true;
 
             enWaferState state = enWaferState.WAFER_EMPTY;
-
+            
             if (IsWafer == Visibility.Visible)
             {
                 foreach (RecipeInfo recipeInfo in _RecipeInfos)
                 {
-                    if (recipeInfo._Name == string.Empty) continue;
+                    //if (recipeInfo._Name == string.Empty) continue;
 
                     if (recipeInfo._WorkStep != WorkStep.IsDoneGood)
                     {

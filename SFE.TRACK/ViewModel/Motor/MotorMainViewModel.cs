@@ -26,6 +26,8 @@ namespace SFE.TRACK.ViewModel.Motor
             mainData = new MotorIODisplayCls();
             mainData.MainTitle = "MOTOR";
 
+            Global.STAxis = Global.STAxis.OrderBy(x => x.ModuleNo).ThenBy(x => x.AxisID).ToList();
+
             foreach(AxisInfoCls axis in Global.STAxis)
             {
                 if (axis.AxisID.IndexOf("_Pin") != -1) continue;
