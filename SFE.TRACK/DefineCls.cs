@@ -10,6 +10,7 @@ using System.Windows.Data;
 
 namespace SFE.TRACK
 {
+    public enum EnumCustomProcess { None, Chamber, Developer, Coater };
     public enum enMachineStatus
     {
         STOP,

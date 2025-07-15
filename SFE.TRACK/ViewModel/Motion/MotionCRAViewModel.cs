@@ -51,29 +51,29 @@ namespace SFE.TRACK.ViewModel.Motion
         private void PickMotionCommand()
         {
             int cstNo = GetCstNo();
-            string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
-            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__PickManualMove, msg);
-            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, "AssyCRA:DoPickDropWaferOnCassette 0,0,0",true,20000);
-            Global.ManualMessageOpen();
+            string msg = string.Format("AssyCRA:DoPickDropWaferOnCassette {0},{1},{2}", 0, cstNo, CstIndex - 1);
+            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, msg,true,20000);
+            //Global.ManualMessageOpen();
         }
         private void PlaceMotionCommand()
         {
             int cstNo = GetCstNo();
-            string msg = string.Format("CRA,{0},{1},{2},{3}", 1, 1, cstNo, CstIndex);
-            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__PlaceManualMove, msg);
+            string msg = string.Format("AssyCRA:DoPickDropWaferOnCassette {0},{1},{2}", 1, cstNo, CstIndex - 1);
+            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, msg, true, 20000);
+            //Global.ManualMessageOpen();
         }
         private void RobotChangeMotionCommand()
         {
-            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__RobotInterFacePosition, "");
+            Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, "AssyCRA:DoRobotMoveToPRA,", true, 20000);
         }
         private int GetCstNo()
         {
             int moduleIndex = 0;
 
-            if (IsCheck[0]) moduleIndex = 1;
-            if (IsCheck[1]) moduleIndex = 2;
-            if (IsCheck[2]) moduleIndex = 3;
-            if (IsCheck[3]) moduleIndex = 4;
+            if (IsCheck[0]) moduleIndex = 0;
+            if (IsCheck[1]) moduleIndex = 1;
+            if (IsCheck[2]) moduleIndex = 2;
+            if (IsCheck[3]) moduleIndex = 3;
 
             return moduleIndex;
         }

@@ -1038,15 +1038,6 @@ namespace SFE.TRACK.ViewModel
                 {
                     //여기에 모니터링 데이터를 넣어준다.
                 }
-                else if (eValue == EnumCommand_Status.Chamber__PutReady)
-                {
-                    //packet = string.Format("Chamber:2:1");
-                    //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.Chamber__StartProcess, packet);
-                }
-                else if (eValue == EnumCommand_Status.Chamber__EndProcess)
-                {
-                    Console.WriteLine("");
-                }
             }
 
             e.SetResult(CommandResult.Success, "done");

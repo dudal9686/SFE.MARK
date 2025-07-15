@@ -10,6 +10,7 @@ using MachineDefine;
 
 namespace SFE.TRACK.ViewModel.Motion
 {
+
     
     public class MotionPRAViewModel : ViewModelBase
     {
@@ -42,36 +43,37 @@ namespace SFE.TRACK.ViewModel.Motion
         private void PutReadyCommand()
         {
             if (Module == null) return;
+
+            string command = string.Format("CHAMBER:{0}:{1}:PutReady", Module.BlockNo, Module.ModuleNo);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StepRequest, command);
+        }
+
+        private void GetReadyCommand()
+        {
+            if (Module == null) return;
+            string command = string.Format("CHAMBER:{0}:{1}:GetReady", Module.BlockNo, Module.ModuleNo);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StepRequest, command);
+        }
+
+        private void UnLoadCommand()
+        {
+            if (Module == null) return;
+            string command = string.Format("CHAMBER:{0}:{1}:Idle", Module.BlockNo, Module.ModuleNo);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StepRequest, command);
+        }
+
+        private void ProcessStartCommand()
+        {
+            if (Module == null) return;
+
             string fileName = string.Empty;
             if (Module.MachineName.ToUpper().IndexOf("CPL") != -1) fileName = "CPL_CHANGE";
             else if (Module.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_TEST";
             else if (Module.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_RECIPE";
             else if (Module.MachineName.ToUpper().IndexOf("HHP") != -1) fileName = "HHP_RECIPE";
 
-
-            string command = string.Format("CHAMBER:{0}:{1}:{2}", Module.BlockNo, Module.ModuleNo, fileName);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__PutReady, command);
-        }
-
-        private void GetReadyCommand()
-        {
-            if (Module == null) return;
-            string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__GetReady, command);
-        }
-
-        private void UnLoadCommand()
-        {
-            if (Module == null) return;
-            string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__UnLoad, command);
-        }
-
-        private void ProcessStartCommand()
-        {
-            if (Module == null) return;
-            string command = string.Format("CHAMBER:{0}:{1}", Module.BlockNo, Module.ModuleNo);
-            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StartProcess, command);
+            string command = string.Format("CHAMBER:{0}:{1}:Processing:{2}", Module.BlockNo, Module.ModuleNo, fileName);
+            Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StepRequest, command);//Chamber__StartProcess
         }
 
         public Model.ModuleBaseCls Module
@@ -105,14 +107,38 @@ namespace SFE.TRACK.ViewModel.Motion
                 Global.MessageOpen(enMessageType.OK, "Please Select Module!");
                 return;
             }
+            string msg = string.Empty;
+            int index = 0;
+            EnumCustomProcess customType = EnumCustomProcess.None;
 
-            blockNo = Module.BlockNo;
-            moduleNo = Module.ModuleNo;
+            if (Module.BlockNo == 1)
+            {
+                msg = string.Format("AssyPRA:DoPickDropWaferOnCRA 0,{0}", GetArmIndex());
+            }
+            else
+            {
+                if (Module.ModuleType == enModuleType.CHAMBER)
+                {
+                    customType = EnumCustomProcess.Chamber;
+                    index = Module.ModuleNo - 5;                    
+                }
+                else if(Module.ModuleType == enModuleType.SPINCHAMBER)
+                {
+                    if (Module.MachineName.IndexOf("DEV") != -1)
+                    {
+                        customType = EnumCustomProcess.Developer;
+                        index = Module.ModuleNo - 2;
+                    }
+                    else
+                    {
+                        customType = EnumCustomProcess.Coater;
+                    }
+                }
 
-            string msg = string.Format("PRA,{0},{1},{2},{3}", GetArmIndex(), blockNo, moduleNo, 1);
-            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__PickManualMove, msg);
-
-            //Protocol
+                msg = string.Format("AssyPRA:DoPickDropWaferOnProcess 0,{0},{1},{2}", GetArmIndex(), (int)customType, index);
+            }
+            
+            Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, msg);
         }
 
         private void PlaceMotionCommand()
@@ -123,19 +149,46 @@ namespace SFE.TRACK.ViewModel.Motion
                 return;
             }
 
-            blockNo = Module.BlockNo;
-            moduleNo = Module.ModuleNo;
+            string msg = string.Empty;
+            int index = 0;
+            EnumCustomProcess customType = EnumCustomProcess.None;
 
-            string msg = string.Format("PRA,{0},{1},{2},{3}", GetArmIndex(), blockNo, moduleNo, 1);
-            //Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__PlaceManualMove, msg);
+            if (Module.BlockNo == 1)
+            {
+                msg = string.Format("AssyPRA:DoPickDropWaferOnCRA 1,{0}", GetArmIndex());
+            }
+            else
+            {
+                if (Module.ModuleType == enModuleType.CHAMBER)
+                {
+                    customType = EnumCustomProcess.Chamber;
+                    index = Module.ModuleNo - 5;
+                }
+                else if (Module.ModuleType == enModuleType.SPINCHAMBER)
+                {
+                    if (Module.MachineName.IndexOf("DEV") != -1)
+                    {
+                        customType = EnumCustomProcess.Developer;
+                        index = Module.ModuleNo - 2;
+                    }
+                    else
+                    {
+                        customType = EnumCustomProcess.Coater;
+                    }
+                }
+
+                msg = string.Format("AssyPRA:DoPickDropWaferOnProcess 1,{0},{1},{2}", GetArmIndex(), (int)customType, index);
+            }
+
+            Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, msg);
         }
 
         private int GetArmIndex()
         {
             int armIndex = 0;
-            if (IsCheckArm[0]) armIndex = 1;
-            if (IsCheckArm[1]) armIndex = 2;
-            if (IsCheckArm[2]) armIndex = 3;
+            if (IsCheckArm[0]) armIndex = 0;
+            if (IsCheckArm[1]) armIndex = 1;
+            if (IsCheckArm[2]) armIndex = 2;
 
             return armIndex;
         }
