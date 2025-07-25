@@ -26,7 +26,10 @@ namespace SFE.TRACK.Alarm
 
         public void CloseDialog()
         {
-            this.DialogResult = true;
+            try{
+                this.DialogResult = true;
+            }
+            catch { }
         }
     }
 }

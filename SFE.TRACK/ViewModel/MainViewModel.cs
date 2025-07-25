@@ -639,7 +639,7 @@ namespace SFE.TRACK.ViewModel
         private void Controller_EvtAlarmOccured(object sender, LibEvtArgs e)
         {
             DefaultController controller = (DefaultController)sender;
-
+            int index = 0;
             //EvtCommandLaunch launch = (EvtCommandLaunch)sender;  
             if (e.m_Params.Length == 0) // alarm cleared
             {
@@ -647,29 +647,31 @@ namespace SFE.TRACK.ViewModel
             }
             else // alarm occured
             {
-                int index = 0;
                 int fromID = (int)e.GetParam(index++);
-                MachineInfo macInfo = (MachineInfo)e.GetParam(index++);
-                AlarmItem item = (AlarmItem)e.GetParam(index++);
-                string maker = (string)e.GetParam(index++);
-                string owner = (string)e.GetParam(index++);
+                AlarmRecord record = (AlarmRecord)e.GetParam(index++);
+
+                //controller.AlarmPopup(this, record);
+
                 string fullMsg = (string)e.GetParam(index++);
-                List<string> paramList = (List<string>)e.GetParam(index++);
+
+
+                AlarmItem item = record.AlarmIITEM;
                 AlarmLogCls alarm = new AlarmLogCls();
-                alarm.Code = item.Name;
-                alarm.Owner = owner;
-                alarm.Message = fullMsg;
-                alarm.Help = item.Action;
-                alarm.Param = paramList[0];
-                alarm.Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                alarm.Code = record.AlarmCode;
+                alarm.Owner = record.Owner;
+                alarm.Message = record.FullMessage;
+                alarm.Help = record.Action;
+                alarm.Param = record.ParamString;
+                alarm.Time = record.AlarmTime.ToString("yyyy-MM-dd HH:mm:ss");
                 alarm.SendID = fromID;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
+                    controller.AlarmPopup(record);
                     Global.STAlarmList.Add(alarm);
                     Global.STLog.AddAlarmLog(string.Format("{0}({1}){2}", alarm.Code, alarm.SendID, alarm.Message));
                 });
                 //에러가 뜬다고 무조건 끄는거 아닌거 같다.
-                Global.ManualMessageClose();
+                //Global.ManualMessageClose();
                 SetAlarm();
             }
         }
@@ -925,6 +927,15 @@ namespace SFE.TRACK.ViewModel
                             {
                                 modulebase.HomeSituation = eState;
                                 modulebase.ModuleState = enModuleState.STANDBY;
+                                foreach (AxisInfoCls axis in Global.STAxis)
+                                {
+                                    if (axis.BlockNo == block && axis.ModuleNo == module) axis.HomeSituation = eState;
+                                }
+                            }
+                            else if(arr[4] == "IsDoneFail")
+                            {
+                                modulebase.HomeSituation = eState;
+                                modulebase.ModuleState = enModuleState.NOTINITIAL;
                                 foreach (AxisInfoCls axis in Global.STAxis)
                                 {
                                     if (axis.BlockNo == block && axis.ModuleNo == module) axis.HomeSituation = eState;
@@ -1469,6 +1480,21 @@ namespace SFE.TRACK.ViewModel
                     if (middleName == "Cassette")
                     {
                         moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.BlockNo == 1 && x.ModuleNo == (arrayID + 1));
+
+                        FoupCls foupBase = moduleBase as FoupCls;
+                        foupBase.IsDetect = exist.Equals(1) ? true : false;
+                        if (foupBase.IsDetect == false) foupBase.IsScan = false;
+
+                        //public enum WaferStorageWorkStep { IsNot, IsScanNeed, IsScanDone, IsRecipeNeed, IsRecipeDone };
+                        //public enum WaferStorageUseStep { IsStop, IsRun, IsTryRun, IsTryStop };
+                        if (workStep == WaferStorageWorkStep.IsScanDone ||
+                            workStep == WaferStorageWorkStep.IsRecipeNeed ||
+                            workStep == WaferStorageWorkStep.IsRecipeDone)
+                        {
+                            foupBase.IsScan = true;
+                        }
+
+                        foupBase.StorageUseStep = useStep;
                     }
                     else if (middleName == "Robot")
                     {
@@ -1516,12 +1542,24 @@ namespace SFE.TRACK.ViewModel
         private void SetDataInWaferDataArray(string moduleName, string middleName, ModuleBaseCls moduleBase, string strValue)
         {
             WaferCls wafer = moduleBase.Wafer;
-            List<string> list = Tokenizer.Split(strValue, ",");
+            int index = 0;
 
-            int id = Convert.ToInt32(list[0]);
-            bool exist = false; 
-            if (Convert.ToInt32(list[1]) == 1) exist = true;
-            string name = list[6];
+            TLocation locStart = new TLocation();
+            TLocation locEnd = new TLocation();
+
+
+            string one = Tokenizer.SplitOne(strValue, ":", out var remain);
+            if (int.TryParse(one, out var id) == false) return;
+
+            List<string> list = Tokenizer.Split(remain, ",");
+
+            bool exist = false; if (Convert.ToInt32(list[index++]) == 1) exist = true;
+            locStart.X = Convert.ToInt32(list[index++]);
+            locStart.Y = Convert.ToInt32(list[index++]);
+            locEnd.X = Convert.ToInt32(list[index++]);
+            locEnd.Y = Convert.ToInt32(list[index++]);
+            string name = list[index++];
+            string step = list[index++];
             list.RemoveRange(0, 7);
 
             if (middleName == "Cassette")

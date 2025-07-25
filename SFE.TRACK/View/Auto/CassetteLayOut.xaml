@@ -47,11 +47,15 @@
                     
                 </GroupBox>
             </Border>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="50"  Content="Cassette1&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="0" ></Button>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="250" Content="Cassette2&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="1" ></Button>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="450" Content="Cassette3&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="2" ></Button>
-            <Button Canvas.Top="580" Background="RosyBrown" Canvas.Left="650" Content="Cassette4&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="3" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup1.FoupColor}" Canvas.Left="20"  Content="Cassette1&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="0" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup2.FoupColor}" Canvas.Left="220" Content="Cassette2&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="1" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup3.FoupColor}" Canvas.Left="420" Content="Cassette3&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="2" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup4.FoupColor}" Canvas.Left="620" Content="Cassette4&#x0a;     Scan " FontSize ="20" Width="130" Height="65" Command="{Binding CassetteScanRelayCommand}" CommandParameter="3" ></Button>
 
+            <Button Canvas.Top="580" Background= "{Binding foup1.FoupStartStopColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="160"  Content="" FontSize ="20" Width="50" Height="65" Command="{Binding CassetteScanRunStopRelayCommand}" CommandParameter="0" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup2.FoupStartStopColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="360"  Content="" FontSize ="20" Width="50" Height="65" Command="{Binding CassetteScanRunStopRelayCommand}" CommandParameter="1" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup3.FoupStartStopColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="560"  Content="" FontSize ="20" Width="50" Height="65" Command="{Binding CassetteScanRunStopRelayCommand}" CommandParameter="2" ></Button>
+            <Button Canvas.Top="580" Background= "{Binding foup4.FoupStartStopColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="760"  Content="" FontSize ="20" Width="50" Height="65" Command="{Binding CassetteScanRunStopRelayCommand}" CommandParameter="3" ></Button>
             <CheckBox Content="" Canvas.Top="35" Canvas.Left="790" IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=Default}">
                 
             </CheckBox>

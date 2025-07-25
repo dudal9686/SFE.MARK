@@ -234,7 +234,7 @@ namespace SFE.TRACK.ViewModel.Auto
 
                     strJob = strJob.Substring(0, strJob.Length - 1);
                     item.SetValue(strJob, foup.ModuleNo - 1);
-                    Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__RecipeSet, "Run");
+                    Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__RecipeSet, (foup.ModuleNo - 1).ToString());
                     jobList.Add(strJob);
                 }
 
@@ -278,6 +278,7 @@ namespace SFE.TRACK.ViewModel.Auto
                     {
                         moduleBase.HomeSituation = enHomeState.HOME_OK;
                         moduleBase.ModuleState = enModuleState.STANDBY;
+                        Global.MachineWorker.GetController("SFETrack").StartMachine();
                         isDone = true;
                     }
                 }

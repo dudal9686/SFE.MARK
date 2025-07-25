@@ -1,8 +1,10 @@
-﻿using System;
+﻿using DefaultBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace SFE.TRACK.Model
 {
@@ -14,11 +16,14 @@ namespace SFE.TRACK.Model
         private string recipeName = string.Empty;
         private string comment = string.Empty;
         private string lotID = string.Empty;
-        System.Windows.Media.SolidColorBrush foupColor = new System.Windows.Media.SolidColorBrush();
+        SolidColorBrush foupColor = new System.Windows.Media.SolidColorBrush();
+        SolidColorBrush foupStartStopColor = new System.Windows.Media.SolidColorBrush();
+        WaferStorageUseStep storageUseStep = WaferStorageUseStep.IsStop;
 
         public FoupCls()
         {
             FoupColor = System.Windows.Media.Brushes.Gray;
+            foupStartStopColor = Brushes.Red;
         }
         public List<WaferCls> FoupWaferList
         {
@@ -74,6 +79,24 @@ namespace SFE.TRACK.Model
         {
             get { return foupColor; }
             set { foupColor = value; RaisePropertyChanged("FoupColor"); }
+        }
+
+        public SolidColorBrush FoupStartStopColor
+        {
+            get { return foupStartStopColor; }
+            set { foupStartStopColor = value; RaisePropertyChanged("FoupStartStopColor"); }
+        }
+
+        public WaferStorageUseStep StorageUseStep
+        {
+            get { return storageUseStep; }
+            set
+            {
+                storageUseStep = value;
+                if (storageUseStep == WaferStorageUseStep.IsRun) FoupStartStopColor = Brushes.YellowGreen;
+                else if (storageUseStep == WaferStorageUseStep.IsStop) FoupStartStopColor = Brushes.Red;
+                RaisePropertyChanged("StorageUseStep");
+            }
         }
 
         public FoupCls Clone()
