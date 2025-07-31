@@ -236,11 +236,12 @@ namespace SFE.TRACK
             return false;
         }
 
-        public static bool ArmPositionOpen(enArmTpe armType, string armDisp)
+        public static bool ArmPositionOpen(enArmTpe armType, string armDisp, string modulename = "COT")
         {
             STArmPositionPopUp.ArmType = armType;
             STArmPositionPopUp.ArmPosition = armDisp;
             STArmPositionPopUp.SelectArmPosition = string.Empty;
+            STArmPositionPopUp.SelectModule = modulename;
             View.Recipe.ArmPosition armPosition = new View.Recipe.ArmPosition();
             armPosition.Owner = (MainWindow)System.Windows.Application.Current.MainWindow;
             Messenger.Default.Send(Global.STArmPositionPopUp);

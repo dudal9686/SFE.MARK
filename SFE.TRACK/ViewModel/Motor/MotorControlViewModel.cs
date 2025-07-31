@@ -339,7 +339,14 @@ namespace SFE.TRACK.ViewModel.Motor
 
                         while (Axis.IsRepeatMode)
                         {
-                            if (Axis.InPosition && !Axis.Motor.IsMoving && !Axis.Motor.IsAlarm) break;
+                            if (Axis.Company == "AzinECAT")
+                            {
+                                if (Axis.InPosition == true && Axis.Motor.IsMoving == false && Axis.Motor.IsAlarm == false) break;
+                            }
+                            else
+                            {
+                                if (Axis.ManualFirstTeachingPosition == Axis.ActualPosition && Axis.InPosition == true && Axis.InMotion == false && Axis.Alarm == false) break;
+                            }
                             Thread.Sleep(1);
                         }
                         Thread.Sleep(100);
@@ -360,8 +367,17 @@ namespace SFE.TRACK.ViewModel.Motor
                         }
                         while (Axis.IsRepeatMode)
                         {
-                            if (Axis.InPosition && !Axis.Motor.IsMoving && !Axis.Motor.IsAlarm) break;
+                            if (Axis.Company == "AzinECAT")
+                            {
+                                if (Axis.InPosition == true && Axis.Motor.IsMoving == false && Axis.Motor.IsAlarm == false) break;
+                            }
+                            else
+                            {
+                                if (Axis.ManualSecondTeachingPosition == Axis.ActualPosition && Axis.InPosition == true && Axis.InMotion == false && Axis.Alarm == false) break;
+                            }
                             Thread.Sleep(1);
+                            //if (Axis.InPosition && !Axis.Motor.IsMoving && !Axis.Motor.IsAlarm) break;
+                            //Thread.Sleep(1);
                         }
                         Thread.Sleep(100);
                     }

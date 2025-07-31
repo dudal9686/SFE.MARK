@@ -153,7 +153,7 @@ namespace SFE.TRACK
                         Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of Arm 1 moving out of cup, cannot dispense.", step.Index));
                         return false;
                     }
-                    if ((step.Arm2Pos == "HOME") && Convert.ToBoolean(step.DispNo & ((uint)nArm2Disp)))
+                    if ((step.Arm2Pos == "OUT") && Convert.ToBoolean(step.DispNo & ((uint)nArm2Disp)))
                     {
                         Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of Arm 2 moving out of cup, cannot dispense.", step.Index));
                         return false;

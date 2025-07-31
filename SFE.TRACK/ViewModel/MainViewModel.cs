@@ -654,7 +654,7 @@ namespace SFE.TRACK.ViewModel
 
                 string fullMsg = (string)e.GetParam(index++);
 
-
+              
                 AlarmItem item = record.AlarmIITEM;
                 AlarmLogCls alarm = new AlarmLogCls();
                 alarm.Code = record.AlarmCode;
@@ -664,6 +664,7 @@ namespace SFE.TRACK.ViewModel
                 alarm.Param = record.ParamString;
                 alarm.Time = record.AlarmTime.ToString("yyyy-MM-dd HH:mm:ss");
                 alarm.SendID = fromID;
+                alarm.AlarmRecord = record;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     controller.AlarmPopup(record);
@@ -780,6 +781,7 @@ namespace SFE.TRACK.ViewModel
                     {
                         if (axis.AxisID == arrParam[0])
                         {
+                            //Motor:C1_X1,1,0,1,0,1,0,0,0,0,1,1000,0
                             axis.Servo = arrParam[1].Equals("1") ? true : false;
                             axis.Alarm = arrParam[2].Equals("1") ? true : false;
                             axis.IsStop = arrParam[3].Equals("1") ? true : false;
@@ -827,6 +829,7 @@ namespace SFE.TRACK.ViewModel
                     {
                         IODataCls ioData = arOutPutIO[i];
                         if (ioData.BoardType == "MINI") continue;
+                        //if (ioData.IONum / 4 >= 20) continue;
                         value = Convert.ToByte(arr[1][ioData.IONum / 4].ToString(), 16);
                         bit = ioData.IONum % 4;
                         ioData.State = ((value << (bit)) & 0x8) == 0x8;

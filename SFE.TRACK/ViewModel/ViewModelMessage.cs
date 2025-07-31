@@ -49,6 +49,7 @@ namespace SFE.TRACK.ViewModel
         public enArmTpe ArmType = enArmTpe.ARM1;
         public string ArmPosition = string.Empty;
         public string SelectArmPosition = string.Empty;
+        public string SelectModule = string.Empty;
     }
 
     public class PopUpDispenseCls : MessageBase

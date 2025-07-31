@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
+using CoreCSRunSim;
 
 namespace SFE.TRACK
 {
@@ -1817,6 +1818,7 @@ namespace SFE.TRACK
         string time = string.Empty;
         string param = string.Empty;
         int sendID = -1;
+        AlarmRecord alramRecod = null;
         enAlarmMessageType messageType = enAlarmMessageType.ALARM; 
 
         public int SendID
@@ -1877,6 +1879,12 @@ namespace SFE.TRACK
         {
             get { return messageType; }
             set { messageType = value; RaisePropertyChanged("MessageType"); }
+        }
+
+        public AlarmRecord AlarmRecord
+        {
+            get { return alramRecod; }
+            set { alramRecod = value; RaisePropertyChanged("AlarmRecord"); }
         }
     }
 

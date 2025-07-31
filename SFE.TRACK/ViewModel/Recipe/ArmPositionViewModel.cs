@@ -12,8 +12,9 @@ namespace SFE.TRACK.ViewModel.Recipe
 {
     public class ArmPositionViewModel : ViewModelBase
     {
-        string[] ArmPositon1 = new string[] { "HOME", "DMY DISPN", "BEGIN", "CENTER", "CENTER2", "END", "DISPN 1", "WAFER EDGE" };
-        string[] ArmPositon2 = new string[] { "HOME", "BEGIN", "CENTER", "CENTER2", "END", "DISPN 1", "WAFER EDGE" };
+        string[] ArmPositon1 = new string[] { "HOME", /*"DMY DISPN",*/ "BEGIN", "CENTER", /*"CENTER2",*/ "END", "DISPN 1", "WAFER EDGE" };
+        string[] ArmPositon2 = new string[] { "HOME", "BEGIN", "CENTER", /*"CENTER2",*/ "END", "DISPN 1", "WAFER EDGE" }; 
+        string[] DevArmPosition2 = new string[] { "IN", "OUT" }; //Arm2Position을 같이 쓰다가 Dev가 io로 바뀜
         public List<ObjectDisplayCls> PositionList { get; set; } = new List<ObjectDisplayCls>();
         public RelayCommand<Window> OKRelayCommand { get; set; }
         public RelayCommand<Window> CancelRelayCommand { get; set; }
@@ -89,6 +90,21 @@ namespace SFE.TRACK.ViewModel.Recipe
             }
             else
             {
+                if (o.SelectModule == "DEV")
+                {
+                    for (int i = 0; i < DevArmPosition2.Length; i++)
+                    {
+                        ObjectDisplayCls displayCls = new ObjectDisplayCls();
+                        displayCls.Index = i + 1;
+                        displayCls.Display = DevArmPosition2[i];
+                        if (o.ArmPosition == DevArmPosition2[i]) displayCls.IsCheck = true;
+                        else displayCls.IsCheck = false;
+                        PositionList.Add(displayCls);
+                    }
+
+                    return;
+                }
+
                 for (int i = 0; i < ArmPositon2.Length; i++)
                 {
                     ObjectDisplayCls displayCls = new ObjectDisplayCls();

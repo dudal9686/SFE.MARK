@@ -170,7 +170,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         {
             SpinChamberStepCls stepData = new SpinChamberStepCls();
             stepData.Arm1Pos = "HOME";
-            stepData.Arm2Pos = "HOME";
+            stepData.Arm2Pos = "OUT";
             stepData.Arm1Speed = 100;
             stepData.Arm2Speed = 100;
 
@@ -271,7 +271,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     if (Global.MessageOpen(enMessageType.OKCANCEL, "Arm1 Wait Change?")) DevStepData.IsArm1MoveWait = DevStepData.IsArm1MoveWait.Equals(true) ? false : true;
                     break;
                 case 9:
-                    if (Global.ArmPositionOpen(enArmTpe.ARM2, DevStepData.Arm2Pos)) DevStepData.Arm2Pos = Global.STArmPositionPopUp.SelectArmPosition;
+                    if (Global.ArmPositionOpen(enArmTpe.ARM2, DevStepData.Arm2Pos, "DEV")) DevStepData.Arm2Pos = Global.STArmPositionPopUp.SelectArmPosition;
                     break;
                 case 10:
                     fGridValue = Global.KeyPad(DevStepData.Arm2Speed);
