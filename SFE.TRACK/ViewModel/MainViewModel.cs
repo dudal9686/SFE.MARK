@@ -83,6 +83,7 @@ namespace SFE.TRACK.ViewModel
             foreach (DefaultController controller in _worker.ControllerList)
             {
                 controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
+                controller.EvtAlarmClearing += Controller_EvtAlarmClearing;
             }
 
             InitData();
@@ -126,7 +127,25 @@ namespace SFE.TRACK.ViewModel
             //foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
         }
 
-      
+        private void Controller_EvtAlarmClearing(object sender, LibEvtArgs e)
+        {
+            ControllerBase controller = (ControllerBase)sender;
+            if (e.ParamCount == 0) // clear all 
+            {
+
+            }
+            else
+            {
+                AlarmRecord record = (AlarmRecord)e.GetParam(0);
+                //string strRet = (string)e.GetParam(1);
+                AlarmLogCls alram = Global.STAlarmList.ToList().Find(x=>x.Code == record.AlarmCode && x.Owner == record.Owner);
+                Global.STAlarmList.Remove(alram);
+
+                if (Global.STAlarmList.Count == 0)
+                    CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
+            }
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             if(Global.STMachineStatus == enMachineStatus.RUN)
@@ -179,6 +198,8 @@ namespace SFE.TRACK.ViewModel
                 MessageBox.Show("Unable to retrieve equipment information.");
                 return false;
             }
+
+            Global.STModuleList = Global.STModuleList.OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
 
             LmList = _worker.GetLM();
             AssyList = _worker.GetAssy();
@@ -647,33 +668,37 @@ namespace SFE.TRACK.ViewModel
             }
             else // alarm occured
             {
-                int fromID = (int)e.GetParam(index++);
-                AlarmRecord record = (AlarmRecord)e.GetParam(index++);
-
-                //controller.AlarmPopup(this, record);
-
-                string fullMsg = (string)e.GetParam(index++);
-
-              
-                AlarmItem item = record.AlarmIITEM;
-                AlarmLogCls alarm = new AlarmLogCls();
-                alarm.Code = record.AlarmCode;
-                alarm.Owner = record.Owner;
-                alarm.Message = record.FullMessage;
-                alarm.Help = record.Action;
-                alarm.Param = record.ParamString;
-                alarm.Time = record.AlarmTime.ToString("yyyy-MM-dd HH:mm:ss");
-                alarm.SendID = fromID;
-                alarm.AlarmRecord = record;
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                try
                 {
-                    controller.AlarmPopup(record);
-                    Global.STAlarmList.Add(alarm);
-                    Global.STLog.AddAlarmLog(string.Format("{0}({1}){2}", alarm.Code, alarm.SendID, alarm.Message));
-                });
-                //에러가 뜬다고 무조건 끄는거 아닌거 같다.
-                //Global.ManualMessageClose();
-                SetAlarm();
+                    int fromID = (int)e.GetParam(index++);
+                    AlarmRecord record = (AlarmRecord)e.GetParam(index++);
+
+                    //controller.AlarmPopup(this, record);
+
+                    string fullMsg = (string)e.GetParam(index++);
+
+
+                    AlarmItem item = record.AlarmIITEM;
+                    AlarmLogCls alarm = new AlarmLogCls();
+                    alarm.Code = record.AlarmCode;
+                    alarm.Owner = record.Owner;
+                    alarm.Message = record.FullMessage;
+                    alarm.Help = record.Action;
+                    alarm.Param = record.ParamString;
+                    alarm.Time = record.AlarmTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    alarm.SendID = fromID;
+                    alarm.AlarmRecord = record;
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        controller.AlarmPopup(record);
+                        Global.STAlarmList.Add(alarm);
+                        Global.STLog.AddAlarmLog(string.Format("{0}({1}){2}", alarm.Code, alarm.SendID, alarm.Message));
+                    });
+                    //에러가 뜬다고 무조건 끄는거 아닌거 같다.
+                    //Global.ManualMessageClose();
+                    SetAlarm();
+                }
+                catch { }
             }
         }
 
@@ -1044,9 +1069,9 @@ namespace SFE.TRACK.ViewModel
                     if (Convert.ToInt32(arr[18]) == 1) axis.HomeSituation = enHomeState.HOME_OK;
                     else axis.HomeSituation = enHomeState.HOME_NONE;
 
-                    axis.ActualPosition = Convert.ToDouble(arr[19]) / 1000;
+                    axis.ActualPosition = Convert.ToDouble(arr[19]);
 
-                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].AutoTuningStatus = Convert.ToInt32(arr[20 + i]).Equals(1) ? "STOP" : "RUN";
+                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].AutoTuningStatus = Convert.ToInt32(arr[20 + i]).Equals(1) ? "RUN" : "STOP";
                 }
                 else if (eValue == EnumCommand_Status.DATA__ChamberMonitoringData)
                 {
@@ -1167,14 +1192,14 @@ namespace SFE.TRACK.ViewModel
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
-                else if (item.Name == "DryRunMode")
-                {
-                    systemCfg.BlockNo = 0;
-                    systemCfg.ModuleNo = 0;
-                    systemCfg.Title = "Dry Run Mode";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
+                //else if (item.Name == "DryRunMode")
+                //{
+                //    systemCfg.BlockNo = 0;
+                //    systemCfg.ModuleNo = 0;
+                //    systemCfg.Title = "Dry Run Mode";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
                 //DEV-R
                 else if (item.Name == "Dev_R_Rinse_DispTime")
                 {

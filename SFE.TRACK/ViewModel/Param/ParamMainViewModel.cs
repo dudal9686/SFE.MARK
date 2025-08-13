@@ -190,7 +190,10 @@ namespace SFE.TRACK.ViewModel.Param
                         {
                             Axis = axis;
                             if(Axis.Company == "SFE_CAN")
+                            {
                                 Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__MotorAxisRequest, string.Format("MOTOR:{0}", Axis.AxisID));
+                            }    
+                                
                             break;
                         }
                     }

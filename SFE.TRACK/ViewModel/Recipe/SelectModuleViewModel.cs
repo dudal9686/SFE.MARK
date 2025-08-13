@@ -172,18 +172,30 @@ namespace SFE.TRACK.ViewModel.Recipe
                         checkModule.IsCheck = false;
                         if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
                         ModuleList.Add(checkModule);
-                        checkModule = new CheckModuleCls();
-                        checkModule.Index = 2;
-                        checkModule.Display = "Spin rpm";
-                        checkModule.IsCheck = false;
-                        if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
-                        ModuleList.Add(checkModule);
+                        //checkModule = new CheckModuleCls();
+                        //checkModule.Index = 2;
+                        //checkModule.Display = "Spin rpm";
+                        //checkModule.IsCheck = false;
+                        //if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
+                        //ModuleList.Add(checkModule);
                     }
                     else if(m.MachineName.IndexOf("COT") != -1)
                     {
                         checkModule = new CheckModuleCls();
                         checkModule.Index = 1;
                         checkModule.Display = "Resist temp";
+                        checkModule.IsCheck = false;
+                        if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
+                        ModuleList.Add(checkModule);
+                        checkModule = new CheckModuleCls();
+                        checkModule.Index = 1;
+                        checkModule.Display = "Resist2 temp";
+                        checkModule.IsCheck = false;
+                        if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
+                        ModuleList.Add(checkModule);
+                        checkModule = new CheckModuleCls();
+                        checkModule.Index = 1;
+                        checkModule.Display = "Resist3 temp";
                         checkModule.IsCheck = false;
                         if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
                         ModuleList.Add(checkModule);
@@ -199,12 +211,12 @@ namespace SFE.TRACK.ViewModel.Recipe
                         checkModule.IsCheck = false;
                         if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
                         ModuleList.Add(checkModule);
-                        checkModule = new CheckModuleCls();
-                        checkModule.Index = 4;
-                        checkModule.Display = "Spin rpm";
-                        checkModule.IsCheck = false;
-                        if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
-                        ModuleList.Add(checkModule);
+                        //checkModule = new CheckModuleCls();
+                        //checkModule.Index = 4;
+                        //checkModule.Display = "Spin rpm";
+                        //checkModule.IsCheck = false;
+                        //if (obj.ControlTarget == checkModule.Display) checkModule.IsCheck = true;
+                        //ModuleList.Add(checkModule);
                     }                
                     break;
                 default:

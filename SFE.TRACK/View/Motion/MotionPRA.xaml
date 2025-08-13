@@ -198,7 +198,10 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="DarkSlateGray" Width="100" Height="30"  FontSize="16" FontWeight="Bold" Text="{Binding IONum, StringFormat={}Y{0:D3}}" Margin="20 10 0 0"/>
                                         <Label Width="180" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="15" Content="{Binding Name}" Margin="0 0 0 0"/>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="30 0 0 0" Command="{Binding IORelayCommand}">
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="30" Height="30" Background="{Binding StateColor}" Margin="30 0 0 0">
+                                            <Button.InputBindings>
+                                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding IORelayCommand}" />
+                                            </Button.InputBindings>
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>

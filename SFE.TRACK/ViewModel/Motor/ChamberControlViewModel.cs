@@ -39,7 +39,7 @@ namespace SFE.TRACK.ViewModel.Motor
         public RelayCommand<object> GridlDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> GridTempDoubleClickRelayCommand { get; set; }
         bool[] isVelocity = new bool[2] { false, true };
-        float pitch = 0.1f;
+        float pitch = 10.0f;
         string command = string.Empty;
         float heatSetTemp = 0;
         public ChamberControlViewModel()
@@ -77,7 +77,7 @@ namespace SFE.TRACK.ViewModel.Motor
             }
             else if(IsVelocity[1])
             {
-                command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Pitch * 1000);
+                command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, Pitch);
                 Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
             }
         }
@@ -102,7 +102,7 @@ namespace SFE.TRACK.ViewModel.Motor
             }
             else if (IsVelocity[1])
             {
-                command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, (-1000)*Pitch);
+                command = string.Format("Chamber:{0}:{1}:{2}", Chamber.BlockNo, Chamber.ModuleNo, (-1)*Pitch);
                 Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
             }
         }
@@ -205,7 +205,7 @@ namespace SFE.TRACK.ViewModel.Motor
         }
         private void PitchClickCommand()
         {
-            Pitch = Global.KeyPad(Pitch, 10, -10);
+            Pitch = Global.KeyPad(Pitch, 1000, -1000);
         }
         private void GridTempDoubleClickCommand(object o)
         {

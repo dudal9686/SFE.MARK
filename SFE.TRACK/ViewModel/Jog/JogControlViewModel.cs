@@ -125,7 +125,7 @@ namespace SFE.TRACK.ViewModel.Jog
             {
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
-                    command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, PitchLen * 1000);
+                    command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, PitchLen);
                     Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
                     return;
                 }
@@ -213,7 +213,7 @@ namespace SFE.TRACK.ViewModel.Jog
             {
                 if (Axis.AxisID.ToUpper().IndexOf("_PIN") != -1)
                 {
-                    command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (-1000) * PitchLen);
+                    command = string.Format("Chamber:{0}:{1}:{2}", Axis.BlockNo, Axis.ModuleNo, (-1) * PitchLen);
                     Global.MachineWorker.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.ChamberManual__PitchMove, command);
                     return;
                 }
