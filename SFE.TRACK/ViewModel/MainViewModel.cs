@@ -71,7 +71,12 @@ namespace SFE.TRACK.ViewModel
             _worker.EvtPrgCfgReloaded += _worker_EvtPrgCfgReloaded;
            
             Global.MachineWorker = _worker;
-            if (_worker.StartWorker(Global.MMI_ID, "HMI", @"C:\MachineSet\SFETrack.mm", true) == false)
+
+            int type = 0;
+            IMachineConnectInfo connectInfo;
+            if(type == 0) connectInfo  = new MServerLiteInfo(@"C:\MachineSet\SFETrack.mm");
+            else  connectInfo = new MServerMyInfo("SFETrack", "worker", "worker");
+            if (_worker.StartWorker("HMI", connectInfo, new IPCNetInfo(Global.MMI_ID), true) == false)
             {
                 MessageBox.Show("Starting worker failed");
                 return;
@@ -215,6 +220,9 @@ namespace SFE.TRACK.ViewModel
             Global.STDataAccess.ReadMonitoringData();
             Global.STDataAccess.ReadUserInfo();
             Global.STDataAccess.ReadMaintSupportData();
+            //ReadChamberUseMaintMode();
+            //ReadDevelopUseMaintMode();
+            //ReadCoaterUseMaintMode();
             ReadBuzzerData();
             return true;
         }
@@ -224,6 +232,54 @@ namespace SFE.TRACK.ViewModel
             Global.STDataAccess.ReadLampData();
             PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__TowerLamp);
             GetTowerLamp(prgItem);
+        }
+
+        private void ReadChamberUseMaintMode()
+        {
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__ChamberInfo);
+            string[] arr = null;
+            ModuleBaseCls moduleBase = null;
+            for(int i = 0; i < prgItem.ValueCount; i++)
+            {
+                arr = prgItem.GetString(i).Split(',');
+                moduleBase = Global.GetModule(Convert.ToInt32(arr[2]), Convert.ToInt32(arr[3]));
+                if (moduleBase == null) continue;
+
+                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(arr[5]);
+                
+            }
+        }
+
+        private void ReadDevelopUseMaintMode()
+        {
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__DeveloperInfo);
+            string[] arr = null;
+            ModuleBaseCls moduleBase = null;
+            for (int i = 0; i < prgItem.ValueCount; i++)
+            {
+                arr = prgItem.GetString(i).Split(',');
+                moduleBase = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+                if (moduleBase == null) continue;
+
+                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(arr[4]);
+
+            }
+        }
+
+        private void ReadCoaterUseMaintMode()
+        {
+            PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__CoaterInfo);
+            string[] arr = null;
+            ModuleBaseCls moduleBase = null;
+            for (int i = 0; i < prgItem.ValueCount; i++)
+            {
+                arr = prgItem.GetString(i).Split(',');
+                moduleBase = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+                if (moduleBase == null) continue;
+
+                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(arr[4]);
+
+            }
         }
 
         private void GetTowerLamp(PrgCfgItem prgItem)
@@ -277,7 +333,7 @@ namespace SFE.TRACK.ViewModel
                 axis.AxisID = motor.MyNameInfo.Name;
                 axis.Motor = motor;
                 MotorInfo motorInfo = (MotorInfo)motor.MyNameInfo;
-                axis.Company = motorInfo.TrdParty;
+                axis.Company = motorInfo.ThirdParty;
                 axis.AxisNo = Convert.ToInt32((enAxisType)Enum.Parse(typeof(enAxisType), motor.MyNameInfo.Name));
 
                 string parentType = motor.GetParentIDentity().Substring(motor.GetParentIDentity().IndexOf(':') + 1, motor.GetParentIDentity().Length - motor.GetParentIDentity().IndexOf(':') - 1);
@@ -448,7 +504,7 @@ namespace SFE.TRACK.ViewModel
                 data.BlockNo = 2;
                 data.IOType = enIOType.DI;
                 IOInfo ioInfo = (IOInfo)io.MyNameInfo;
-                data.Company = ioInfo.TrdParty;
+                data.Company = ioInfo.ThirdParty;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = false;
                 parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
@@ -456,7 +512,7 @@ namespace SFE.TRACK.ViewModel
                 if (parentType == "CRA" || parentType == "PRA")
                 {
                     if (io.MyNameInfo.Alias == "CRA") data.BlockNo = 1;
-                    data.ModuleNo = 1;
+                    data.ModuleNo = 0;
                     data.BoardNo = 0;// Convert.ToInt32(arr[arr.Length - 2]);
                     data.ChannelNo = Convert.ToInt32(arr[arr.Length - 2]);
                     data.IONum = data.ChannelNo * 32 + Convert.ToInt32(arr[arr.Length - 1]);
@@ -496,7 +552,7 @@ namespace SFE.TRACK.ViewModel
                 data.BlockNo = 2;
                 data.IOType = enIOType.DO;
                 IOInfo ioInfo = (IOInfo)io.MyNameInfo;
-                data.Company = ioInfo.TrdParty;
+                data.Company = ioInfo.ThirdParty;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = true;
                 parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
@@ -750,6 +806,22 @@ namespace SFE.TRACK.ViewModel
                 else if(eValue == EnumCommand_Action.Request__Initialize)
                 {
                     arr = message.Split(':');
+                }
+                else if(eValue == EnumCommand_Action.MaintChamber__PumpRecipeListRequest)
+                {
+                    if (Global.STDataAccess.SetPumpList())
+                        Global.SendCommand(Global.PANEL_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.MaintChamber__PumpRecipeResponse, "OK");
+                }
+                else if(eValue == EnumCommand_Action.MaintChamber__PumpRecipeDetailRequest)
+                {
+                    ProcessPumpDataCls pumpData = new ProcessPumpDataCls();
+                    string path = string.Format(@"C:\MachineSet\SFETrack\Recipe\Pump\{0}.csv", message);
+                    //recipeName:dispAmount:dispRate:acc:dec:reloadRate:cal:acCloseDelay
+                    if (Global.STDataAccess.ReadPumpRecipe(path, ref pumpData))
+                    {
+                        packet = string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}", message, pumpData.DisAmount, pumpData.DistRate, pumpData.Acc, pumpData.Dec, pumpData.ReloadRate, pumpData.Cal, pumpData.AvCloseDelayTime);
+                        Global.SendCommand(Global.PANEL_ID, IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.MaintChamber__PumpRecipeDetailResponse, packet);
+                    }
                 }
             }
             else if (command == EnumCommand.Alarm)
@@ -1055,7 +1127,7 @@ namespace SFE.TRACK.ViewModel
 
                     for(int i = 0; i < 4; i++) chamber.HeatTempList[i].ProcessValue = Convert.ToSingle(arr[3+i]);
                     for (int i = 0; i < 4; i++) chamber.HeatTempList[i].SetValue = Convert.ToSingle(arr[7+i]);
-                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].ControllerStatus = Convert.ToInt32(arr[11 + i]).Equals(1) ? "STOP" : "RUN";
+                    for (int i = 0; i < 4; i++) chamber.HeatTempList[i].ControllerStatus = Convert.ToInt32(arr[11 + i]).Equals(1) ? "RUN" : "STOP";
 
                     if (Convert.ToInt32(arr[15]) == 1) axis.InMotion = true;
                     else axis.InMotion = false;
@@ -1072,10 +1144,29 @@ namespace SFE.TRACK.ViewModel
                     axis.ActualPosition = Convert.ToDouble(arr[19]);
 
                     for (int i = 0; i < 4; i++) chamber.HeatTempList[i].AutoTuningStatus = Convert.ToInt32(arr[20 + i]).Equals(1) ? "RUN" : "STOP";
+                    axis.Servo = arr[24].Equals("1") ? true : false;
                 }
                 else if (eValue == EnumCommand_Status.DATA__ChamberMonitoringData)
                 {
                     //여기에 모니터링 데이터를 넣어준다.
+                }
+                else if (eValue == EnumCommand_Status.Chamber__Information)
+                {
+                    arr = message.Split(':');
+                    ModuleBaseCls moduleBase = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+                    if (moduleBase == null) return;
+
+                    string fileName = string.Empty;
+                    if (moduleBase.MachineName.ToUpper().IndexOf("CPL") != -1) fileName = "CPL_CHANGE";
+                    else if (moduleBase.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_TEST";
+                    else if (moduleBase.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_RECIPE";
+                    else if (moduleBase.MachineName.ToUpper().IndexOf("HHP") != -1) fileName = "HHP_RECIPE";
+
+                    if (arr[3] == "ProcessingDone")
+                    {
+                        //string msg = string.Format("CHAMBER:{0}:{1}:Processing:{2}", arr[1], arr[2], fileName);
+                        //Global.MachineWorker.SendCommand(Global.CHAMBER_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Chamber__StepRequest, msg);
+                    }
                 }
             }
 
@@ -1496,12 +1587,12 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        private void TreatSerialWaferData(NameInfo.TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList, int exist = 1, int recipeSet = 1, WaferStorageUseStep useStep = WaferStorageUseStep.IsRun, WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot)
+        private void TreatSerialWaferData(TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList, int exist = 1, int recipeSet = 1, WaferStorageUseStep useStep = WaferStorageUseStep.IsRun, WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot)
         {
             List<string> list = Tokenizer.Split(title, "_");
             string middleName = list[1];
             ModuleBaseCls moduleBase = null;
-            if (typeName == NameInfo.TYPE_NAME.ASSY)
+            if (typeName == TYPE_NAME.ASSY)
             {
                 if (name == "CRA")
                 {
@@ -1656,10 +1747,10 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        protected bool AnalyseOwner(string message, out NameInfo.TYPE_NAME typeName, out string name, out int unitID, out string remain)
+        protected bool AnalyseOwner(string message, out TYPE_NAME typeName, out string name, out int unitID, out string remain)
         {
             int index = 0;
-            typeName = NameInfo.TYPE_NAME.MACHINE;
+            typeName = TYPE_NAME.MACHINE;
             name = "";
             unitID = -1;
             remain = "";

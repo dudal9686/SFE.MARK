@@ -66,18 +66,6 @@ namespace SFE.TRACK
             { 
                 RobotConnectColor = Brushes.Green; 
                 Global.IsMCSConnection = true;
-                //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Status, EnumCommand_Status.UnitStatus__SendStart, "IO_IN");
-
-
-                //List<ModuleBaseCls> foupList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).ToList();
-                //foreach (ModuleBaseCls foup in foupList)
-                //{
-                //    FoupCls foupCls = foup as FoupCls;
-                //    ioName = string.Format("CST{0}checksensor", foupCls.ModuleNo);
-                //    foupCls.IsDetect = IODataCls.GetDIStatus(ioName);
-                //    foupCls.IsScan = foupCls.IsDetect;
-                //    CommonServiceLocator.ServiceLocator.Current.GetInstance<SFE.TRACK.ViewModel.Auto.LotStartViewModel>().SetIsDetect(foupCls.ModuleNo);
-                //}
             }
             else { RobotConnectColor = Brushes.Red; Global.IsMCSConnection = false; }
         }

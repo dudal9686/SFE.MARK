@@ -71,7 +71,7 @@ namespace SFE.TRACK.Model
                 Vel = GetData().speedPack.speed;
                 Pos = GetData().position;
 
-                if(Company == "AzinECAT")
+                if(Company == "AjinECAT")
                 {
                     Acc = Acc / Global.STPulseToUnit;
                     Dec = Dec / Global.STPulseToUnit;
@@ -128,7 +128,7 @@ namespace SFE.TRACK.Model
         }
         public void SetData()
         {
-            if(Company == "AzinECAT") Motor.SetTeachingPosition(TeachingName, Pos * Global.STPulseToUnit, Vel * Global.STPulseToUnit, Acc * Global.STPulseToUnit, Dec * Global.STPulseToUnit, TimeOut);
+            if(Company == "AjinECAT") Motor.SetTeachingPosition(TeachingName, Pos * Global.STPulseToUnit, Vel * Global.STPulseToUnit, Acc * Global.STPulseToUnit, Dec * Global.STPulseToUnit, TimeOut);
             else Motor.SetTeachingPosition(TeachingName, Pos, Vel, Acc, Dec, TimeOut);
         }
     }

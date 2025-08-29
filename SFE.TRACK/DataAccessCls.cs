@@ -2669,5 +2669,13 @@ namespace SFE.TRACK
 
             return isDone;
         }
+
+        public bool SetPumpList()
+        {
+            if (!Global.STAccessDB.DeletePumpRecipe()) return false;
+            if (!Global.STAccessDB.SetPumpRecipeList()) return false;
+
+            return true;
+        }
     }
 }

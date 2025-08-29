@@ -58,7 +58,7 @@
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="Height" Value="40"/>
-                                        <Setter Property="Background" Value="{Binding ServoState}"/>
+                                        <Setter Property="Background" Value="{Binding ServoState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -66,7 +66,7 @@
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="Height" Value="40"/>
-                                        <Setter Property="Background" Value="{Binding InMotionState}"/>
+                                        <Setter Property="Background" Value="{Binding InMotionState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -74,7 +74,7 @@
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="Height" Value="40"/>
-                                        <Setter Property="Background" Value="{Binding PlusLimitState}"/>
+                                        <Setter Property="Background" Value="{Binding PlusLimitState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -82,11 +82,11 @@
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="Height" Value="40"/>
-                                        <Setter Property="Background" Value="{Binding MinusLimitState}"/>
+                                        <Setter Property="Background" Value="{Binding MinusLimitState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="190" Header="Position" Binding="{Binding ActualPosition}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="190" Header="Position" Binding="{Binding ActualPosition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
@@ -180,7 +180,7 @@
                             <TextBlock Text="Temperature" Foreground="White" FontSize="20"  VerticalAlignment="Center" Margin="10 -5 0 0"/>
                             <Button Command="{Binding TempRunRelayCommand}" ToolTip="Controller Run" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="250,-4,0,0" VerticalAlignment="Top">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Play" Width="40" Height="40" Foreground="Blue" Margin="-50 0 0 0"/>
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Play" Width="40" Height="40" Foreground="Blue" Margin="0 0 0 0"/>
                                 </StackPanel>
                             </Button>
                             <Button Command="{Binding TempStopRelayCommand}" ToolTip="Controller Stop" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
@@ -193,7 +193,7 @@
                                     <materialDesign:PackIcon Kind="Message" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <TextBox Height="20" Width="50" Text="{Binding HeatSetTemp}"></TextBox>
+                            <TextBox Height="20" Width="50" FontSize="15" TextAlignment="Center" Text="{Binding HeatSetTemp}" Margin="10 -5 0 0"></TextBox>
                         </StackPanel>
                     </materialDesign:ColorZone>
                     <DataGrid Name="DataGridChamberValue" SelectedIndex="0" ItemsSource="{Binding Chamber.HeatTempList}" GridLinesVisibility="All" Height="200" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" SelectedItem="{Binding HeatTemp}">
@@ -220,15 +220,15 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="95" Header="Zone" Binding="{Binding ZoneIndex}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="95" Header="Zone" Binding="{Binding ZoneIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="150" Header="PV" Binding="{Binding ProcessValue}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="150" Header="PV" Binding="{Binding ProcessValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="150" Header="SV" Binding="{Binding SetValue}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="150" Header="SV" Binding="{Binding SetValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="150" Header="STATUS" Binding="{Binding ControllerStatus}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="150" Header="STATUS" Binding="{Binding ControllerStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="150" Header="A/T STATUS" Binding="{Binding AutoTuningStatus}" FontSize="20" Foreground="Black">
+                            <DataGridTextColumn Width="150" Header="A/T STATUS" Binding="{Binding AutoTuningStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="Black">
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>

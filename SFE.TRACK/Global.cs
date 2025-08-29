@@ -47,6 +47,8 @@ namespace SFE.TRACK
         public static int MCS_ID = 1;
         public static int CHAMBER_ID = 55;
         public static int MMI_ID = 1000;
+        public static int PANEL_ID = 300;
+
         public static bool IsChamberConnection = false;
         public static bool IsMCSConnection = false;
         public static int HOME_TIMEOUT = 300000;

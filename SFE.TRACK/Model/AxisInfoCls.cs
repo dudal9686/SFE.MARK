@@ -121,7 +121,7 @@ namespace SFE.TRACK.Model
             set
             {
                 company = value;
-                if(company.ToUpper() == "AZINECAT") timer.Start();
+                if(company.ToUpper() == "AJINECAT") timer.Start();
             }
         }
 

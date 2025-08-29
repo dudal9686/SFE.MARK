@@ -339,7 +339,7 @@ namespace SFE.TRACK.ViewModel.Motor
 
                         while (Axis.IsRepeatMode)
                         {
-                            if (Axis.Company == "AzinECAT")
+                            if (Axis.Company == "AjinECAT")
                             {
                                 if (Axis.InPosition == true && Axis.Motor.IsMoving == false && Axis.Motor.IsAlarm == false) break;
                             }
@@ -367,7 +367,7 @@ namespace SFE.TRACK.ViewModel.Motor
                         }
                         while (Axis.IsRepeatMode)
                         {
-                            if (Axis.Company == "AzinECAT")
+                            if (Axis.Company == "AjinECAT")
                             {
                                 if (Axis.InPosition == true && Axis.Motor.IsMoving == false && Axis.Motor.IsAlarm == false) break;
                             }

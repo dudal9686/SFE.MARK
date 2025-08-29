@@ -8,27 +8,33 @@ using System.Threading;
 using System.Data;
 using System.Windows;
 using SFE.TRACK.Model;
+using MySql.Data.MySqlClient;
 
 namespace SFE.TRACK.DB
 {    
-    public class AccessDBCls
+    public class AccessDBCls // MariaDB 로 교체
     {
-        OleDbConnection dbConnect = null;
-        OleDbCommand dbCommand = null;
-        OleDbDataAdapter dbAdapter = null;
+        MySqlConnection dbConnect = null;
+        MySqlCommand dbCommand = null;
+        MySqlDataAdapter dbAdapter = null;
+
+        //OleDbConnection dbConnect = null;
+        //OleDbCommand dbCommand = null;
+        //OleDbDataAdapter dbAdapter = null;
         String connectString = string.Empty;
         Mutex sync = new Mutex();
 
         public AccessDBCls()
         {
-            connectString = string.Format("Provider=Microsoft.Jet.OleDb.4.0; Data Source={0}", /*System.Windows.Forms.Application.StartupPath + */@"D:\MDB\MachineDB.mdb");
+            //connectString = string.Format("Provider=Microsoft.Jet.OleDb.4.0; Data Source={0}", /*System.Windows.Forms.Application.StartupPath + */@"D:\MDB\MachineDB.mdb");
+            connectString = string.Format("Server=127.0.0.1;Port=3306;Database=SFE_MARK;Uid=root;Pwd=1234");
         }
 
         private bool Open()
         {
             try
             {
-                dbConnect = new OleDbConnection(connectString);
+                dbConnect = new MySqlConnection(connectString);
                 dbConnect.Open();
             }            
             catch (Exception ex)
@@ -69,7 +75,7 @@ namespace SFE.TRACK.DB
 
             try
             {
-                dbCommand = new OleDbCommand(query, dbConnect);
+                dbCommand = new MySqlCommand(query, dbConnect);
                 dbCommand.CommandTimeout = 3000;
                 dbCommand.ExecuteNonQuery();
             }
@@ -100,8 +106,8 @@ namespace SFE.TRACK.DB
             }
             try
             {
-                dbCommand = new OleDbCommand(query, dbConnect);
-                dbAdapter = new OleDbDataAdapter(dbCommand);
+                dbCommand = new MySqlCommand(query, dbConnect);
+                dbAdapter = new MySqlDataAdapter(dbCommand);
                 dbAdapter.Fill(dt);
             }
             catch (Exception ex)
@@ -477,6 +483,25 @@ namespace SFE.TRACK.DB
                 data.ModuleNo,
                 data.ControllerName);
             return ExecuteNonQuery(query);
+        }
+
+        public bool DeletePumpRecipe()
+        {
+            string query = "DELETE FROM tbPumpRecipe";
+            return ExecuteNonQuery(query);
+        }
+
+        public bool SetPumpRecipeList()
+        {
+            bool isRet = true;
+            string query = string.Empty;
+            foreach (DirFileListCls recipe in Global.PumpRecipeFileList)
+            {
+                query = string.Format("INSERT INTO tbPumpRecipe (RecipeName) VALUES ('{0}');", recipe.FileName);
+                if (!ExecuteNonQuery(query)) { isRet = false; break; }
+            }
+
+            return isRet;
         }
     }
 }

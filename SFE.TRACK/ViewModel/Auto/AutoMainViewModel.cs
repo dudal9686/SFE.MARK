@@ -11,6 +11,7 @@ using MachineDefine;
 using SFE.TRACK.Model;
 using System.Windows.Threading;
 using System.Diagnostics;
+using System.IO;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -182,7 +183,7 @@ namespace SFE.TRACK.ViewModel.Auto
         }
         private void MonitoringCommand()
         {
-            Global.STMachineStatus = enMachineStatus.STOP;
+            //Global.STMachineStatus = enMachineStatus.STOP;
             View.Auto.DataMonitoring dataMonit = new View.Auto.DataMonitoring();
             dataMonit.ShowDialog();
         }
