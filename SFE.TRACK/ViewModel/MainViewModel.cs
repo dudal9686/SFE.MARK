@@ -63,6 +63,13 @@ namespace SFE.TRACK.ViewModel
             isEnabledMenu = new ObservableCollection<bool>();
             isSelectedMenu = new ObservableCollection<bool>();
             for (int i = 0; i < 10; i++) { IsEnabledMenu.Add(true); IsSelectedMenu.Add(true); }
+
+            if (!InitModule())
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+                return;
+            }
+
             _worker = new MachineReaderWorker();
             _worker.EvtCommandLaunched += _worker_EvtCommandLaunched;
             _worker.EvtCommandStatusChanged += _worker_EvtCommandStatusChanged;
@@ -85,11 +92,17 @@ namespace SFE.TRACK.ViewModel
             _worker.GetController("SFETrack").ConnectedComID = Global.MCS_ID;
             _worker.GetController("Chamber").ConnectedComID = Global.CHAMBER_ID;
 
-            foreach (DefaultController controller in _worker.ControllerList)
+            //foreach (DefaultController controller in _worker.ControllerList)
             {
-                controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
-                controller.EvtAlarmClearing += Controller_EvtAlarmClearing;
+                //controller.EvtAlarmOccured += Controller_EvtAlarmOccured;
+                //controller.EvtAlarmClearing += Controller_EvtAlarmClearing;
+                //controller.EvtAlarmCleared += Controller_EvtAlarmCleared;
             }
+            _worker.GetController("SFETrack").EvtAlarmOccured += Controller_EvtAlarmOccured;
+            _worker.GetController("SFETrack").EvtAlarmClearing += Controller_EvtAlarmClearing;
+            _worker.GetController("SFETrack").EvtAlarmCleared += Controller_EvtAlarmCleared;
+
+            _worker.StartAllController();
 
             InitData();
             InitJobProcess();
@@ -132,6 +145,28 @@ namespace SFE.TRACK.ViewModel
             //foup_.FoupWaferList[0].WaferState = enWaferState.WAFER_EMPTY;
         }
 
+        private void Controller_EvtAlarmCleared(object sender, LibEvtArgs e)
+        {
+            ControllerBase controller = (ControllerBase)sender;
+            if (e.ParamCount == 0) // clear all 
+            {
+
+            }
+            else
+            {
+                AlarmRecord record = (AlarmRecord)e.GetParam(0);
+                //string strRet = (string)e.GetParam(1);
+                AlarmLogCls alram = Global.STAlarmList.ToList().Find(x => x.Code == record.AlarmCode && x.Owner == record.Owner);
+
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Global.STAlarmList.Remove(alram);
+                    if (Global.STAlarmList.Count == 0)
+                        CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
+                });
+            }
+        }
+
         private void Controller_EvtAlarmClearing(object sender, LibEvtArgs e)
         {
             ControllerBase controller = (ControllerBase)sender;
@@ -144,10 +179,13 @@ namespace SFE.TRACK.ViewModel
                 AlarmRecord record = (AlarmRecord)e.GetParam(0);
                 //string strRet = (string)e.GetParam(1);
                 AlarmLogCls alram = Global.STAlarmList.ToList().Find(x=>x.Code == record.AlarmCode && x.Owner == record.Owner);
-                Global.STAlarmList.Remove(alram);
 
-                if (Global.STAlarmList.Count == 0)
-                    CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Global.STAlarmList.Remove(alram);
+                    if (Global.STAlarmList.Count == 0)
+                        CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>().ClearAlarm();
+                });
             }
         }
 
@@ -196,7 +234,7 @@ namespace SFE.TRACK.ViewModel
             for (int i = 0; i < 10; i++) Global.STJobInfo.LotInfoList.Add(new LotInfoCls());
         }
 
-        private bool InitData()
+        private bool InitModule()
         {
             if (!Global.STDataAccess.ReadModuleData() /*|| !AxisCls.OpenDevice()*/)
             {
@@ -206,6 +244,11 @@ namespace SFE.TRACK.ViewModel
 
             Global.STModuleList = Global.STModuleList.OrderBy(x => x.BlockNo).ThenBy(x => x.ModuleNo).ToList();
 
+            return true;
+        }
+
+        private bool InitData()
+        {
             LmList = _worker.GetLM();
             AssyList = _worker.GetAssy();
             DIList = _worker.GetInput();
@@ -1600,7 +1643,7 @@ namespace SFE.TRACK.ViewModel
                     {
                         moduleBase = Global.STModuleList.Find(x => x.ModuleType == enModuleType.FOUP && x.BlockNo == 1 && x.ModuleNo == (arrayID + 1));
 
-                        FoupCls foupBase = moduleBase as FoupCls;
+                        FoupCls foupBase = moduleBase as FoupCls;                        
                         foupBase.IsDetect = exist.Equals(1) ? true : false;
                         if (foupBase.IsDetect == false) foupBase.IsScan = false;
 

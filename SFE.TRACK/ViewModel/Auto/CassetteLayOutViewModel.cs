@@ -53,7 +53,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, message, true, 10000);
 
                 Global.MachineWorker.SendCommand(CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__ScanSet, cst);
-                Global.MachineWorker.GetController("SFETrack").StartMachine();
+                //Global.MachineWorker.GetController("SFETrack").StartMachine();
             }
             //message = string.Format("Cassette:{0}", cst);
             //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette__Scan, message);

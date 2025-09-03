@@ -34,15 +34,15 @@ namespace SFE.TRACK
         {
             base.OnStartup(e);
 
-            Process[] process = Process.GetProcessesByName("IPCNetServer");
-            if (process.Length == 0)
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(@"C:\MachineSet\IPCNetServer\IPCNetServer.exe");
-                }
-                catch { }
-            }
+            //Process[] process = Process.GetProcessesByName("IPCNetServer");
+            //if (process.Length == 0)
+            //{
+            //    try
+            //    {
+            //        System.Diagnostics.Process.Start(@"C:\MachineSet\IPCNetServer\IPCNetServer.exe");
+            //    }
+            //    catch { }
+            //}
             //en-US, zh-CN
             CultureInfo cultureInfo = new CultureInfo(SFE.TRACK.Properties.Settings.Default.LANG_CODE);
             Thread.CurrentThread.CurrentCulture = cultureInfo;

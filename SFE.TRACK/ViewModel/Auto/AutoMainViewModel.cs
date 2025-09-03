@@ -252,6 +252,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 
                 //Recipe Setting 이 되었다는 Command 보내야 한다.
                 Global.STMachineStatus = enMachineStatus.RUN;
+                Global.MachineWorker.GetController("SFETrack").StartMachine();
             }
 
             jobList.Clear();
@@ -273,14 +274,24 @@ namespace SFE.TRACK.ViewModel.Auto
                     break;
                 }
 
-                if (Global.MachineWorker.GetController("SFETrack").InitializeStep == CoreCSRunSim.WorkingNeedStep.IsDone)
+                if (Global.MachineWorker.GetController("SFETrack").InitializeStep == CoreCSRunSim.WorkingNeedStep.IsDone)  //IsNot(Fail)
                 {
                     if(moduleBase.ModuleNo == 0 && moduleBase.IsHomeChecked)
                     {
                         moduleBase.HomeSituation = enHomeState.HOME_OK;
                         moduleBase.ModuleState = enModuleState.STANDBY;
-                        Global.MachineWorker.GetController("SFETrack").StartMachine();
+                        //Global.MachineWorker.GetController("SFETrack").StartMachine(); // 두번 주면 안 되고.
                         isDone = true;
+                    }
+                }
+                else if (Global.MachineWorker.GetController("SFETrack").InitializeStep == CoreCSRunSim.WorkingNeedStep.IsNot)  //IsNot(Fail)
+                {
+                    if (moduleBase.ModuleNo == 0 && moduleBase.IsHomeChecked)
+                    {
+                        moduleBase.HomeSituation = enHomeState.HOME_ERROR;
+                        moduleBase.ModuleState = enModuleState.NOTINITIAL;
+                        //Global.MachineWorker.GetController("SFETrack").StartMachine(); // 두번 주면 안 되고.
+                        isDone = false;
                     }
                 }
 

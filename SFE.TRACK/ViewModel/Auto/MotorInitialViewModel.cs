@@ -63,10 +63,11 @@ namespace SFE.TRACK.ViewModel.Auto
                     {
                         isRobot = true;
                         if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsRun) continue;
-                        Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                        
                         if(Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsIdle ||
                             Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsStop)
                         {
+                            Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
                             Global.MachineWorker.GetController("SFETrack").StartMachine();
                         }
                     }
