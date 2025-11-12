@@ -124,10 +124,10 @@
                                             <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                                         </Border>
                                         <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80">
-                                            <materialDesign:PackIcon Kind="Circle" Foreground="{Binding Source={StaticResource Clock}, Path=ChamberConnectColor}" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="{Binding ChamberConnectColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                                         </Border>
                                         <Border Background="DarkGray" BorderBrush="White" BorderThickness="0.8" Width="80">
-                                            <materialDesign:PackIcon Kind="Circle" Foreground="{Binding Source={StaticResource Clock}, Path=RobotConnectColor}" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                                            <materialDesign:PackIcon Kind="Circle" Foreground="{Binding RobotConnectColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="30" Height="30" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                                         </Border>
                                     </StackPanel>
                                 </StackPanel>

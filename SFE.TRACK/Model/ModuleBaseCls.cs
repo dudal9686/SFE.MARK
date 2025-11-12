@@ -299,6 +299,13 @@ namespace SFE.TRACK.Model
             RecipeInfo recipeInfo = null;
             WorkStep workStep = WorkStep.IsNeed;
 
+            if(ModuleNo == 0)
+            {
+                if(Wafer.IsWafer == Visibility.Visible) Wafer.WaferState = enWaferState.WAFER_PROCESS;
+                else Wafer.WaferState = enWaferState.WAFER_NONE;
+                return;
+            }
+
             for (int i = 0; i < Wafer._RecipeInfos.Length; i++)
             {
                 recipeInfo = Wafer._RecipeInfos[i];

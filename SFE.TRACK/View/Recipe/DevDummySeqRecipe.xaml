@@ -168,9 +168,9 @@
                                     <DataGridTextColumn Header="Step&#x0a;Time" Foreground="Black" Width="60" Binding="{Binding StepTime}" FontSize="16"/>
                                     
                                     <DataGridTextColumn Header="Dispense No" Foreground="Black" Width="150" Binding="{Binding DispDisplay}" FontSize="16"/>
-                                    <DataGridTextColumn Header="Arm1&#x0a; Pos" Foreground="Black" Width="80" Binding="{Binding Arm1Pos}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm1&#x0a; Pos" Foreground="Black" Width="190" Binding="{Binding Arm1Pos}" FontSize="16"/>
                                     <DataGridTextColumn Header="Arm1&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm1Speed}" FontSize="16"/>
-                                    <DataGridTemplateColumn Header="Arm1&#x0a; Wait" Width="70">
+                                    <DataGridTemplateColumn Header="Arm1&#x0a; Wait" Width="70" Visibility="Hidden">
                                         <DataGridTemplateColumn.CellStyle>
                                             <Style TargetType="DataGridCell">
                                                 <Setter Property="Background" Value="{Binding Path=IsArm1MoveWait, Converter={StaticResource UseValueConverter}}"/>
@@ -186,9 +186,9 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="Arm2&#x0a; Pos" Foreground="Black" Width="80" Binding="{Binding Arm2Pos}" FontSize="16"/>
-                                    <DataGridTextColumn Header="Arm2&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm2Speed}" FontSize="16"/>
-                                    <DataGridTemplateColumn Header="Arm2&#x0a; Wait" Width="70">
+                                    <DataGridTextColumn Header="Arm2&#x0a; Pos" Foreground="Black" Width="190" Binding="{Binding Arm2Pos}" FontSize="16"/>
+                                    <DataGridTextColumn Header="Arm2&#x0a; Speed" Foreground="Black" Width="80" Binding="{Binding Arm2Speed}" Visibility="Hidden" FontSize="16"/>
+                                    <DataGridTemplateColumn Header="Arm2&#x0a; Wait" Width="70" Visibility="Hidden">
                                         <DataGridTemplateColumn.CellStyle>
                                             <Style TargetType="DataGridCell">
                                                 <Setter Property="Background" Value="{Binding Path=IsArm2MoveWait, Converter={StaticResource UseValueConverter}}"/>

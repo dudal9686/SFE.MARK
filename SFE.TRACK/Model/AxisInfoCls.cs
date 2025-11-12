@@ -49,7 +49,6 @@ namespace SFE.TRACK.Model
 
         bool isOwn = false;
         string command = string.Empty;
-        DispatcherTimer timer = new DispatcherTimer();
 
         public UnitMotor Motor { get; set; }
 
@@ -91,38 +90,17 @@ namespace SFE.TRACK.Model
             EncoderClearRelayCommand = new RelayCommand(EncoderClearCommand);
             StopRelayCommand = new RelayCommand(StopCommand);
             AlarmResetRelayCommand = new RelayCommand(AlarmResetCommand);
-
-            timer.Interval = TimeSpan.FromMilliseconds(500);
-            timer.Tick += Timer_Tick;
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            PlusLimit = Motor.IsPositiveLimit;
-            MinusLimit = Motor.IsNegativeLimit;
-            Servo = Motor.IsServoOn;
-            InMotion = Motor.IsMoving;
-            InPosition = Motor.IsInPosition;
-            IsStop = !Motor.IsMoving;
-            Alarm = Motor.IsAlarm;
-            IsHome = Motor.IsHome;
-            ActualPosition = Motor.GetEncoderPos() / 1000;
-            CommandPosition = Motor.CommandPosition / 1000;
         }
 
         ~AxisInfoCls()
         {
-            timer.Stop();
+            
         }   
 
         public string Company
         {
             get { return company; }
-            set
-            {
-                company = value;
-                if(company.ToUpper() == "AJINECAT") timer.Start();
-            }
+            set { company = value; }
         }
 
         public bool IsOwn

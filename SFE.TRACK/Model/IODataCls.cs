@@ -33,35 +33,21 @@ namespace SFE.TRACK.Model
         SolidColorBrush stateColor = new SolidColorBrush();
 
         public RelayCommand IORelayCommand { get; set; }
-        DispatcherTimer timer = new DispatcherTimer();
         public IODataCls()
         {
             IORelayCommand = new RelayCommand(IOCommand);
-            stateColor = Brushes.Red;
-
-            timer.Interval = TimeSpan.FromMilliseconds(500);
-            timer.Tick += Timer_Tick;
-            
+            stateColor = Brushes.Red;            
         }
 
         ~IODataCls()
         {
-            timer.Stop();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            State = io.IsActive();
+            
         }
 
         public string Company
         {
             get { return company; }
-            set
-            {
-                company = value;
-                if(company.ToUpper() == "AJINECAT") timer.Start();
-            }
+            set { company = value; }
         }
 
         public UnitIO IO
@@ -131,11 +117,15 @@ namespace SFE.TRACK.Model
 
         public bool State
         {
-            get { return state; }
+            get 
+            {
+                return state; 
+            }
             set { state = value;
                 if (state) StateColor = Brushes.YellowGreen;
                 else StateColor = Brushes.Red;
-                RaisePropertyChanged("State"); }
+                RaisePropertyChanged("State"); 
+            }
         }
 
         public bool Enable

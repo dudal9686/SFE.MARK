@@ -335,7 +335,7 @@ namespace SFE.TRACK.DB
             for (int i = 0; i < Global.STDispenseList.Count; i++)
             {
                 DispenseInfoCls info = Global.STDispenseList[i];
-                query = string.Format("UPDATE tbDispenseInfo SET Use = {0}, DummyUse = {1}, RecipeUse= {2} WHERE Type = '{3}' AND DispNo = {4}",
+                query = string.Format("UPDATE tbDispenseInfo SET `Use` = {0}, DummyUse = {1}, RecipeUse= {2} WHERE Type = '{3}' AND DispNo = {4}",
                                         info.IsUse.Equals(true) ? 1 : 0,
                                         info.IsUseDummy.Equals(true) ? 1 : 0,
                                         info.IsUseRecipe.Equals(true) ? 1 : 0,

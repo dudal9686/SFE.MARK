@@ -21,6 +21,11 @@ namespace SFE.TRACK.ViewModel.Param
         public RelayCommand<object> TeachDataDoubleClickRelayCommand { get; set; }
         public RelayCommand SaveTeachingRelayCommand { get; set; }
         public RelayCommand MoveTeachingRelayCommand { get; set; }
+        public RelayCommand MoveStopRelayCommand { get; set; }
+        public RelayCommand ServoOnRelayCommand { get; set; }
+        public RelayCommand ZeroPositionMoveRelayCommand { get; set; }
+        public RelayCommand ServoOffRelayCommand { get; set; }
+        public RelayCommand AlarmResetRelayCommand { get; set; }
         List<TeachingDataCls> teachingData { get; set; }
         int selectedModuleIndex = 0;
         int selectedTeachingedIndex = 0;
@@ -51,7 +56,12 @@ namespace SFE.TRACK.ViewModel.Param
             Messenger.Default.Register<TeachModuleMessageCls>(this, OnReceiveMessageAction);
             SaveTeachingRelayCommand = new RelayCommand(SaveTeachingCommand);
             MoveTeachingRelayCommand = new RelayCommand(MoveTeachingCommand);
+            MoveStopRelayCommand = new RelayCommand(MoveStopCommand);
             TeachDataDoubleClickRelayCommand = new RelayCommand<object>(TeachDataDoubleClickCommand);
+            ZeroPositionMoveRelayCommand = new RelayCommand(ZeroPositionMoveCommand);
+            ServoOnRelayCommand = new RelayCommand(ServoOnCommand);
+            ServoOffRelayCommand = new RelayCommand(ServoOffCommand);
+            AlarmResetRelayCommand = new RelayCommand(AlarmResetCommand);
         }
         ~ParamMainViewModel()
         {
@@ -230,11 +240,59 @@ namespace SFE.TRACK.ViewModel.Param
             Global.MessageOpen(enMessageType.OK, "Saved.");
         }
 
+        private void MoveStopCommand()
+        {
+            if (paramData == null) return;
+            string command = string.Empty;
+            foreach (AxisInfoCls axis in Global.STAxis)
+            {
+                if (axis.Motor.GetName() == paramData.Motor.GetName())
+                {
+                    command = string.Format("Motor:{0}", axis.AxisID);
+                    if (axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__Stop, command);
+                    else axis.Motor.StopMove();
+                    break;
+                }
+            }
+        }
+
+        private void ZeroPositionMoveCommand()
+        {
+            if (paramData == null) return;
+
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to move to zero position? ({0})", paramData.Motor.GetName()))) return;
+
+            string command = string.Empty;
+            Console.WriteLine(paramData.Motor.GetName());
+
+            foreach (AxisInfoCls axis in Global.STAxis)
+            {
+                if (axis.Motor.GetName() == paramData.Motor.GetName())
+                {
+                    if (axis.Company == "SFE_CAN")
+                    {
+                        command = string.Format("Motor:{0},{1},{2},{3},{4},{5}", axis.AxisID, 0, paramData.Vel, paramData.Acc, paramData.Dec, 10000);
+                        Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Move__DirectMove, command);
+                    }
+                    else
+                    {
+                        speedPack.acc = paramData.Acc * Global.STPulseToUnit;
+                        speedPack.dec = paramData.Dec * Global.STPulseToUnit;
+                        speedPack.speed = paramData.Vel * Global.STPulseToUnit;
+                        speedPack.timeout = 5000;
+                        axis.Motor.DoSCurveMove(0 * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
+                    }
+
+                    break;
+                }
+            }
+        }
+
         private void MoveTeachingCommand()
         {
             if (paramData == null) return;
 
-            if (!Global.MessageOpen(enMessageType.OKCANCEL, "Would you like to move?")) return;
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to move? ({0})", paramData.Motor.GetName()))) return;
 
             string command = string.Empty;
             Console.WriteLine(paramData.Motor.GetName());
@@ -256,6 +314,58 @@ namespace SFE.TRACK.ViewModel.Param
                         speedPack.timeout = 5000;
                         axis.Motor.DoSCurveMove(paramData.Pos * Global.STPulseToUnit, speedPack, UnitMotor.EnumMovePosType.ABSOLUTE);
                     }
+
+                    break;
+                }
+            }
+        }
+
+        private void ServoOnCommand()
+        {
+            if (paramData == null) return;
+            string command = string.Empty;
+            foreach (AxisInfoCls axis in Global.STAxis)
+            {
+                if (axis.Motor.GetName() == paramData.Motor.GetName())
+                {
+                    command = string.Format("Motor:{0},{1}", axis.AxisID, 1);
+                    if (axis.Company == "SFE_CAN")
+                        Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__ServoOn, command);
+                    else axis.Motor.DoServoOn(true);
+                    break;
+                }
+            }
+        }
+
+        private void ServoOffCommand()
+        {
+            if (paramData == null) return;
+            string command = string.Empty;
+            foreach (AxisInfoCls axis in Global.STAxis)
+            {
+                if (axis.Motor.GetName() == paramData.Motor.GetName())
+                {
+                    axis.Servo = false;
+                    command = string.Format("Motor:{0},{1}", axis.AxisID, 0);
+                    if (axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__ServoOn, command);
+                    else axis.Motor.DoServoOn(false);
+                    break;
+                }
+            }
+        }
+
+        private void AlarmResetCommand()
+        {
+            if (paramData == null) return;
+            string command = string.Empty;
+            foreach (AxisInfoCls axis in Global.STAxis)
+            {
+                if (axis.Motor.GetName() == paramData.Motor.GetName())
+                {
+                    command = string.Format("Motor:{0}", axis.AxisID);
+                    if (axis.Company == "SFE_CAN") Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.StatusChange__ServoAlarmClear, command);
+                    else axis.Motor.ClerAlarm();
+                    break;
                 }
             }
         }

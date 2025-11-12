@@ -85,7 +85,7 @@ namespace SFE.TRACK.ViewModel.Motor
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
                     speedPack.dec = speedPack.dec * Global.STPulseToUnit;
                     speedPack.speed = speedPack.speed * Global.STPulseToUnit;
-                    Axis.Motor.DoVelocityMove(speedPack);
+                    Axis.Motor.DoVelocityMove(speedPack,false);
                 }
             }
             else if (IsVelocity[1])
@@ -100,7 +100,7 @@ namespace SFE.TRACK.ViewModel.Motor
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
                     speedPack.dec = speedPack.dec * Global.STPulseToUnit;
                     speedPack.speed = speedPack.speed * Global.STPulseToUnit;
-                    Axis.Motor.DoVelocityMove(speedPack);
+                    Axis.Motor.DoVelocityMove(speedPack, false);
                 }
             }
             else if (IsVelocity[2])
@@ -149,7 +149,7 @@ namespace SFE.TRACK.ViewModel.Motor
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
                     speedPack.dec = speedPack.dec * Global.STPulseToUnit;
                     speedPack.speed = speedPack.speed * Global.STPulseToUnit;
-                    Axis.Motor.DoVelocityMove(speedPack);
+                    Axis.Motor.DoVelocityMove(speedPack, false);
                 }
             }
             else if (IsVelocity[1])
@@ -164,7 +164,7 @@ namespace SFE.TRACK.ViewModel.Motor
                     speedPack.acc = speedPack.acc * Global.STPulseToUnit;
                     speedPack.dec = speedPack.dec * Global.STPulseToUnit;
                     speedPack.speed = speedPack.speed * Global.STPulseToUnit;
-                    Axis.Motor.DoVelocityMove(speedPack);
+                    Axis.Motor.DoVelocityMove(speedPack, false);
                 }
             }
             else if (IsVelocity[2])

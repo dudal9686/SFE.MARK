@@ -65,12 +65,25 @@
                             <DataTemplate DataType="{x:Type Model:CRARobotCls}">
                                 <Canvas>
                                     <Label Width="{Binding SizeX}" Height="{Binding SizeY}" BorderBrush="White" BorderThickness="0.5" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{Binding MachineName}" FontSize="15" Background="{Binding ModuleColor}"></Label>
+                                    <Button Width="20" BorderThickness="0" BorderBrush="Transparent" Height="20" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="60 250 0 0" Visibility="{Binding Wafer.IsWafer}" Background="{Binding Wafer.WaferColor}" >
+
+                                    </Button>
                                 </Canvas>
+                                
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type Model:PRARobotCls}">
                                 <Canvas>
                                     <Label Width="{Binding SizeX}" Height="{Binding SizeY}" BorderBrush="White" BorderThickness="0.5" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{Binding MachineName}" FontSize="15" Background="{Binding ModuleColor}"></Label>
+                                    <Label Width="50" Margin="100 30 0 0" BorderThickness="0.5" FontWeight="UltraBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Arm3" FontSize="15" Background="{Binding ModuleColor}"></Label>
+                                    <Button Width="20" Margin="150 35 0 0" BorderThickness="0" BorderBrush="Transparent" Height="20" Style="{StaticResource MaterialDesignFloatingActionButton}" Visibility="Visible" Background="{Binding ArmWaferList[2].WaferColor}" />
+
+                                    <Label Width="50" Margin="100 60 0 0" BorderThickness="0.5" FontWeight="UltraBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Arm2" FontSize="15" Background="{Binding ModuleColor}"></Label>
+                                    <Button Width="20" Margin="150 65 0 0" BorderThickness="0" BorderBrush="Transparent" Height="20" Style="{StaticResource MaterialDesignFloatingActionButton}" Visibility="Visible" Background="{Binding ArmWaferList[1].WaferColor}" />
+
+                                    <Label Width="50" Margin="100 90 0 0" BorderThickness="0.5" FontWeight="UltraBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Arm1" FontSize="15" Background="{Binding ModuleColor}"></Label>
+                                    <Button Width="20" Margin="150 95 0 0" BorderThickness="0" BorderBrush="Transparent" Height="20" Style="{StaticResource MaterialDesignFloatingActionButton}" Visibility="Visible" Background="{Binding ArmWaferList[0].WaferColor}" />
                                 </Canvas>
+
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type Model:FoupCls}">
                                 <Canvas>

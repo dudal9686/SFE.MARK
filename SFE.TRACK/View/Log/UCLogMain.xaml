@@ -79,7 +79,7 @@
                                 <Label Content="UI" Margin="0 10"></Label>
                             </StackPanel>
                         </TreeViewItem.Header>
-                        <TreeViewItem IsSelected="{Binding IsUISocket}" x:Name="lvUISocket">
+                        <TreeViewItem IsSelected="{Binding IsUISocket}" x:Name="lvUISocket" Visibility="Hidden">
                             <TreeViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>

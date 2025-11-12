@@ -12,16 +12,22 @@ namespace SFE.TRACK.ViewModel.Auto
     {
         List<MonitoringDataCls> MonitoringList_ { get; set; }
         public RelayCommand<Window> OKRelayCommand { get; set; }
+        public RelayCommand LoadRelayCommand { get; set; }
         public DataMonitoringViewModel()
         {
-            OKRelayCommand = new RelayCommand<Window>(OKCommand);
-            MonitoringList = Global.STMonitoringList.FindAll(x=>x.IsUse == true).ToList();   
+            LoadRelayCommand = new RelayCommand(LoadCommand);
+            OKRelayCommand = new RelayCommand<Window>(OKCommand);             
         }
 
         public List<MonitoringDataCls> MonitoringList
         {
             get { return MonitoringList_; }
             set { MonitoringList_ = value; RaisePropertyChanged("MonitoringList"); }
+        }
+
+        private void LoadCommand()
+        {
+            MonitoringList = Global.STMonitoringList.FindAll(x => x.IsUse == true).ToList();
         }
 
         private void OKCommand(Window o)

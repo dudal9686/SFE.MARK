@@ -67,7 +67,7 @@ namespace SFE.TRACK.ViewModel.Auto
                         if(Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsIdle ||
                             Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsStop)
                         {
-                            Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                            Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "SFETrack:Do", true);
                             Global.MachineWorker.GetController("SFETrack").StartMachine();
                         }
                     }
@@ -77,7 +77,23 @@ namespace SFE.TRACK.ViewModel.Auto
             
                 foreach(AxisInfoCls axis in Global.STAxis)
                 {
-                    if (module.BlockNo == axis.BlockNo && module.ModuleNo == axis.ModuleNo) axis.HomeSituation = enHomeState.HOME_NONE;
+                    //if (module.BlockNo == axis.BlockNo && module.ModuleNo == axis.ModuleNo) axis.HomeSituation = enHomeState.HOME_NONE;
+
+                    if (module.BlockNo == axis.BlockNo && module.ModuleNo == axis.ModuleNo)
+                    {
+                        module.HomeSituation = enHomeState.HOME_ERROR;
+
+                        if (module.ModuleNo == 0 && Global.IsMCSConnection)
+                        {
+                            axis.HomeSituation = enHomeState.HOME_NONE;
+                            module.HomeSituation = enHomeState.HOMMING;
+                        }
+                        else if (module.ModuleNo != 0 && Global.IsChamberConnection)
+                        {
+                            axis.HomeSituation = enHomeState.HOME_NONE;
+                            module.HomeSituation = enHomeState.HOMMING;
+                        }
+                    }
                 }
             }
             Global.STMachineStatus = enMachineStatus.HOME;

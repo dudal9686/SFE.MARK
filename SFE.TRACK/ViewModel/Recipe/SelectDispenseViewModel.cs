@@ -112,14 +112,27 @@ namespace SFE.TRACK.ViewModel.Recipe
 
         private void GridDoubleClickCommand(object o)
         {
-            if(!DispenseStep.IsCheck) DispenseStep.IsCheck = true;
-            else DispenseStep.IsCheck = false;
+            if(!DispenseStep.IsCheck)
+            {
+                if(DispenseStep.DispName.IndexOf("RESIST") != -1)
+                {
+                    foreach (DispenseInfoCls dispInfo in DispenseList)
+                    {
+                        if (dispInfo.DispName.IndexOf("RESIST") != -1)
+                            dispInfo.IsCheck = false;
+                    }
+                }
+                DispenseStep.IsCheck = true;
+            }                
+            else 
+                DispenseStep.IsCheck = false;
 
             if(Global.STDispensePopUp.DummyOrRecipeUse == "DUMMYUSE" && !Global.STDispensePopUp.IsMultiSelect)
             {
                 foreach(DispenseInfoCls info in DispenseList)
                 {
-                    if (info != DispenseStep) info.IsCheck = false;
+                    if (info != DispenseStep) 
+                        info.IsCheck = false;
                 }
             }
         }

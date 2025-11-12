@@ -58,14 +58,18 @@ namespace SFE.TRACK.ViewModel.Log
                 StreamReader sr = new StreamReader(fileName);
                 while(!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
-                    if (line == string.Empty) continue;
+                    try
+                    {
+                        line = sr.ReadLine();
+                        if (line == string.Empty) continue;
 
-                    string[] arr = line.Split('>');
-                    LogDataCls logData = new LogDataCls();
-                    logData.Time = arr[0].Replace("<", "").Trim();
-                    logData.Message = arr[1].Trim();
-                    LogList.Add(logData);
+                        string[] arr = line.Split('>');
+                        LogDataCls logData = new LogDataCls();
+                        logData.Time = arr[0].Replace("<", "").Trim();
+                        logData.Message = arr[1].Trim();
+                        LogList.Add(logData);
+                    }
+                    catch { }
                 }
 
                 sr.Close();
@@ -148,8 +152,8 @@ namespace SFE.TRACK.ViewModel.Log
                 isUISocket = value;
                 if (isUISocket)
                 {
-                    directoryInfo = @"D:\MARK_LOG\UI\SOCKET_LOG\";
-                    SetDisplay();
+                    //directoryInfo = @"D:\MARK_LOG\UI\SOCKET_LOG\";
+                    //SetDisplay();
                 }
                 RaisePropertyChanged("IsUISocket");
             }

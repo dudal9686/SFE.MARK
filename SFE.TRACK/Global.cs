@@ -288,7 +288,7 @@ namespace SFE.TRACK
             return false;
         }
 
-        public static float KeyPad(float value = 0, float maxVal = 100000, float minVal = -100000)
+        public static float KeyPad(float value = 0, float maxVal = 3000000, float minVal = -100000)
         {
             float reValue = value;
             Pad.KeyPad keyPad = new Pad.KeyPad(value, maxVal, minVal);

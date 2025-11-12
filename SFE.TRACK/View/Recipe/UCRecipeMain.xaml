@@ -211,14 +211,14 @@
                                 </StackPanel>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                        <TreeViewItem IsSelected="{Binding IsAdhDummyCondRecipe}" x:Name="lvAdhDummyCondRecipe">
+                        <!--<TreeViewItem IsSelected="{Binding IsAdhDummyCondRecipe}" x:Name="lvAdhDummyCondRecipe">
                             <TreeViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
                                     <Label Content="Adhension" Margin="0 10"></Label>
                                 </StackPanel>
                             </TreeViewItem.Header>
-                        </TreeViewItem>
+                        </TreeViewItem>-->
                     </TreeViewItem>
                     <!--Dummy Seq Recipe-->
                     <TreeViewItem IsSelected="{Binding IsCotDummySeqRecipe}">
@@ -244,14 +244,14 @@
                                 </StackPanel>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                        <TreeViewItem IsSelected="{Binding IsAdhDummySeqRecipe}" x:Name="lvAdhDummySeqRecipe">
+                        <!--<TreeViewItem IsSelected="{Binding IsAdhDummySeqRecipe}" x:Name="lvAdhDummySeqRecipe">
                             <TreeViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Drag" Width="30" Height="30" Foreground="#565656" Margin="0 5 10 0"/>
                                     <Label Content="Adhension" Margin="0 10"></Label>
                                 </StackPanel>
                             </TreeViewItem.Header>
-                        </TreeViewItem>
+                        </TreeViewItem>-->
                     </TreeViewItem>
                     <!--Cleaning Condition Recipe-->
                     <!--<TreeViewItem IsSelected="{Binding IsCleanCondRecipe}" x:Name="lvCleanCondRecipe">

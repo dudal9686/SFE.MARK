@@ -53,7 +53,7 @@ namespace SFE.TRACK.ViewModel.Auto
                 //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, message, true, 10000);
 
                 Global.MachineWorker.SendCommand(CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__ScanSet, cst);
-                //Global.MachineWorker.GetController("SFETrack").StartMachine();
+                Global.MachineWorker.GetController("SFETrack").StartMachine();
             }
             //message = string.Format("Cassette:{0}", cst);
             //Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Cassette__Scan, message);
@@ -68,8 +68,20 @@ namespace SFE.TRACK.ViewModel.Auto
             else if (cst == "2") foup = foup3;
             else if (cst == "3") foup = foup4;
 
-            if(foup.StorageUseStep == DefaultBase.WaferStorageUseStep.IsRun) Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__Stop, cst);
-            else if (foup.StorageUseStep == DefaultBase.WaferStorageUseStep.IsStop) Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__Start, cst);
+            if (foup.StorageUseStep == DefaultBase.WaferStorageUseStep.IsRun)
+            {
+                if (Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to stop {0}?", foup.MachineFullName)))
+                {
+                    Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__Stop, cst);
+                }
+            }
+            else if (foup.StorageUseStep == DefaultBase.WaferStorageUseStep.IsStop)
+            {
+                if (Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to start {0}?", foup.MachineFullName)))
+                {
+                    Global.MachineWorker.SendCommand(IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.Cassette__Start, cst);
+                }
+            }
         }
     }
 }

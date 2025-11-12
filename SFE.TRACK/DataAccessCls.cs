@@ -2417,7 +2417,7 @@ namespace SFE.TRACK
             DataTable dt = new DataTable();
             if (Global.STAccessDB.GetMonitoringData(ref dt))
             {
-                for(int i = 0; i < dt.Rows.Count; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     MonitoringDataCls data = new MonitoringDataCls();
                     data.BlockNo = Convert.ToInt32(dt.Rows[i]["BlockNo"]);
@@ -2425,6 +2425,7 @@ namespace SFE.TRACK
                     data.ModuleName = Global.GetModule(data.BlockNo, data.ModuleNo).MachineTitle;
                     data.MeasDataName = dt.Rows[i]["MeasDataName"].ToString();
                     data.ControllerName = dt.Rows[i]["ControllerName"].ToString();
+                    data.MonitoringType = dt.Rows[i]["Type"].ToString();
                     data.IsUse = Convert.ToInt32(dt.Rows[i]["Use"]).Equals(1) ? true : false;
                     data.InitTemp = Convert.ToSingle(dt.Rows[i]["InitTemp"]);
                     data.OverTemp = Convert.ToSingle(dt.Rows[i]["OverTemp"]);
@@ -2432,7 +2433,27 @@ namespace SFE.TRACK
                     data.SettlingTimeOut = Convert.ToInt32(dt.Rows[i]["SettlingTimeOut"]);
                     data.RangeMax = Convert.ToSingle(dt.Rows[i]["RangeMax"]);
                     data.RangeMin = Convert.ToSingle(dt.Rows[i]["RangeMin"]);
-                    Global.STMonitoringList.Add(data);
+
+                    ModuleBaseCls moduleBase = Global.GetModule(data.BlockNo, data.ModuleNo);
+
+                    if (moduleBase.ModuleType == enModuleType.CHAMBER && data.MonitoringType == "PLATETEMP")
+                    {
+                        data.Zone = (1).ToString();
+                        Global.STMonitoringList.Add(data);
+
+                        if (moduleBase.MachineName == "HHP" || moduleBase.MachineName == "LHP")
+                        {
+                            for (int j = 1; j < 4; j++)
+                            {
+                                MonitoringDataCls cloneData = data.Clone();
+                                cloneData.Zone = (j + 1).ToString();
+                                Global.STMonitoringList.Add(cloneData);
+                            }
+                        }
+                    }
+                    else
+                        Global.STMonitoringList.Add(data);
+                        
                 }
             }
             else isDone = false;

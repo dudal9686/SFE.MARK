@@ -179,11 +179,11 @@ namespace SFE.TRACK
                     return false;
                 }
 
-                if (step.Arm2Speed <= 0)
-                {
-                    Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of arm2 speed is invalid, cannot save.", step.Index));
-                    return false;
-                }
+                //if (step.Arm2Speed <= 0)
+                //{
+                //    Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of arm2 speed is invalid, cannot save.", step.Index));
+                //    return false;
+                //}
             }
 
             return true;
@@ -451,11 +451,11 @@ namespace SFE.TRACK
                     return false;
                 }
 
-                if (step.Arm2Speed <= 0)
-                {
-                    Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of arm2 speed is invalid, cannot save.", step.Index));
-                    return false;
-                }
+                //if (step.Arm2Speed <= 0)
+                //{
+                //    Global.MessageOpen(enMessageType.OK, string.Format("Step[{0}] : In case of arm2 speed is invalid, cannot save.", step.Index));
+                //    return false;
+                //}
 
                 if (step.Loop != 0) nCnt++;
             }

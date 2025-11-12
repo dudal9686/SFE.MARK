@@ -250,5 +250,13 @@ namespace SFE.TRACK.Model
 
             WaferState = state;
         }
+
+        public void SetRobotWaferState()
+        {
+            if (IsWafer == Visibility.Visible)
+            {
+                WaferState = enWaferState.WAFER_PROCESS;
+            }
+        }
     }
 }

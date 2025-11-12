@@ -5,12 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SFE.TRACK.View.Auto"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         DataContext="{Binding DataMonitoringViewModel, Source={StaticResource Locator}}"
         x:Name="MonitoringDataView"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Title="DataMonitoring" Height="700" Width="890" IsVisibleChanged="MonitoringDataView_IsVisibleChanged">
+        Title="DataMonitoring" Height="700" Width="990" IsVisibleChanged="MonitoringDataView_IsVisibleChanged">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadRelayCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="8.8*"/>
@@ -46,6 +52,7 @@
                                     <DataGridTextColumn Header="Module" Foreground="Black" Width="150" Binding="{Binding ModuleName}" FontSize="18"/>
                                     <DataGridTextColumn Header="Measurement Data" Foreground="Black" Width="250" Binding="{Binding MeasDataName}" FontSize="18"/>
                                     <DataGridTextColumn Header="Controller Name" Foreground="Black" Width="250" Binding="{Binding ControllerName}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Zone" Foreground="Black" Width="100" Binding="{Binding Zone}" FontSize="18"/>
                                     <DataGridTextColumn Header="PV" Foreground="Black" Width="100" Binding="{Binding PV}" FontSize="18"/>
                                     <DataGridTextColumn Header="SV" Foreground="Black" Width="100" Binding="{Binding SV}" FontSize="18"/>
                                 </DataGrid.Columns>

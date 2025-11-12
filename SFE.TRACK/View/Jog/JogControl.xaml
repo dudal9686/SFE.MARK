@@ -30,7 +30,9 @@
                     </materialDesign:ColorZone>
                 </StackPanel>
             </Border>
-            
+            <Canvas>
+                <TextBlock Text="{Binding Axis.AxisID}" FontWeight="Bold"  VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18"></TextBlock>
+            </Canvas>
             
         </Grid>
         <Grid Grid.Row="1" Background="#8F98A5">

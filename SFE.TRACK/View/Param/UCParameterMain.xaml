@@ -82,7 +82,34 @@
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ClipboardListOutline" Foreground="Navy" Width="20" Height="40" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding TeachingName}" FontSize="22" Foreground="White" VerticalAlignment="Center" Margin="10 0 0 0"/>
-                        <Button Command="{Binding MoveTeachingRelayCommand}" ToolTip="Move" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="900 0 0 0">
+
+                        <Button Command="{Binding ZeroPositionMoveRelayCommand}" ToolTip="Zero Position" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="330 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Orbit" Foreground="MintCream" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding ServoOnRelayCommand}" ToolTip="Servo On" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="50 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Circle" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding ServoOffRelayCommand}" ToolTip="Servo Off" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="50 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="NullOff" Foreground="Green" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding AlarmResetRelayCommand}" ToolTip="Alarm Reset" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="50 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Alarm" Foreground="#FF8000" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding MoveStopRelayCommand}" ToolTip="Stop" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="50 0 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Stop" Foreground="Red" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding MoveTeachingRelayCommand}" ToolTip="Move" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="50 0 0 0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="SwapHorizontal" Foreground="Blue" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
@@ -92,7 +119,7 @@
                                 <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <TextBox Text="{Binding Axis.ActualPosition, Mode=TwoWay, UpdateSourceTrigger=Default, StringFormat={}{0:F3}}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold" IsReadOnly="True" Margin="50 0 0 0"></TextBox>
+                        <TextBox Text="{Binding Axis.ActualPosition, Mode=TwoWay, UpdateSourceTrigger=Default, StringFormat={}{0:F3}}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" FontWeight="Bold" IsReadOnly="True" Margin="30 0 0 0"></TextBox>
                     </StackPanel>
                 </materialDesign:ColorZone>
 

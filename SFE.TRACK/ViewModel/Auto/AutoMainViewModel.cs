@@ -12,6 +12,7 @@ using SFE.TRACK.Model;
 using System.Windows.Threading;
 using System.Diagnostics;
 using System.IO;
+using CoreCSRunSim;
 
 namespace SFE.TRACK.ViewModel.Auto
 {
@@ -45,32 +46,36 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void LotStartCommand()
         {
-            if (Global.STMachineStatus == enMachineStatus.RUN || Global.STMachineStatus == enMachineStatus.STOPING) return;
-            bool isStart = false;
-            View.Auto.LotStart lotStart = new View.Auto.LotStart();
-            lotStart.Owner = Application.Current.MainWindow;
-            lotStart.ShowDialog();
-
-            if (lotStart.DialogResult.HasValue && lotStart.DialogResult.Value)
+            if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == RunStatus.EnumRunningStatus.IsStop ||
+                Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == RunStatus.EnumRunningStatus.IsIdle)
             {
-                List<FoupCls> foupList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
+                //if (Global.STMachineStatus == enMachineStatus.RUN || Global.STMachineStatus == enMachineStatus.STOPING) return;
+                bool isStart = false;
+                View.Auto.LotStart lotStart = new View.Auto.LotStart();
+                lotStart.Owner = Application.Current.MainWindow;
+                lotStart.ShowDialog();
 
-                foreach(FoupCls foup in foupList)
+                if (lotStart.DialogResult.HasValue && lotStart.DialogResult.Value)
                 {
-                    if(foup.IsDetect && foup.IsScan && foup.RecipeName != string.Empty)
+                    List<FoupCls> foupList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.FOUP).Cast<FoupCls>().ToList();
+
+                    foreach (FoupCls foup in foupList)
                     {
-                        isStart = true;
-                        break;
+                        if (foup.IsDetect && foup.IsScan && foup.RecipeName != string.Empty)
+                        {
+                            isStart = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!isStart)
-                {
-                    Global.MessageOpen(enMessageType.OK, "Please select a recipe");
-                    return;
-                }
+                    if (!isStart)
+                    {
+                        Global.MessageOpen(enMessageType.OK, "Please select a recipe");
+                        return;
+                    }
 
-                SendJobData();
+                    SendJobData();
+                }
             }
         }
 
@@ -125,13 +130,13 @@ namespace SFE.TRACK.ViewModel.Auto
                 if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsIdle ||
                         Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsStop)
                 {
-                    Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                    Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "SFETrack:Do", true);
                     Global.MachineWorker.GetController("SFETrack").StartMachine();
                 }
                 
 
-                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
-                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "Do", true);
+                Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "SFETrack:Do", true);
+                Global.SendCommand(Global.CHAMBER_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "SFETrack:Do", true);
                 
                 stopWatch.Stop();
                 stopWatch.Start();
@@ -165,14 +170,18 @@ namespace SFE.TRACK.ViewModel.Auto
 
         private void StopCommand()
         {
-            if (Global.STMachineStatus == enMachineStatus.STOPING || Global.STMachineStatus == enMachineStatus.STOP) return;
-
-            View.Auto.StopControl stopView = new View.Auto.StopControl();
-            stopView.Owner = Application.Current.MainWindow;
-            stopView.ShowDialog();
-            if(stopView.DialogResult.HasValue && stopView.DialogResult.Value)
+            if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == RunStatus.EnumRunningStatus.IsRun)
             {
-                //Command
+
+                //if (Global.STMachineStatus == enMachineStatus.STOPING || Global.STMachineStatus == enMachineStatus.STOP) return;
+
+                View.Auto.StopControl stopView = new View.Auto.StopControl();
+                stopView.Owner = Application.Current.MainWindow;
+                stopView.ShowDialog();
+                if (stopView.DialogResult.HasValue && stopView.DialogResult.Value)
+                {
+                    //Command
+                }
             }
         }
         private void RecipeTransferCommand()
@@ -291,7 +300,7 @@ namespace SFE.TRACK.ViewModel.Auto
                         moduleBase.HomeSituation = enHomeState.HOME_ERROR;
                         moduleBase.ModuleState = enModuleState.NOTINITIAL;
                         //Global.MachineWorker.GetController("SFETrack").StartMachine(); // 두번 주면 안 되고.
-                        isDone = false;
+                        //isDone = false;
                     }
                 }
 

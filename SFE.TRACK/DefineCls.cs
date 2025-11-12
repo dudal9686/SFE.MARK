@@ -849,6 +849,7 @@ namespace SFE.TRACK
         int nArm2Speed = 0;
         bool isArm2MoveWait = false;
         string sPumpRecipe = string.Empty;
+        bool isSkipProcess = false;
 
         public int Index
         {
@@ -906,6 +907,12 @@ namespace SFE.TRACK
             }
         }
 
+        public bool IsSkipProcess
+        {
+            get { return isSkipProcess; }
+            set { isSkipProcess = value; RaisePropertyChanged("IsSkipProcess"); }
+        }
+
         public bool IsRRC
         {
             get { return isRRC; }
@@ -943,8 +950,9 @@ namespace SFE.TRACK
                     }
                 }
 
-                if(disp != string.Empty) 
+                if (disp != string.Empty)
                     DispDisplay = disp.Substring(0, disp.Length - 1);
+                else DispDisplay = "";
                 RaisePropertyChanged("DispNo"); }
         }
 
@@ -2302,6 +2310,8 @@ namespace SFE.TRACK
         string moduleName = string.Empty;
         string measDataName = string.Empty;
         string controllerName = string.Empty;
+        string monitoringType = string.Empty;
+        string zone = string.Empty;
         bool isUse = false;        
 
         public int BlockNo
@@ -2328,6 +2338,16 @@ namespace SFE.TRACK
         {
             get { return controllerName; }
             set { controllerName = value; RaisePropertyChanged("ControllerName"); }
+        }
+        public string MonitoringType
+        {
+            get { return monitoringType; }
+            set { monitoringType = value; RaisePropertyChanged("MonitoringType"); }
+        }
+        public string Zone
+        {
+            get { return zone; }
+            set { zone = value; RaisePropertyChanged("Zone"); }
         }
         public bool IsUse
         {
@@ -2373,6 +2393,17 @@ namespace SFE.TRACK
         {
             get { return rangeMin; }
             set { rangeMin = value; RaisePropertyChanged("RangeMin"); }
+        }
+        public MonitoringDataCls Clone()
+        {
+            return (MonitoringDataCls)this.MemberwiseClone();
+
+            //MonitoringDataCls clone = new MonitoringDataCls();
+            //clone.BlockNo = this.BlockNo;
+            //clone.ModuleNo = this.ModuleNo;
+            //clone.InitTemp = this.InitTemp;
+            //clone.OverTemp = this.OverTemp;
+            //return clone;
         }
     }
 

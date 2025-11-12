@@ -190,7 +190,7 @@
                             </Button>
                             <Button Command="{Binding TempSetRelayCommand}" ToolTip="Set Temperature" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="10 -5 0 0">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <materialDesign:PackIcon Kind="Message" Foreground="Coral" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <materialDesign:PackIcon Kind="TemperatureCheck" Foreground="Coral" Width="40" Height="35" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <TextBox Height="20" Width="50" FontSize="15" TextAlignment="Center" Text="{Binding HeatSetTemp}" Margin="10 -5 0 0"></TextBox>
@@ -282,13 +282,13 @@
                 </Button>
                 <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Shtter Open" Command="{Binding ShutterOpenRelayCommand}">
                     <StackPanel>
-                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArrowUp" Width="40" Height="40" Foreground="Black" Margin="0 5 0 0"/>
+                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArrowDown" Width="40" Height="40" Foreground="Black" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Shutter Open" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>
                 <Button Height="100" Width="200" Background="#8F98AC" Margin="5 0 0 0" ToolTip="Shutter Close" Command="{Binding ShutterCloseRelayCommand}">
                     <StackPanel>
-                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArrowDown" Width="40" Height="40" Foreground="Black" Margin="0 5 0 0"/>
+                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="ArrowUp" Width="40" Height="40" Foreground="Black" Margin="0 5 0 0"/>
                         <TextBlock HorizontalAlignment="Center" FontSize="18" Text="Shutter Close" FontWeight="Bold" Foreground="White" Margin="0 5 0 0"/>
                     </StackPanel>
                 </Button>                
