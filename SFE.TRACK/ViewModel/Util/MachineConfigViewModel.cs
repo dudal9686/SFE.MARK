@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Messaging;
 using SFE.TRACK.Model;
 using CoreCSMac;
 using MachineDefine;
+using CoreCSBase;
 
 namespace SFE.TRACK.ViewModel.Util
 {
@@ -44,43 +45,48 @@ namespace SFE.TRACK.ViewModel.Util
         private void SaveCommand()
         {
             List<ModuleBaseCls> arList = null;
+            //string[] arr = null;
+            Tokenizer t = null;
             arChamberInfo.Clear();
             if (Global.STDataAccess.SaveModuleData())
             {
                 arList = Global.STModuleList.FindAll(x => x.MachineName.IndexOf("COT") != -1).OrderBy(x => x.ModuleNo).ToList();
 
-                for(int i = 0; i < arList.Count; i++)
-                {
-                    ModuleBaseCls module = arList[i];
-                    arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}", i, module.BlockNo, module.ModuleNo, module.Use));
-                }
-
                 PrgCfgItem item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__CoaterInfo);
+
+                for (int i = 0; i < arList.Count; i++)
+                {
+                    t = new Tokenizer(item.GetString(i), ",");
+
+                    ModuleBaseCls module = arList[i];
+                    arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}, {4}", i, module.BlockNo, module.ModuleNo, module.Use, t.GetInt(4)));
+                }                
                 item.SetValueAll(arChamberInfo);
                 arChamberInfo.Clear();
 
                 arList = Global.STModuleList.FindAll(x => x.MachineName.IndexOf("DEV") != -1).OrderBy(x => x.ModuleNo).ToList();
+                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__DeveloperInfo);
 
                 for (int i = 0; i < arList.Count; i++)
                 {
+                    t = new Tokenizer(item.GetString(i), ",");
                     ModuleBaseCls module = arList[i];
-                    arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}", i, module.BlockNo, module.ModuleNo, module.Use));
+                    arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}, {4}", i, module.BlockNo, module.ModuleNo, module.Use, t.GetInt(4)));
                 }
-
-                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__DeveloperInfo);
+                
                 item.SetValueAll(arChamberInfo);
                 
                 arChamberInfo.Clear();
 
                 arList = Global.STModuleList.FindAll(x => x.ModuleType == enModuleType.CHAMBER).OrderBy(x => x.ModuleNo).ToList();
-
+                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__ChamberInfo);
                 for (int i = 0; i < arList.Count; i++)
                 {
+                    t = new Tokenizer(item.GetString(i), ",");
                     ModuleBaseCls module = arList[i];
-                    arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}, {4}", i, module.MachineName, module.BlockNo, module.ModuleNo, module.Use));
+                    arChamberInfo.Add(string.Format("{0}, {1}, {2}, {3}, {4}, {5}", i, module.MachineName, module.BlockNo, module.ModuleNo, module.Use, t.GetInt(5)));
                 }
-
-                item = Global.MachineWorker.Reader.GetConfigItem(EnumPrgCfg.Environment__ChamberInfo);
+                
                 item.SetValueAll(arChamberInfo);
                 arChamberInfo.Clear();
 

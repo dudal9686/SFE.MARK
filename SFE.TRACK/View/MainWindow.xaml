@@ -134,7 +134,20 @@
 
                             </Border>
 
-                            <Button Command="{Binding LoginRelayCommand}" materialDesign:ButtonAssist.CornerRadius="5" Background="White" Width="125" Height="45" Margin="70 5 5 5">
+                            <StackPanel Orientation="Vertical" Margin="10 0 0 0">
+                                <TextBox Width="100" Height="30" FontFamily="Bahnschrift SemiBold Condensed" FontSize="18" TextAlignment="Center" Foreground="Black" IsReadOnly="True" Text="{Binding RobotState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 0">
+                                    <TextBox.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding RobotStateRelayCommand}"/>     
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <TextBox Width="100" Height="30" FontFamily="Bahnschrift SemiBold Condensed" FontSize="18" TextAlignment="Center" Foreground="Black" IsReadOnly="True" Text="{Binding LotState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 5 0 0">
+                                    <TextBox.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding LotStateRelayCommand}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                            </StackPanel>
+
+                            <Button Command="{Binding LoginRelayCommand}" materialDesign:ButtonAssist.CornerRadius="5" Background="White" Width="125" Height="45" Margin="10 5 5 5">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                     <materialDesign:PackIcon Kind="{Binding Source={x:Static local:Global.STLoginInfo}, Path = LoginDisplay}" Foreground="Blue" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-5 0 0 0"/>
                                     <TextBlock FontWeight="Bold" Text="{Binding Source={x:Static local:Global.STLoginInfo}, Path = LoginDisplay}" Foreground="Black" FontSize="15" VerticalAlignment="Center" Margin="2 0 0 0"/>

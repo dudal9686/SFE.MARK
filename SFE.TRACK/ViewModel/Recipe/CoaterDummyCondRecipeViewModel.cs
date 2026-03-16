@@ -27,6 +27,7 @@ namespace SFE.TRACK.ViewModel.Recipe
         public RelayCommand DeleteDetailRelayCommand { get; set; }
         public RelayCommand<object> RecipeDoubleClickRelayCommand { get; set; }
         public RelayCommand<object> RecipeDetailDoubleClickRelayCommand { get; set; }
+        public RelayCommand PumpRecipeRelayCommand { get; set; }
 
         private int RecipeListSelectedIndex_ = -1;
         private int RecipeDetailSelectedIndex_ = -1;
@@ -41,6 +42,8 @@ namespace SFE.TRACK.ViewModel.Recipe
             SaveAsListRelayCommand = new RelayCommand(SaveAsListCommand);
             DeleteListRelayCommand = new RelayCommand(DeleteListCommand);
             ReNameListRelayCommand = new RelayCommand(ReNameListCommand);
+
+            PumpRecipeRelayCommand = new RelayCommand(PumpRecipeCommand);
 
             AddDetailRelayCommand = new RelayCommand(AddDetailCommand);
             SaveDetailRelayCommand = new RelayCommand(SaveDetailCommand);
@@ -70,6 +73,15 @@ namespace SFE.TRACK.ViewModel.Recipe
         #endregion
 
         #region Command
+        private void PumpRecipeCommand()
+        {
+            if (!Global.GetRecipeEditMode()) return;
+            if (Global.RecipeOpen(enRecipeMenu.PUMP, Recipe.PumpRecipe))
+            {
+                Recipe.PumpRecipe = Global.STRecipePopUp.SelectRecipeName;
+            }
+        }
+
         private void AddListCommand()
         {
             string newFileName = string.Empty;
@@ -236,6 +248,13 @@ namespace SFE.TRACK.ViewModel.Recipe
                 case 1:
                     if (Global.DispenseInfoOpen(enDispenseModule.COT, StepRecipe.DispenseNo, "DUMMYUSE", false))
                     {
+                        if(Convert.ToBoolean(Global.STDispensePopUp.SelectDispenseValue & (int)enCotDispense.BACK_RINSE1) ||
+                            Convert.ToBoolean(Global.STDispensePopUp.SelectDispenseValue & (int)enCotDispense.BACK_RINSE2))
+                        {
+                            Global.MessageOpen(enMessageType.OK, string.Format("Dummy dispensers cannot use {0}.", (enCotDispense)Global.STDispensePopUp.SelectDispenseValue));
+                            return;
+                        }
+
                         for (int i=0; i< Recipe.StepList.Count; i++)
                         {
                             if (Recipe.StepList[i].DispenseNo == Global.STDispensePopUp.SelectDispenseValue)
@@ -264,7 +283,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     break;
                 case 6:
                     StepRecipe.Timing++;
-                    if (StepRecipe.Timing > 3) StepRecipe.Timing = 0;
+                    if (StepRecipe.Timing > 2) StepRecipe.Timing = 0;
                     break;
                 case 7:
                     if(Global.RecipeOpen(enRecipeMenu.COT_DUMMY_SEQ, StepRecipe.Recipe)) StepRecipe.Recipe = Global.STRecipePopUp.SelectRecipeName;

@@ -271,7 +271,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     break;
                 case 6:
                     StepRecipe.Timing++;
-                    if (StepRecipe.Timing > 3) StepRecipe.Timing = 0;
+                    if (StepRecipe.Timing > 2) StepRecipe.Timing = 0;
                     break;
                 case 7:
                     if (Global.RecipeOpen(enRecipeMenu.ADH_DUMMY_COND, StepRecipe.Recipe)) StepRecipe.Recipe = Global.STRecipePopUp.SelectRecipeName;

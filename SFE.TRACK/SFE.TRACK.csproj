@@ -259,6 +259,8 @@
     <Compile Include="ViewModel\Jog\JogControlViewModel.cs" />
     <Compile Include="ViewModel\Language\LanguageViewModel.cs" />
     <Compile Include="ViewModel\Log\LogMainViewModel.cs" />
+    <Compile Include="ViewModel\MachineState\LotStateViewModel.cs" />
+    <Compile Include="ViewModel\MachineState\RobotStateViewModel.cs" />
     <Compile Include="ViewModel\Maint\EditMonitoringDataViewModel.cs" />
     <Compile Include="ViewModel\Maint\MaintChamberViewModel.cs" />
     <Compile Include="ViewModel\Maint\MaintenanceModeViewModel.cs" />
@@ -363,6 +365,12 @@
     </Compile>
     <Compile Include="View\Log\UCLogMain.xaml.cs">
       <DependentUpon>UCLogMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MachineState\LotStateView.xaml.cs">
+      <DependentUpon>LotStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MachineState\RobotStateView.xaml.cs">
+      <DependentUpon>RobotStateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Maint\EditMonitoringData.xaml.cs">
       <DependentUpon>EditMonitoringData.xaml</DependentUpon>
@@ -609,6 +617,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Log\UCLogMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MachineState\LotStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MachineState\RobotStateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -895,6 +911,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

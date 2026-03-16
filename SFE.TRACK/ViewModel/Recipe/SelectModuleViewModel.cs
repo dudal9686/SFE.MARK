@@ -346,10 +346,41 @@ namespace SFE.TRACK.ViewModel.Recipe
             }
             else
             {
+                bool isFind = false;
+
                 if (SelectedIndex != -1)
                 {
                     CheckModuleCls checkModule = ModuleList[SelectedIndex] as CheckModuleCls;
-                    if(checkModule.IsCheck) checkModule.IsCheck = false;
+
+                    #region Recipe에 중복 되는 모듈 체크
+                    ProcessWaferDataCls processRecipe = CommonServiceLocator.ServiceLocator.Current.GetInstance<WaferFlowRecipeViewModel>().Waferdata;
+
+                    if (processRecipe != null)
+                    {
+                        foreach (WaferStepCls step in processRecipe.WaferStepList)
+                        {
+                            if (waferStep.Index == step.Index) continue;
+                            for (int i = 0; i < step.ModuleCount; i++)
+                            {
+                                if(checkModule.ModuleNo == step.ModuleNoList[i])
+                                {
+                                    isFind = true;
+                                    break;
+                                }
+                            }
+
+                            if (isFind) break;
+                        }
+                    }
+
+                    if (isFind && !checkModule.IsCheck)
+                    {
+                        Global.MessageOpen(enMessageType.OK, "The same module exists in the recipe.");
+                        return;
+                    }
+                    #endregion 
+
+                    if (checkModule.IsCheck) checkModule.IsCheck = false;
                     else checkModule.IsCheck = true;
                 }
             }

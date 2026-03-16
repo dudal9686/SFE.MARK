@@ -47,8 +47,8 @@ namespace SFE.TRACK.ViewModel.Motion
             string fileName = string.Empty;
             string systemFileName = "SYSTEM_RECIPE";
             if (Module.MachineName.ToUpper().IndexOf("CPL") != -1) fileName = "CPL_CHANGE";
-            else if (Module.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_TEST";
-            else if (Module.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_RECIPE";
+            else if (Module.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_RECIPE";
+            else if (Module.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_test";
             else if (Module.MachineName.ToUpper().IndexOf("HHP") != -1) fileName = "HHP_RECIPE";
 
             string command = string.Format("CHAMBER:{0}:{1}:PutReady:{2}:{3}", Module.BlockNo, Module.ModuleNo, fileName, systemFileName);
@@ -76,8 +76,8 @@ namespace SFE.TRACK.ViewModel.Motion
             string fileName = string.Empty;
             string systemFileName = "SYSTEM_RECIPE";
             if (Module.MachineName.ToUpper().IndexOf("CPL") != -1) fileName = "CPL_CHANGE";
-            else if (Module.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_TEST";
-            else if (Module.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_RECIPE";
+            else if (Module.MachineName.ToUpper().IndexOf("COT") != -1) fileName = "COT_RECIPE";
+            else if (Module.MachineName.ToUpper().IndexOf("DEV") != -1) fileName = "DEV_test";
             else if (Module.MachineName.ToUpper().IndexOf("HHP") != -1) fileName = "HHP_RECIPE";
 
             string command = string.Format("CHAMBER:{0}:{1}:Processing:{2}:{3}", Module.BlockNo, Module.ModuleNo, fileName, systemFileName);
@@ -115,6 +115,9 @@ namespace SFE.TRACK.ViewModel.Motion
                 Global.MessageOpen(enMessageType.OK, "Please Select Module!");
                 return;
             }
+
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to do a pick motion? ({0}-{1})", Module.BlockNo, Module.ModuleNo))) return;
+
             string msg = string.Empty;
             int index = 0;
             EnumCustomProcess customType = EnumCustomProcess.None;
@@ -156,6 +159,8 @@ namespace SFE.TRACK.ViewModel.Motion
                 Global.MessageOpen(enMessageType.OK, "Please Select Module!");
                 return;
             }
+
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to do a Place motion? ({0}-{1})", Module.BlockNo, Module.ModuleNo))) return;
 
             string msg = string.Empty;
             int index = 0;

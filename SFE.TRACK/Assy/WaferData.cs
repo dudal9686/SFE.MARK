@@ -21,7 +21,7 @@ namespace DefaultBase
     {
         public string _Name = "";
         public EnumRecipeDetailType _RecipeType = EnumRecipeDetailType.Not;
-        public WorkStep _WorkStep = WorkStep.IsNot;
+        public WorkStep _WorkStep = WorkStep.Idle;
         public int _BlockNo;
         public List<int> _moudleNoList = new List<int>();
 
@@ -29,7 +29,7 @@ namespace DefaultBase
         {
             _Name = "";
             _RecipeType = EnumRecipeDetailType.Not;
-            _WorkStep = WorkStep.IsNot;
+            _WorkStep = WorkStep.Idle;
             _BlockNo = -1;
         }
         public void SetInfo(string recipeName, EnumRecipeDetailType recipeType, WorkStep step, int blockNo, List<int> moduleNoList)
@@ -99,7 +99,7 @@ namespace DefaultBase
             for (int i = 0; i < _RecipeInfos.Length; i++)
             {
                 info = _RecipeInfos[i];
-                if (info._Name != "" && info._WorkStep <= WorkStep.IsDoing) return info;
+                if (info._Name != "" && info._WorkStep <= WorkStep.Doing) return info;
             }
 
             return null;

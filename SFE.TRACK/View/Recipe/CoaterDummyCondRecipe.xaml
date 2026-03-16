@@ -120,7 +120,7 @@
 
                 <StackPanel >
 
-                    <Border BorderBrush="LightGray" BorderThickness="1" Height="810">
+                    <Border BorderBrush="LightGray" BorderThickness="1" Height="700">
                         <StackPanel Orientation="Vertical" Margin="0 5 0 0">
                             <!--<ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="282" VerticalAlignment="Top" >-->
                             <DataGrid  x:Name="DataGridRecipeDetail" SelectedIndex="{Binding RecipeDetailSelectedIndex}" GridLinesVisibility="All" TextBlock.TextAlignment="Center" FontFamily = "Consolar" RowHeight="40" SelectionMode="Single" IsReadOnly="True" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding Recipe.StepList}" AutoGenerateColumns="False" SelectedItem="{Binding StepRecipe, Mode=TwoWay, UpdateSourceTrigger=Default}">
@@ -146,16 +146,16 @@
                                 </DataGrid.RowStyle>-->
 
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="No"  Foreground="Black" Width="50" Binding="{Binding Index}" FontSize="15"/>
+                                    <DataGridTextColumn Header="No"  Foreground="Black" Width="80" Binding="{Binding Index}" FontSize="15"/>
                                     <DataGridTextColumn Header="Name" Foreground="Black" Width="130" Binding="{Binding DipsenseDisplay}" FontSize="13"/>
-                                    <DataGridTextColumn Header="Wafer&#x0a;Count" Foreground="Black" Width="70" Binding="{Binding WaferCnt}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Interval&#x0a;(sec)" Foreground="Black" Width="70" Binding="{Binding Interval}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Lot Spec" Foreground="Black" Width="100" Binding="{Binding LotspecDisplay}" FontSize="14"/>
-                                    <DataGridTextColumn Header="Cond" Foreground="Black" Width="65" Binding="{Binding CondDisplay}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Timing" Foreground="Black" Width="85" Binding="{Binding TimingDisplay}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Recipe&#x0a;Name" Foreground="Black" Width="120" Binding="{Binding Recipe}" FontSize="13"/>
+                                    <DataGridTextColumn Header="Wafer Count" Foreground="Black" Width="100" Binding="{Binding WaferCnt}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Interval&#x0a;(sec)" Foreground="Black" Width="100" Binding="{Binding Interval}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Lot Spec" Foreground="Black" Width="150" Binding="{Binding LotspecDisplay}" FontSize="14"/>
+                                    <DataGridTextColumn Header="Cond" Foreground="Black" Width="100" Binding="{Binding CondDisplay}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Timing" Foreground="Black" Width="100" Binding="{Binding TimingDisplay}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Recipe&#x0a;Name" Foreground="Black" Width="120" Binding="{Binding Recipe}" FontSize="13" Visibility="Hidden"/>
 
-                                    <DataGridTemplateColumn Header="Recipe&#x0a;Use" Width="80">
+                                    <DataGridTemplateColumn Header="Recipe&#x0a;Use" Width="80"  Visibility="Hidden">
                                         <DataGridTemplateColumn.CellStyle>
                                             <Style TargetType="DataGridCell">
                                                 <Setter Property="Background" Value="{Binding Path=IsRecipeUse, Converter={StaticResource UseValueConverter}}"/>
@@ -171,10 +171,10 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    
-                                    <DataGridTextColumn Header="Recipe&#x0a;Cnt" Foreground="Black" Width="80" Binding="{Binding RecipeCnt}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Recipe&#x0a;Interval" Foreground="Black" Width="80" Binding="{Binding RecipeInterval}" FontSize="15"/>
-                                    <DataGridTextColumn Header="Recipe&#x0a;Time" Foreground="Black" Width="80" Binding="{Binding RecipeTime}" FontSize="15"/>
+
+                                    <DataGridTextColumn Header="Disp&#x0a;Cnt" Foreground="Black" Width="80" Binding="{Binding RecipeCnt}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Disp&#x0a;Interval" Foreground="Black" Width="80" Binding="{Binding RecipeInterval}" FontSize="15"/>
+                                    <DataGridTextColumn Header="Disp&#x0a;Time" Foreground="Black" Width="80" Binding="{Binding RecipeTime}" FontSize="15"/>
                                 </DataGrid.Columns>
 
                                 <DataGrid.InputBindings>
@@ -185,6 +185,19 @@
 
                         </StackPanel>
                     </Border>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Margin="0 750 0 0" Height="200">
+
+                    <Button Width="200" Height="70" Background="LightGray" Command="{Binding PumpRecipeRelayCommand}" Margin="10 10 0 80">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="PushNotificationOutline" Foreground="DarkSeaGreen" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="Pump Recipe" FontSize="20" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBox BorderThickness="1" FontSize="20"  Width="480" Height="70" IsReadOnly="True" TextAlignment="Center" Padding="15" BorderBrush="LightGray" Text="{Binding Recipe.PumpRecipe , Mode=TwoWay, UpdateSourceTrigger=Default}"  Margin="10 -70 0 0"/>
+
                 </StackPanel>
             </StackPanel>
         </Grid>    

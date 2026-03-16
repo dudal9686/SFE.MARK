@@ -10,10 +10,9 @@
              d:DesignHeight="880" d:DesignWidth="1574">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2.5*"/>
-            <ColumnDefinition Width="2.5*"/>
-            <ColumnDefinition Width="2.5*"/>
-            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="3.3*"/>
+            <ColumnDefinition Width="3.3*"/>
+            <ColumnDefinition Width="3.3*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <GroupBox  materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Margin="5">
@@ -26,7 +25,7 @@
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
                 <StackPanel>
-                    <Button Command="{Binding SaveSystemCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
+                    <Button Command="{Binding SaveSystemCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="350 -60 0 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -42,8 +41,8 @@
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Description" Width="250" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Value" Width="120" Binding="{Binding Value}"/>
+                            <DataGridTextColumn Header="Description" Width="350" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Value" Width="150" Binding="{Binding Value}"/>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding SystemConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=SystemConfigDataGrid}"/>
@@ -63,7 +62,7 @@
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
                 <StackPanel>
-                    <Button Command="{Binding SaveCotCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
+                    <Button Command="{Binding SaveCotCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="350 -60 0 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -80,8 +79,8 @@
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Description" Width="250" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Value" Width="108" Binding="{Binding Value}"/>
+                            <DataGridTextColumn Header="Description" Width="350" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Value" Width="150" Binding="{Binding Value}"/>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding CotConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=CotConfigDataGrid}"/>
@@ -96,12 +95,12 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="InfoCircle" Height="40" Width="20" VerticalAlignment="Center" />
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Dev-L Config" />
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="Dev Config" />
                         </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
                 <StackPanel>
-                    <Button Command="{Binding SaveDevLCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="200 -60 0 0">
+                    <Button Command="{Binding SaveDevLCfgRelayCommand}" ToolTip="Save" Background="Transparent" BorderBrush="Transparent" Width="60" Height="40" Margin="350 -60 0 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="ContentSave" Foreground="GreenYellow" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -118,8 +117,8 @@
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Description" Width="250" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Value" Width="120" Binding="{Binding Value}"/>
+                            <DataGridTextColumn Header="Description" Width="350" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Value" Width="150" Binding="{Binding Value}"/>
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DevLConfigGridDoubleClickRelayCommand}" CommandParameter="{Binding ElementName=DevLConfigDataGrid}"/>
@@ -128,7 +127,7 @@
                 </StackPanel>
             </GroupBox>
         </Grid>
-        <Grid Grid.Column="3">
+        <!--<Grid Grid.Column="3">
             <GroupBox  materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="#151160" materialDesign:ColorZoneAssist.Foreground="White" Margin="5">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
@@ -165,6 +164,6 @@
                     </DataGrid>
                 </StackPanel>
             </GroupBox>
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

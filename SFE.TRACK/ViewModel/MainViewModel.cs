@@ -36,6 +36,8 @@ namespace SFE.TRACK.ViewModel
         public RelayCommand ShutDownRelayCommand { get; set; }
         public RelayCommand LoginRelayCommand { get; set; }
         public RelayCommand LanguageRelayCommand { get; set; }
+        public RelayCommand RobotStateRelayCommand { get; set; }
+        public RelayCommand LotStateRelayCommand { get; set; }
         ObservableCollection<bool> isEnabledMenu { get; set; }
         ObservableCollection<bool> isSelectedMenu { get; set; }
         List<LMBase> LmList = null;
@@ -49,6 +51,9 @@ namespace SFE.TRACK.ViewModel
         System.Windows.Media.SolidColorBrush TitleColor_ = (SolidColorBrush)new BrushConverter().ConvertFrom("#00004f");
         System.Windows.Media.SolidColorBrush _robotConnectColor = Brushes.Red;
         System.Windows.Media.SolidColorBrush _chamberConnectColor = Brushes.Red;
+
+        string _robotState = string.Empty;
+        string _lotState = string.Empty;
 
         MachineReaderWorker _worker;
         DispatcherTimer timer = new DispatcherTimer();
@@ -64,6 +69,8 @@ namespace SFE.TRACK.ViewModel
             ShutDownRelayCommand = new RelayCommand(ShutDownCommand);
             LoginRelayCommand = new RelayCommand(LoginCommand);
             LanguageRelayCommand = new RelayCommand(LanguageCommand);
+            RobotStateRelayCommand = new RelayCommand(RobotStateCommand);
+            LotStateRelayCommand = new RelayCommand(LotStateCommand);
             isEnabledMenu = new ObservableCollection<bool>();
             isSelectedMenu = new ObservableCollection<bool>();
             for (int i = 0; i < 10; i++) { IsEnabledMenu.Add(true); IsSelectedMenu.Add(true); }
@@ -86,8 +93,8 @@ namespace SFE.TRACK.ViewModel
             int type = 1;
             IMachineConnectInfo connectInfo;
             if(type == 0) connectInfo  = new MServerLiteInfo(@"C:\MachineSet\SFETrack.mm");
-            else  connectInfo = new MServerMyInfo("SFETrack", "worker", "worker");
-            if (_worker.StartWorker("HMI", connectInfo, new IPCNetInfo(Global.MMI_ID), true) == false)
+            else  connectInfo = new MServerMyInfo("SFETrack", "worker", "worker", Global.STServer);
+            if (_worker.StartWorker("HMI", connectInfo, new IPCNetInfo(Global.MMI_ID, "CHAMBER", Global.STServer), true) == false)
             {
                 MessageBox.Show("Starting worker failed");
                 return;
@@ -165,17 +172,24 @@ namespace SFE.TRACK.ViewModel
             set { _chamberConnectColor = value; RaisePropertyChanged("ChamberConnectColor"); }
             get { return _chamberConnectColor; }
         }
+        public string RobotState
+        {
+            get { return _robotState; }
+            set { _robotState = value; RaisePropertyChanged("RobotState"); }
+        }
+        public string LotState
+        {
+            get { return _lotState; }
+            set { _lotState = value; RaisePropertyChanged("LotState"); }
+        }
         private void Controller_EvtAlarmCleared(object sender, LibEvtArgs e)
         {
             ControllerBase controller = (ControllerBase)sender;
-            if (e.ParamCount == 0) // clear all 
-            {
+            AlarmRecord record = (AlarmRecord)e.GetParam(0);
+            //string strRet = (string)e.GetParam(1);
 
-            }
-            else
+            if (record != null)
             {
-                AlarmRecord record = (AlarmRecord)e.GetParam(0);
-                //string strRet = (string)e.GetParam(1);
                 AlarmLogCls alram = Global.STAlarmList.ToList().Find(x => x.Code == record.AlarmCode && x.Owner == record.Owner);
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -185,21 +199,18 @@ namespace SFE.TRACK.ViewModel
                         ClearAlarm();
                 });
             }
+
         }
 
         private void Controller_EvtAlarmClearing(object sender, LibEvtArgs e)
         {
             ControllerBase controller = (ControllerBase)sender;
-            if (e.ParamCount == 0) // clear all 
-            {
 
-            }
-            else
+            AlarmRecord record = (AlarmRecord)e.GetParam(0);
+            //string strRet = (string)e.GetParam(1);
+            if (record != null)
             {
-                AlarmRecord record = (AlarmRecord)e.GetParam(0);
-                //string strRet = (string)e.GetParam(1);
-                AlarmLogCls alram = Global.STAlarmList.ToList().Find(x=>x.Code == record.AlarmCode && x.Owner == record.Owner);
-
+                AlarmLogCls alram = Global.STAlarmList.ToList().Find(x => x.Code == record.AlarmCode && x.Owner == record.Owner);
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     Global.STAlarmList.Remove(alram);
@@ -207,11 +218,23 @@ namespace SFE.TRACK.ViewModel
                         ClearAlarm();
                 });
             }
+            else
+            {
+
+            }
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (Global.STAlarmList.Count == 0)
+                    ClearAlarm();
+            });
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if(Global.STMachineStatus == enMachineStatus.RUN)
+            if (Global.MachineWorker == null) return;
+
+            //if(Global.STMachineStatus == enMachineStatus.RUN)
+            if (Global.MachineWorker.GetController("SFETrack").MyRunStatus == RunStatus.EnumRunningStatus.Run)
             {
                 //IsEnabledMenu[(int)enMainMenu.MAINT] = false;
                 //IsEnabledMenu[(int)enMainMenu.MOTOR] = false;
@@ -219,7 +242,8 @@ namespace SFE.TRACK.ViewModel
                 //IsEnabledMenu[(int)enMainMenu.MOTIONMOVING] = false;
                 //IsEnabledMenu[(int)enMainMenu.MAINT] = false;
             }
-            else if(Global.STMachineStatus == enMachineStatus.STOP)
+            //else if(Global.STMachineStatus == enMachineStatus.STOP)
+            else if(Global.MachineWorker.GetController("SFETrack").MyRunStatus == RunStatus.EnumRunningStatus.Stop)
             {
                 IsEnabledMenu[(int)enMainMenu.MAINT] = true;
                 IsEnabledMenu[(int)enMainMenu.MOTOR] = true;
@@ -228,7 +252,14 @@ namespace SFE.TRACK.ViewModel
                 IsEnabledMenu[(int)enMainMenu.MAINT] = true;
             }
 
-            if (Global.MachineWorker == null) return;
+            RunStatus.EnumRunningStatus runStatus = Global.MachineWorker.GetController("SFETrack").MyRunStatus;
+            EnumLotStatus lotStatus = Global.MachineWorker.GetController("SFETrack").GetLot().GetLotStatus("SFETrack", out var re);
+
+            RobotState = string.Format("Status : {0}", runStatus.ToString());
+            LotState = string.Format("Lot : {0}", lotStatus.ToString());
+
+            if (lotStatus == EnumLotStatus.Idle && (runStatus == RunStatus.EnumRunningStatus.Stop || runStatus == RunStatus.EnumRunningStatus.Idle)) 
+                Global.MachineWorker.GetController("SFETrack").LotCreate();
 
             try
             {
@@ -321,15 +352,15 @@ namespace SFE.TRACK.ViewModel
         private void ReadChamberUseMaintMode()
         {
             PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__ChamberInfo);
-            string[] arr = null;
+            Tokenizer t = null;
             ModuleBaseCls moduleBase = null;
             for(int i = 0; i < prgItem.ValueCount; i++)
             {
-                arr = prgItem.GetString(i).Split(',');
-                moduleBase = Global.GetModule(Convert.ToInt32(arr[2]), Convert.ToInt32(arr[3]));
+                t = new Tokenizer(prgItem.GetString(i), ",");
+                moduleBase = Global.GetModule(t.GetInt(2), t.GetInt(3));
                 if (moduleBase == null) continue;
 
-                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(arr[5]);
+                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(t.GetInt(5));
                 
             }
         }
@@ -337,15 +368,15 @@ namespace SFE.TRACK.ViewModel
         private void ReadDevelopUseMaintMode()
         {
             PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__DeveloperInfo);
-            string[] arr = null;
+            Tokenizer t = null;
             ModuleBaseCls moduleBase = null;
             for (int i = 0; i < prgItem.ValueCount; i++)
             {
-                arr = prgItem.GetString(i).Split(',');
-                moduleBase = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+                t = new Tokenizer(prgItem.GetString(i), ",");
+                moduleBase = Global.GetModule(t.GetInt(1), t.GetInt(2));
                 if (moduleBase == null) continue;
 
-                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(arr[4]);
+                moduleBase.MaintMode = (enMaintenanceMode)t.GetInt(4);
 
             }
         }
@@ -353,15 +384,15 @@ namespace SFE.TRACK.ViewModel
         private void ReadCoaterUseMaintMode()
         {
             PrgCfgItem prgItem = _worker.Reader.GetConfigItem(EnumPrgCfg.Environment__CoaterInfo);
-            string[] arr = null;
+            Tokenizer t = null;
             ModuleBaseCls moduleBase = null;
             for (int i = 0; i < prgItem.ValueCount; i++)
             {
-                arr = prgItem.GetString(i).Split(',');
-                moduleBase = Global.GetModule(Convert.ToInt32(arr[1]), Convert.ToInt32(arr[2]));
+                t = new Tokenizer(prgItem.GetString(i), ",");
+                moduleBase = Global.GetModule(t.GetInt(1), t.GetInt(2));
                 if (moduleBase == null) continue;
 
-                moduleBase.MaintMode = (enMaintenanceMode)Convert.ToInt32(arr[4]);
+                moduleBase.MaintMode = (enMaintenanceMode)t.GetInt(4);
 
             }
         }
@@ -420,7 +451,7 @@ namespace SFE.TRACK.ViewModel
                 axis.Company = motorInfo.ThirdParty;
                 axis.AxisNo = Convert.ToInt32((enAxisType)Enum.Parse(typeof(enAxisType), motor.MyNameInfo.Name));
 
-                string parentType = motor.GetParentIDentity().Substring(motor.GetParentIDentity().IndexOf(':') + 1, motor.GetParentIDentity().Length - motor.GetParentIDentity().IndexOf(':') - 1);
+                string parentType = motor.GetParent().FullName.Substring(motor.GetParent().FullName.IndexOf(':') + 1, motor.GetParent().FullName.Length - motor.GetParent().FullName.IndexOf(':') - 1);
                 axis.Parent = parentType;
                 if (parentType == "CRA" || parentType == "PRA")
                 {
@@ -591,8 +622,8 @@ namespace SFE.TRACK.ViewModel
                 data.Company = ioInfo.ThirdParty;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = false;
-                parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
-
+                parentType = io.GetParent().FullName.Substring(io.GetParent().FullName.IndexOf(':') + 1, io.GetParent().FullName.Length - io.GetParent().FullName.IndexOf(':') - 1);
+                
                 if (parentType == "CRA" || parentType == "PRA")
                 {
                     if (io.MyNameInfo.Alias == "CRA") data.BlockNo = 1;
@@ -639,7 +670,7 @@ namespace SFE.TRACK.ViewModel
                 data.Company = ioInfo.ThirdParty;
                 data.Alias = io.MyNameInfo.Alias;
                 data.Enable = true;
-                parentType = io.GetParentIDentity().Substring(io.GetParentIDentity().IndexOf(':') + 1, io.GetParentIDentity().Length - io.GetParentIDentity().IndexOf(':') - 1);
+                parentType = io.GetParent().FullName.Substring(io.GetParent().FullName.IndexOf(':') + 1, io.GetParent().FullName.Length - io.GetParent().FullName.IndexOf(':') - 1);
 
                 if (parentType == "CRA" || parentType == "PRA" || parentType == "TowerLamp")
                 {
@@ -792,6 +823,18 @@ namespace SFE.TRACK.ViewModel
             SFE.TRACK.Language.LanguageView lang = new SFE.TRACK.Language.LanguageView();
             lang.Owner = Application.Current.MainWindow;
             lang.ShowDialog();
+        }
+
+        private void RobotStateCommand()
+        {
+            View.MachineState.RobotStateView robotStateView = new View.MachineState.RobotStateView();
+            robotStateView.ShowDialog();
+        }
+
+        private void LotStateCommand()
+        {
+            View.MachineState.LotStateView lotStateView = new View.MachineState.LotStateView();
+            lotStateView.ShowDialog();
         }
 
         private void ShutDownCommand()
@@ -1051,12 +1094,21 @@ namespace SFE.TRACK.ViewModel
                         //ioData.State = (value & 0x1) == 0x1;
                     }
                 }
-                else if (eValue == EnumCommand_Status.MCS__InitStep)
+                else if (eValue == EnumCommand_Status.MCS__ActorWorkStep)
                 {
+                    List<string> list = Tokenizer.Split(message, "\r\n", false, false);
+                    string ctrlName = list[0];
+                    //if (ctrlName != GetName()) return;
+                    if (ControllerBase.AnalyseDataOwner(list[1], out var typeName, out var name, out var specify) == false) return;
+                    list.RemoveRange(0, 2);
+                    ActorStepType stepType = (ActorStepType)Enum.Parse(typeof(ActorStepType), list[0]);
+                    WorkStep workstep = (WorkStep)Enum.Parse(typeof(WorkStep), list[1]);
+                    if (stepType != ActorStepType.Initial) return;
+
                     arr = message.Split(':');
-                    string controller = arr[1];
-                    string moduleName = arr[2];
-                    string step = arr[3];
+                    string controller = ctrlName;
+                    string moduleName = name;
+                    string step = workstep.ToString();
                     ModuleBaseCls module = null;
                     enHomeState eState = enHomeState.HOME_NONE;
                     if (moduleName == "PRB")
@@ -1181,14 +1233,16 @@ namespace SFE.TRACK.ViewModel
                 {
                     List<string> list, tempList;
                     list = Tokenizer.Split(message, false, false, "\r\n");
-                    if (AnalyseOwner(list[0], out var typeName, out var name, out var unitID, out var title) == false) return;
+                    if (AnalyseOwner(list[0], out var controllerName, out var typeName, out var name, out var title) == false) return;
                     if (AnalyseSerialDataType(list[1], out var isAll, out var ownID, out var itemID) == false) return;
+
                     if (title.IndexOf("WaferData") == 0)
                     {
                         int exist = 1;
                         int recipeSet = 1;
                         WaferStorageUseStep useStep = WaferStorageUseStep.IsRun;
-                        WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot;
+                        WorkStep recipeStep = WorkStep.Idle;
+                        WorkStep scanStep = WorkStep.Idle;
                         tempList = list.ToList();
                         tempList.RemoveRange(0, 2);
                         if (isAll)
@@ -1196,12 +1250,16 @@ namespace SFE.TRACK.ViewModel
                             string final = tempList[tempList.Count - 1];
                             Tokenizer ttt = new Tokenizer(final, ",");
                             exist = ttt.GetInt(0);// == 0) exist = false;
-                            recipeSet = ttt.GetInt(1);// == 0) recipeSet = false;
-                            useStep = (WaferStorageUseStep)ttt.GetInt(2);
-                            workStep = (WaferStorageWorkStep)ttt.GetInt(3);
+                            useStep = (WaferStorageUseStep)ttt.GetInt(1);
+                            scanStep = (WorkStep)ttt.GetInt(2);
+                            recipeStep = (WorkStep)ttt.GetInt(3);
+                            //recipeSet = ttt.GetInt(1);// == 0) recipeSet = false;
+                            //useStep = (WorkStep)ttt.GetInt(2);
+                            //workStep = (WaferStorageWorkStep)ttt.GetInt(3);
+                            //recipeStep
                             tempList.RemoveAt(tempList.Count - 1);
                         }
-                        TreatSerialWaferData(typeName, name, unitID, title, ownID, tempList, exist, recipeSet, useStep, workStep);
+                        TreatSerialWaferData(typeName, name, title, ownID, tempList, exist, useStep, scanStep, recipeStep);
                     }
                 }
                 else if (eValue == EnumCommand_Status.UnitStatus__MiniBoardState)
@@ -1278,6 +1336,7 @@ namespace SFE.TRACK.ViewModel
             e.SetResult(CommandResult.Success, "done");
         }
 
+       
         private void _worker_EvtCommandResultComes(object sender, EvtCommandResult e)
         {
             string[] groupArr = null;
@@ -1345,6 +1404,18 @@ namespace SFE.TRACK.ViewModel
             {
                 SetSystemConfig(item);
             }
+            else if (item.IsSameConfig(EnumPrgCfg.Environment__Operation))
+            {
+                SetSystemConfig(item);
+            }
+            else if (item.IsSameConfig(EnumPrgCfg.Environment__ChamberLiquidOperation))
+            {
+                SetSystemConfig(item);
+            }
+            else if (item.IsSameConfig(EnumPrgCfg.Environment__ChamberTempOperation))
+            {
+                SetSystemConfig(item);
+            }
             else
             {
                 if (item.IsMotorTeachingConfig(out var motorName, out var teachName))
@@ -1364,15 +1435,16 @@ namespace SFE.TRACK.ViewModel
             {
                 systemCfg = new SystemCfgCls();
                 //SYSTEM
-                if(item.Name == "VelocityRatio")
-                {
-                    systemCfg.BlockNo = 0;
-                    systemCfg.ModuleNo = 0;
-                    systemCfg.Title = "Run Speed Rate";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if(item.Name == "TemphumidityControllerComNo")
+                //if(item.Name == "VelocityRatio")
+                //{
+                //    systemCfg.BlockNo = 0;
+                //    systemCfg.ModuleNo = 0;
+                //    systemCfg.Title = "Run Speed Rate";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else 
+                if (item.Name == "TemphumidityControllerComNo")
                 {
                     systemCfg.BlockNo = 0;
                     systemCfg.ModuleNo = 0;
@@ -1388,6 +1460,38 @@ namespace SFE.TRACK.ViewModel
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
+                else if (item.Name == "Operation")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Dry Run";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.GetInt(0).ToString();
+                }
+                else if (item.Name == "ChamberTempOperation")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Use Chamber Temp";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.GetInt(0).ToString();
+                }
+                else if (item.Name == "ChamberLiquidOperation")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Use Chamber Liquid";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.GetInt(0).ToString();
+                }
+                else if (item.Name == "UseDummyDispense")
+                {
+                    systemCfg.BlockNo = 0;
+                    systemCfg.ModuleNo = 0;
+                    systemCfg.Title = "Use Dummy Dispense";
+                    systemCfg.Name = item.Name;
+                    systemCfg.Value = item.Contents;
+                }
                 //else if (item.Name == "DryRunMode")
                 //{
                 //    systemCfg.BlockNo = 0;
@@ -1397,68 +1501,68 @@ namespace SFE.TRACK.ViewModel
                 //    systemCfg.Value = item.Contents;
                 //}
                 //DEV-R
-                else if (item.Name == "Dev_R_Rinse_DispTime")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 3;
-                    systemCfg.Title = "DevR Rinse Dispense Time";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }                
-                else if (item.Name == "Dev_R_Dispense_Flag")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 3;
-                    systemCfg.Title = "DevR Dispense flag";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Dev_R_BackRinse_DispTime")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 3;
-                    systemCfg.Title = "DevR BackRinse Dispense Time";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Dev_R_DispTime")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 3;
-                    systemCfg.Title = "DevR Dispense Time";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
+                //else if (item.Name == "Dev_R_Rinse_DispTime")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 3;
+                //    systemCfg.Title = "DevR Rinse Dispense Time";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}                
+                //else if (item.Name == "Dev_R_Dispense_Flag")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 3;
+                //    systemCfg.Title = "DevR Dispense flag";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Dev_R_BackRinse_DispTime")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 3;
+                //    systemCfg.Title = "DevR BackRinse Dispense Time";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Dev_R_DispTime")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 3;
+                //    systemCfg.Title = "DevR Dispense Time";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
                 //DEV-L
-                else if (item.Name == "Dev_L_Rinse_DispTime")
+                else if (item.Name == "Dev_Rinse_DispTime")
                 {
                     systemCfg.BlockNo = 2;
                     systemCfg.ModuleNo = 2;
-                    systemCfg.Title = "DevL Rinse Dispense Time";
+                    systemCfg.Title = "Dev Rinse Dispense Time";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
-                else if (item.Name == "Dev_L_Dispense_Flag")
+                else if (item.Name == "Dev_Dispense_Flag")
                 {
                     systemCfg.BlockNo = 2;
                     systemCfg.ModuleNo = 2;
-                    systemCfg.Title = "DevL Dispense flag";
+                    systemCfg.Title = "Dev Dispense flag";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
-                else if (item.Name == "Dev_L_BackRinse_DispTime")
+                else if (item.Name == "Dev_BackRinse_DispTime")
                 {
                     systemCfg.BlockNo = 2;
                     systemCfg.ModuleNo = 2;
-                    systemCfg.Title = "DevL BackRinse Dispense Time";
+                    systemCfg.Title = "Dev BackRinse Dispense Time";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
-                else if (item.Name == "Dev_L_DispTime")
+                else if (item.Name == "Dev_DispTime")
                 {
                     systemCfg.BlockNo = 2;
                     systemCfg.ModuleNo = 2;
-                    systemCfg.Title = "DevL Dispense Time";
+                    systemCfg.Title = "Dev Dispense Time";
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
@@ -1519,103 +1623,103 @@ namespace SFE.TRACK.ViewModel
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
-                else if (item.Name == "Cot_Pump2_Reload_Rate")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump2 Reload Rate";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump2_Dispense_Decel")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump2 Dec";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump2_Dispense_Amout")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump2 Amount";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump2_Dispense_Accel")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump2 Acc";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump2_Calibration")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump2 Cal";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump2_Dispense_Rate")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump2 Dispense Rate";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
+                //else if (item.Name == "Cot_Pump2_Reload_Rate")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump2 Reload Rate";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump2_Dispense_Decel")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump2 Dec";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump2_Dispense_Amout")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump2 Amount";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump2_Dispense_Accel")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump2 Acc";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump2_Calibration")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump2 Cal";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump2_Dispense_Rate")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump2 Dispense Rate";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
 
-                else if (item.Name == "Cot_Pump3_Reload_Rate")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump3 Reload Rate";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump3_Dispense_Decel")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump3 Dec";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump3_Dispense_Amout")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump3 Amount";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump3_Dispense_Accel")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump3 Acc";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump3_Calibration")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump3 Cal";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Pump3_Dispense_Rate")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Pump3 Dispense Rate";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
+                //else if (item.Name == "Cot_Pump3_Reload_Rate")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump3 Reload Rate";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump3_Dispense_Decel")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump3 Dec";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump3_Dispense_Amout")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump3 Amount";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump3_Dispense_Accel")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump3 Acc";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump3_Calibration")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump3 Cal";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Pump3_Dispense_Rate")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Pump3 Dispense Rate";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
                 else if (item.Name == "Cot_PR_DispTime")
                 {
                     systemCfg.BlockNo = 2;
@@ -1632,30 +1736,30 @@ namespace SFE.TRACK.ViewModel
                     systemCfg.Name = item.Name;
                     systemCfg.Value = item.Contents;
                 }
-                else if (item.Name == "Cot_Bath_Sel_NozzleNo")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Bath Select Noz";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Bath_OperationTime")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Bath Operation Time";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
-                else if (item.Name == "Cot_Bath_IntervalTime")
-                {
-                    systemCfg.BlockNo = 2;
-                    systemCfg.ModuleNo = 1;
-                    systemCfg.Title = "Cot Bath Interval Time";
-                    systemCfg.Name = item.Name;
-                    systemCfg.Value = item.Contents;
-                }
+                //else if (item.Name == "Cot_Bath_Sel_NozzleNo")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Bath Select Noz";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Bath_OperationTime")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Bath Operation Time";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
+                //else if (item.Name == "Cot_Bath_IntervalTime")
+                //{
+                //    systemCfg.BlockNo = 2;
+                //    systemCfg.ModuleNo = 1;
+                //    systemCfg.Title = "Cot Bath Interval Time";
+                //    systemCfg.Name = item.Name;
+                //    systemCfg.Value = item.Contents;
+                //}
                 else if (item.Name == "Cot_BackRinse_DispTime")
                 {
                     systemCfg.BlockNo = 2;
@@ -1670,7 +1774,8 @@ namespace SFE.TRACK.ViewModel
             }
             else
             {
-                systemCfg.Value = item.Contents;
+                if (item.Name == "Operation") systemCfg.Value = item.GetInt(0).ToString();
+                else systemCfg.Value = item.Contents;
             }
         }
 
@@ -1692,7 +1797,7 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        private void TreatSerialWaferData(TYPE_NAME typeName, string name, int unitID, string title, int arrayID, List<string> datList, int exist = 1, int recipeSet = 1, WaferStorageUseStep useStep = WaferStorageUseStep.IsRun, WaferStorageWorkStep workStep = WaferStorageWorkStep.IsNot)
+        private void TreatSerialWaferData(TYPE_NAME typeName, string name, string title, int arrayID, List<string> datList, int exist = 1, WaferStorageUseStep useStep = WaferStorageUseStep.IsRun, WorkStep scanStep = WorkStep.Idle, WorkStep recipeStep = WorkStep.Idle)
         {
             List<string> list = Tokenizer.Split(title, "_");
             string middleName = list[1];
@@ -1711,9 +1816,9 @@ namespace SFE.TRACK.ViewModel
 
                         //public enum WaferStorageWorkStep { IsNot, IsScanNeed, IsScanDone, IsRecipeNeed, IsRecipeDone };
                         //public enum WaferStorageUseStep { IsStop, IsRun, IsTryRun, IsTryStop };
-                        if (workStep == WaferStorageWorkStep.IsScanDone ||
-                            workStep == WaferStorageWorkStep.IsRecipeNeed ||
-                            workStep == WaferStorageWorkStep.IsRecipeDone)
+                        if (scanStep == WorkStep.Done ||
+                            recipeStep == WorkStep.Need ||
+                            recipeStep == WorkStep.Done)
                         {
                             foupBase.IsScan = true;
                         }
@@ -1824,7 +1929,8 @@ namespace SFE.TRACK.ViewModel
 
             for (int i = 0; i < list.Count; i++)
             {
-                if (AnalyseWaferData(list[i], out var recipeID, out var recipeName, out var recipeType, out var recipeStep, out var blockNo, out var moduleNoList) == false) continue;
+                if (AnalyseWaferRecipeData(list[i], out var recipeID, out var recipeName, out var recipeType, out var recipeStep, out var extraPin, out var blockNo, out var moduleNoList) == false) continue;
+                //if (AnalyseWaferData(list[i], out var recipeID, out var recipeName, out var recipeType, out var recipeStep, out var blockNo, out var moduleNoList) == false) continue;
                 wafer._RecipeInfos[recipeID].SetInfo(recipeName, recipeType, recipeStep, blockNo, moduleNoList);
             }
 
@@ -1855,14 +1961,42 @@ namespace SFE.TRACK.ViewModel
                 else wafer.WaferState = enWaferState.WAFER_NONE;
             }
         }
+        private bool AnalyseWaferRecipeData(string message, out int recipeID, out string recipeName, out EnumRecipeDetailType recipeType, out WorkStep step, out int extraPin, out int blockNo, out List<int> moduleNo)
+        {
+            int index = 0;
+            recipeID = -1;
+            recipeName = "";
+            recipeType = EnumRecipeDetailType.Not;
+            step = WorkStep.Idle;
+            extraPin = -1;
+            blockNo = -1;
+            moduleNo = new List<int>();
+            List<string> list = Tokenizer.Split(message, ":", false, false);
+            if (list.Count < 6) return false;
+            recipeID = Convert.ToInt32(list[index++]);
+            recipeName = list[index++];
+            recipeType = (EnumRecipeDetailType)Convert.ToInt32(list[index++]);
+            step = (WorkStep)Convert.ToInt32(list[index++]);
+            extraPin = Convert.ToInt32(list[index++]);
+            blockNo = Convert.ToInt32(list[index++]);
 
+            list.RemoveRange(0, index);
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                moduleNo.Add(Convert.ToInt32(list[i]));
+            }
+
+
+            return true;
+        }
         private bool AnalyseWaferData(string message, out int recipeID, out string recipeName, out EnumRecipeDetailType recipeType, out WorkStep step, out int blockNo, out List<int> moduleNo)
         {
             int index = 0;
             recipeID = -1;
             recipeName = "";
             recipeType = EnumRecipeDetailType.Not;
-            step = WorkStep.IsNot;
+            step = WorkStep.Idle;
             blockNo = -1;
             moduleNo = new List<int>();
             List<string> list = Tokenizer.Split(message, false, false, ":");
@@ -1885,19 +2019,18 @@ namespace SFE.TRACK.ViewModel
             return true;
         }
 
-        protected bool AnalyseOwner(string message, out TYPE_NAME typeName, out string name, out int unitID, out string remain)
+        protected bool AnalyseOwner(string message, out string controllerName, out TYPE_NAME typeName, out string name, out string remain)
         {
             int index = 0;
+            controllerName = "";
             typeName = TYPE_NAME.MACHINE;
             name = "";
-            unitID = -1;
             remain = "";
             List<string> list = Tokenizer.Split(message, false, false, ":");
             if (list.Count < 2) return false;
+            controllerName = list[index++];
             typeName = MachineReader.Instance.GetTypeName(list[index++]);
             name = list[index++];
-
-            if (list.Count > 2) unitID = Convert.ToInt32(list[index++]);
             if (list.Count > 3) remain = list[index++];
 
             return true;

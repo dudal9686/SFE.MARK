@@ -1447,7 +1447,7 @@ namespace SFE.TRACK
                 if (Timing == 0) TimingDisplay = "Pre-recv"; 
                 else if (Timing == 1) TimingDisplay = "Pre-proc";
                 else if (Timing == 2) TimingDisplay = "Post-proc";
-                else TimingDisplay = "Processing";
+                //else TimingDisplay = "Processing";
                 RaisePropertyChanged("Timing"); 
             }
         }

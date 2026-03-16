@@ -235,6 +235,12 @@ namespace SFE.TRACK.ViewModel.Recipe
                 case 1:
                     if (Global.DispenseInfoOpen(enDispenseModule.DEV, StepRecipe.DispenseNo, "DUMMYUSE", false))
                     {
+                        if (Convert.ToBoolean(Global.STDispensePopUp.SelectDispenseValue & (int)enDevDispense.BACK_RINSE))
+                        {
+                            Global.MessageOpen(enMessageType.OK, string.Format("Dummy dispensers cannot use {0}.", (enDevDispense)Global.STDispensePopUp.SelectDispenseValue));
+                            return;
+                        }
+
                         for (int i = 0; i < Recipe.StepList.Count; i++)
                         {
                             if (Recipe.StepList[i].DispenseNo == Global.STDispensePopUp.SelectDispenseValue)
@@ -263,7 +269,7 @@ namespace SFE.TRACK.ViewModel.Recipe
                     break;
                 case 6:
                     StepRecipe.Timing++;
-                    if (StepRecipe.Timing > 3) StepRecipe.Timing = 0;
+                    if (StepRecipe.Timing > 2) StepRecipe.Timing = 0;
                     break;
                 case 7:
                     if (Global.RecipeOpen(enRecipeMenu.DEV_DUMMY_SEQ, StepRecipe.Recipe)) StepRecipe.Recipe = Global.STRecipePopUp.SelectRecipeName;

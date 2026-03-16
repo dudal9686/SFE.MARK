@@ -62,10 +62,10 @@ namespace SFE.TRACK.ViewModel.Auto
                     if (!isRobot)
                     {
                         isRobot = true;
-                        if (Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsRun) continue;
+                        if (Global.MachineWorker.GetController("SFETrack").MyRunStatus == CoreCSRunSim.RunStatus.EnumRunningStatus.Run) continue;
                         
-                        if(Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsIdle ||
-                            Global.MachineWorker.GetController("SFETrack").GetCurrentRunStatus() == CoreCSRunSim.RunStatus.EnumRunningStatus.IsStop)
+                        if(Global.MachineWorker.GetController("SFETrack").MyRunStatus == CoreCSRunSim.RunStatus.EnumRunningStatus.Idle ||
+                            Global.MachineWorker.GetController("SFETrack").MyRunStatus == CoreCSRunSim.RunStatus.EnumRunningStatus.Stop)
                         {
                             Global.SendCommand(Global.MCS_ID, CoreCSBase.IPC.IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.Request__Initialize, "SFETrack:Do", true);
                             Global.MachineWorker.GetController("SFETrack").StartMachine();
@@ -96,7 +96,7 @@ namespace SFE.TRACK.ViewModel.Auto
                     }
                 }
             }
-            Global.STMachineStatus = enMachineStatus.HOME;
+            //Global.STMachineStatus = enMachineStatus.HOME;
             window.DialogResult = true;
         }
 

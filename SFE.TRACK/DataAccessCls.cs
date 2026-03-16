@@ -1801,7 +1801,7 @@ namespace SFE.TRACK
                         step.Lotspec = Convert.ToInt32(arr[4]);
                         step.IsCond = Convert.ToInt32(arr[5]).Equals(1) ? true : false;
                         step.Timing = Convert.ToInt32(arr[6]);
-                        step.IsRecipeUse = Convert.ToInt32(arr[7]).Equals(1) ? true : false;
+                        step.IsRecipeUse = false;//Convert.ToInt32(arr[7]).Equals(1) ? true : false;
                         step.RecipeCnt = Convert.ToInt32(arr[8]);
                         step.RecipeInterval = Convert.ToInt32(arr[9]);
                         step.RecipeTime = Convert.ToInt32(arr[10]);

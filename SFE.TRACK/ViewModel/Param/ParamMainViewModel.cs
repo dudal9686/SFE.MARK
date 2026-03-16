@@ -387,7 +387,13 @@ namespace SFE.TRACK.ViewModel.Param
                         positionValue = Global.STTeachingMessage.Position;
                         //if (axis.Parent == "Chamber") positionValue = Global.STTeachingMessage.Position / 500;
                         //else positionValue = Global.STTeachingMessage.Position;
-                        ParamData.Pos = positionValue;
+                        if(positionValue != ParamData.Pos)
+                        {
+                            if(Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to change? ({0} -> {1})", ParamData.Pos, positionValue)))
+                            {
+                                ParamData.Pos = positionValue;
+                            }
+                        }                        
                     }
                     break;
                 case 2:

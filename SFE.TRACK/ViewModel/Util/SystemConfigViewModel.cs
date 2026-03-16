@@ -73,10 +73,30 @@ namespace SFE.TRACK.ViewModel.Util
 
         private void SaveSystemCfgCommand()
         {
-            foreach(SystemCfgCls system in arSystemCfgList)
+            PrgCfgItem prgItem;
+            foreach (SystemCfgCls system in arSystemCfgList)
             {
-                PrgCfgItem prgItem = Global.MachineWorker.Reader.GetConfigItem("SystemChamber", system.Name);
-                prgItem.SetValue(Convert.ToInt32(system.Value));
+                if (system.Name.IndexOf("Operation") != -1)
+                {
+                    prgItem = Global.MachineWorker.Reader.GetConfigItem("Environment", system.Name);
+                    prgItem.SetValue(Convert.ToInt32(system.Value.Equals("0") ? "0" : "1"), 0);
+                }
+                //else if(system.Name == "ChamberLiquidOperation")
+                //{
+                //    prgItem = Global.MachineWorker.Reader.GetConfigItem("Evironment", system.Name);
+                //    prgItem.SetValue(Convert.ToInt32(system.Value.Equals("0") ? "0" : "1"), 0);
+                //}
+                //else if(system.Name == "ChamberTempOperation")
+                //{
+                //    prgItem = Global.MachineWorker.Reader.GetConfigItem("Evironment", system.Name);
+                //    prgItem.SetValue(Convert.ToInt32(system.Value.Equals("0") ? "0" : "1"), 0);
+                //}
+                else
+                {
+                    prgItem = Global.MachineWorker.Reader.GetConfigItem("SystemChamber", system.Name);
+                    prgItem.SetValue(Convert.ToInt32(system.Value));
+                }
+                
             }
             Global.MessageOpen(enMessageType.OK, "It has been Saved");
         }

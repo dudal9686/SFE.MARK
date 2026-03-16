@@ -27,7 +27,7 @@ namespace SFE.TRACK.DB
         public AccessDBCls()
         {
             //connectString = string.Format("Provider=Microsoft.Jet.OleDb.4.0; Data Source={0}", /*System.Windows.Forms.Application.StartupPath + */@"D:\MDB\MachineDB.mdb");
-            connectString = string.Format("Server=127.0.0.1;Port=3306;Database=SFE_MARK;Uid=root;Pwd=1234");
+            connectString = string.Format("Server=192.168.40.90;Port=3306;Database=SFE_MARK;Uid=root;Pwd=1234");
         }
 
         private bool Open()

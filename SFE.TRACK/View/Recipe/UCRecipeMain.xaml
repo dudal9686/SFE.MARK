@@ -221,7 +221,7 @@
                         </TreeViewItem>-->
                     </TreeViewItem>
                     <!--Dummy Seq Recipe-->
-                    <TreeViewItem IsSelected="{Binding IsCotDummySeqRecipe}">
+                    <TreeViewItem IsSelected="{Binding IsCotDummySeqRecipe}" Visibility="Hidden">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon HorizontalAlignment="Center" FontSize="10" Kind="ViewSequential" Width="30" Height="35" Foreground="#565656" Margin="0 5 10 0"/>

@@ -297,7 +297,7 @@ namespace SFE.TRACK.Model
         {
             bool isFind = false;
             RecipeInfo recipeInfo = null;
-            WorkStep workStep = WorkStep.IsNeed;
+            WorkStep workStep = WorkStep.Need;
 
             if(ModuleNo == 0)
             {
@@ -311,7 +311,7 @@ namespace SFE.TRACK.Model
                 recipeInfo = Wafer._RecipeInfos[i];
                 if (isFind)
                 {
-                    if (recipeInfo._Name == string.Empty || recipeInfo._WorkStep == WorkStep.IsNeed) break;
+                    if (recipeInfo._Name == string.Empty || recipeInfo._WorkStep == WorkStep.Need) break;
                 }
                 foreach (int modNo in recipeInfo._moudleNoList)
                 {
@@ -324,9 +324,9 @@ namespace SFE.TRACK.Model
                 }
             }
 
-            if (workStep == WorkStep.IsNeed) { Wafer.WaferState = enWaferState.WAFER_PROCESS_NORMAL; ModuleState = enModuleState.STANDBY; }
-            else if (workStep == WorkStep.IsDoing) { Wafer.WaferState = enWaferState.WAFER_PROCESS; ModuleState = enModuleState.PROCESS; }
-            else if (workStep == WorkStep.IsDoneGood) { Wafer.WaferState = enWaferState.WAFER_PROCESS_END; ModuleState = enModuleState.STANDBY; }
+            if (workStep == WorkStep.Need) { Wafer.WaferState = enWaferState.WAFER_PROCESS_NORMAL; ModuleState = enModuleState.STANDBY; }
+            else if (workStep == WorkStep.Doing) { Wafer.WaferState = enWaferState.WAFER_PROCESS; ModuleState = enModuleState.PROCESS; }
+            else if (workStep == WorkStep.Done) { Wafer.WaferState = enWaferState.WAFER_PROCESS_END; ModuleState = enModuleState.STANDBY; }
         }
     }
 }

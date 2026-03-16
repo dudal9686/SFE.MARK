@@ -55,6 +55,7 @@ namespace SFE.TRACK
         public static bool IsShutDown = false;
         public static int STPulseToUnit = 1000;
         public static enMachineStatus STMachineStatus = enMachineStatus.STOP;
+        public static string STServer = "127.0.0.1"; //"192.168.40.90";//
         //Maint Suppot List
         public static List<MaintSupportCls> STMaintSupportList = new List<MaintSupportCls>();
         public static List<LampCls> STLampList = new List<LampCls>();

@@ -51,6 +51,7 @@ namespace SFE.TRACK.ViewModel.Motion
         private void PickMotionCommand()
         {
             int cstNo = GetCstNo();
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to do a pick motion? ({0}-{1})", cstNo + 1, CstIndex))) return;
             string msg = string.Format("AssyCRA:DoPickDropWaferOnCassette {0},{1},{2}", 0, cstNo, CstIndex - 1);
             Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, msg,true,20000);
             //Global.ManualMessageOpen();
@@ -58,6 +59,7 @@ namespace SFE.TRACK.ViewModel.Motion
         private void PlaceMotionCommand()
         {
             int cstNo = GetCstNo();
+            if (!Global.MessageOpen(enMessageType.OKCANCEL, string.Format("Would you like to do a place motion? ({0}-{1})", cstNo + 1, CstIndex))) return;
             string msg = string.Format("AssyCRA:DoPickDropWaferOnCassette {0},{1},{2}", 1, cstNo, CstIndex - 1);
             Global.SendCommand(Global.MCS_ID, IPCNetClient.DataType.String, EnumCommand.Action, EnumCommand_Action.TermManual__Do, msg, true, 20000);
             //Global.ManualMessageOpen();

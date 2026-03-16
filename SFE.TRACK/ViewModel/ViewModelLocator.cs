@@ -115,6 +115,8 @@ namespace SFE.TRACK.ViewModel
             SimpleIoc.Default.Register<Motion.MotionPRAViewModel>();
             SimpleIoc.Default.Register<Motion.MotionCRAViewModel>();
             SimpleIoc.Default.Register<Motion.MotionIRAViewModel>();
+            SimpleIoc.Default.Register<MachineState.RobotStateViewModel>();
+            SimpleIoc.Default.Register<MachineState.LotStateViewModel>();
         }
 
         public MainViewModel MainViewModel
@@ -305,6 +307,17 @@ namespace SFE.TRACK.ViewModel
         public Log.LogMainViewModel LogMainViewModel
         {
             get { return ServiceLocator.Current.GetInstance<Log.LogMainViewModel>(); }
+        }
+        #endregion
+
+        #region MachineState
+        public MachineState.RobotStateViewModel RobotStateViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<MachineState.RobotStateViewModel>(); }
+        }
+        public MachineState.LotStateViewModel LotStateViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<MachineState.LotStateViewModel>(); }
         }
         #endregion
 

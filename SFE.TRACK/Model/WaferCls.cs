@@ -36,7 +36,7 @@ namespace SFE.TRACK.Model
 
         public RecipeInfo[] _RecipeInfos = new RecipeInfo[30];
         public string _flowRecipeName;
-        public WorkStep _WorkStep = WorkStep.IsNot;
+        public WorkStep _WorkStep = WorkStep.Idle;
 
         bool use = true;
         //public WaferDataArray WaferWorkData { get; set; } = new WaferDataArray(1);
@@ -238,7 +238,7 @@ namespace SFE.TRACK.Model
                 {
                     //if (recipeInfo._Name == string.Empty) continue;
 
-                    if (recipeInfo._WorkStep != WorkStep.IsDoneGood)
+                    if (recipeInfo._WorkStep != WorkStep.Done)
                     {
                         isProcessEnd = false;
                         break;

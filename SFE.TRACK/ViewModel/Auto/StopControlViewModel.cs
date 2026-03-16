@@ -27,13 +27,13 @@ namespace SFE.TRACK.ViewModel.Auto
         private void StopCommand(Window o)
         {
             Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.MCS__WorkStop, "Stop");
-            Global.STMachineStatus = enMachineStatus.STOP;
+            //Global.STMachineStatus = enMachineStatus.STOP;
             o.DialogResult = true;
         }
         private void RecoveryCommand(Window o)
         {
             Global.SendCommand(IPCNetClient.DataType.String, EnumCommand.Setting, EnumCommand_Setting.MCS__WorkStop, "Cancel");
-            Global.STMachineStatus = enMachineStatus.STOP;
+            //Global.STMachineStatus = enMachineStatus.STOP;
             o.DialogResult = true;
         }
         private void CancelCommand(Window o)
